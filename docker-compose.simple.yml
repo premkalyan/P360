@@ -1,0 +1,76 @@
+version: '3.8'
+
+networks:
+  p360-network:
+    driver: bridge
+
+services:
+  # Backend Development Server
+  backend-dev:
+    image: node:18-alpine
+    working_dir: /app
+    container_name: p360-backend-dev
+    networks:
+      - p360-network
+    environment:
+      - NODE_ENV=development
+      - JWT_SECRET=${JWT_SECRET:-dev-secret-key}
+      - PORT=8000
+    volumes:
+      - ./backend:/app
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "7601:8000"
+    depends_on:
+      - db
+      - redis
+
+  # Frontend Development Server  
+  frontend-dev:
+    image: node:18-alpine
+    working_dir: /app
+    container_name: p360-frontend-dev
+    networks:
+      - p360-network
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:7601
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm install && npm run dev"
+    ports:
+      - "7600:3000"
+    depends_on:
+      - backend-dev
+
+  # PostgreSQL Database
+  db:
+    image: postgres:15
+    container_name: p360-postgres
+    networks:
+      - p360-network
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=p360_dev
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: p360-redis
+    networks:
+      - p360-network
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
