@@ -1,0 +1,115 @@
+{
+  "cursor.rules": {
+    "enabled": true,
+    "enforceOnSave": true,
+    "strictMode": true
+  },
+  "cursor.mcp": {
+    "integrations": {
+      "jira": {
+        "server": "mcp_jira-orengrinker",
+        "required": true,
+        "commands": [
+          "search_issues",
+          "get_issue_details", 
+          "transition_issue",
+          "add_comment",
+          "create_issue"
+        ]
+      },
+      "confluence": {
+        "server": "mcp_confluence",
+        "required": true,
+        "commands": [
+          "create_page",
+          "update_page", 
+          "search",
+          "upload_document"
+        ]
+      },
+      "figma": {
+        "server": "mcp_figma",
+        "required": true,
+        "commands": [
+          "get_figma_data",
+          "figma_tokens_to_p360_theme",
+          "figma_component_to_p360_mapping"
+        ]
+      },
+      "kiwi_tcms": {
+        "server": "mcp_kiwi-tcms",
+        "required": true,
+        "commands": [
+          "list_products",
+          "list_plans",
+          "list_cases",
+          "get_case"
+        ]
+      }
+    }
+  },
+  "cursor.sdlc": {
+    "enforceJiraStory": true,
+    "requireTestCoverage": true,
+    "mandatoryPRTemplate": true,
+    "autoUpdateJiraStatus": true
+  },
+  "cursor.git": {
+    "enforceConventionalCommits": true,
+    "requireJiraReference": true,
+    "branchNamingPattern": "^(feature|bugfix|hotfix)/P360-\\d+-[a-z-]+$",
+    "commitMessagePattern": "^P360-\\d+: .+$"
+  },
+  "cursor.testing": {
+    "requireUnitTests": true,
+    "requireIntegrationTests": true,
+    "coverageThreshold": 90,
+    "testNamingPattern": "*.test.{ts,tsx,js,jsx}"
+  },
+  "cursor.documentation": {
+    "requireJSDoc": true,
+    "updateConfluenceOnChange": true,
+    "generateAPIDocumentation": true
+  },
+  "cursor.quality": {
+    "linting": {
+      "enabled": true,
+      "autoFix": true,
+      "rules": "strict"
+    },
+    "formatting": {
+      "enabled": true,
+      "onSave": true,
+      "tool": "prettier"
+    },
+    "accessibility": {
+      "enforceWCAG": "AA",
+      "checkOnBuild": true
+    },
+    "performance": {
+      "bundleAnalysis": true,
+      "loadTimeThreshold": 2000,
+      "optimizeImages": true
+    }
+  },
+  "cursor.docker": {
+    "autoDetectCompose": true,
+    "composeFile": "docker-compose.simple.yml",
+    "healthCheckTimeout": 30,
+    "buildOptimization": true
+  },
+  "cursor.ai": {
+    "codeGeneration": {
+      "followP360Patterns": true,
+      "includeTests": true,
+      "generateDocumentation": true,
+      "respectDesignSystem": true
+    },
+    "contextAwareness": {
+      "includeJiraStory": true,
+      "includeFigmaDesigns": true,
+      "includeExistingTests": true,
+      "includeProjectStructure": true
+    }
+  }
+}
