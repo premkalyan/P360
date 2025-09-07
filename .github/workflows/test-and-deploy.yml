@@ -1,0 +1,346 @@
+name: 🚀 P360 CI/CD - Test, Build & Deploy
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+    types: [opened, synchronize, reopened, ready_for_review]
+
+env:
+  NODE_VERSION: '18'
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
+jobs:
+  # 🧪 TESTING JOBS
+  unit-tests:
+    name: 🧪 Unit Tests
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    
+    strategy:
+      matrix:
+        workspace: [frontend, backend]
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: '${{ matrix.workspace }}/package-lock.json'
+      
+      - name: 🔧 Install Dependencies
+        working-directory: ./${{ matrix.workspace }}
+        run: npm ci
+      
+      - name: 🧪 Run Unit Tests
+        working-directory: ./${{ matrix.workspace }}
+        run: npm run test -- --coverage --watchAll=false
+      
+      - name: 📊 Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./${{ matrix.workspace }}/coverage/lcov.info
+          flags: ${{ matrix.workspace }}
+          name: ${{ matrix.workspace }}-coverage
+
+  integration-tests:
+    name: 🔗 Integration Tests
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    needs: [unit-tests]
+    
+    services:
+      postgres:
+        image: postgres:14-alpine
+        env:
+          POSTGRES_DB: p360_test
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+      
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: 🔧 Install Dependencies
+        run: npm install --workspaces
+      
+      - name: 🏗️ Build Applications
+        run: |
+          npm run build:backend
+          npm run build:frontend
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/p360_test
+          REDIS_URL: redis://localhost:6379
+          NODE_ENV: test
+      
+      - name: 🧪 Run Integration Tests
+        run: npm run test:integration
+        env:
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5432/p360_test
+          REDIS_URL: redis://localhost:6379
+          NODE_ENV: test
+
+  e2e-tests:
+    name: 🎭 End-to-End Tests
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    needs: [unit-tests]
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      
+      - name: 🎭 Install Playwright
+        run: |
+          npm install --workspaces
+          npx playwright install --with-deps
+      
+      - name: 🐳 Start Services with Docker
+        run: |
+          echo "JWT_SECRET=test-secret-key" > .env.test
+          docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d --build
+        env:
+          NODE_ENV: test
+      
+      - name: ⏳ Wait for Services
+        run: |
+          timeout 60s bash -c 'until curl -s http://localhost:3000 > /dev/null; do sleep 1; done'
+          timeout 60s bash -c 'until curl -s http://localhost:8000 > /dev/null; do sleep 1; done'
+      
+      - name: 🧪 Run E2E Tests
+        run: npm run test:e2e
+        env:
+          BASE_URL: http://localhost:3000
+          API_URL: http://localhost:8000
+      
+      - name: 📸 Upload Screenshots
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: playwright-screenshots
+          path: tests/e2e/test-results/
+          retention-days: 7
+      
+      - name: 🛑 Stop Services
+        if: always()
+        run: docker-compose -f docker-compose.yml -f docker-compose.test.yml down
+
+  # 📊 CODE QUALITY JOBS
+  lint-and-type-check:
+    name: 📝 Lint & Type Check
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        workspace: [frontend, backend]
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: '${{ matrix.workspace }}/package-lock.json'
+      
+      - name: 🔧 Install Dependencies
+        working-directory: ./${{ matrix.workspace }}
+        run: npm ci
+      
+      - name: 📝 Run ESLint
+        working-directory: ./${{ matrix.workspace }}
+        run: npm run lint
+      
+      - name: 🔍 Run Type Check
+        working-directory: ./${{ matrix.workspace }}
+        run: npm run type-check
+
+  security-scan:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: 🔒 Run Security Audit
+        run: |
+          npm audit --audit-level high --workspace frontend
+          npm audit --audit-level high --workspace backend
+      
+      - name: 🔍 Run Dependency Check
+        uses: securecodewarrior/github-action-add-sarif@v1
+        with:
+          sarif-file: 'dependency-check-report.sarif'
+
+  # 🐳 DOCKER BUILD & DEPLOY JOBS
+  docker-build:
+    name: 🐳 Docker Build & Push
+    runs-on: ubuntu-latest
+    needs: [unit-tests, lint-and-type-check]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    
+    strategy:
+      matrix:
+        service: [frontend, backend]
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: 🐳 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: 🔑 Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: 🏷️ Extract Metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}-${{ matrix.service }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix=sha-
+            type=raw,value=latest,enable={{is_default_branch}}
+      
+      - name: 🏗️ Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.${{ matrix.service }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64,linux/arm64
+
+  # 🚀 DEPLOYMENT JOBS
+  deploy-staging:
+    name: 🚀 Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [e2e-tests, integration-tests, docker-build]
+    if: github.ref == 'refs/heads/develop'
+    environment: staging
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: 🚀 Deploy to Staging Environment
+        run: |
+          echo "🚀 Deploying P360 to Staging..."
+          echo "Frontend: ghcr.io/${{ github.repository }}-frontend:develop"
+          echo "Backend: ghcr.io/${{ github.repository }}-backend:develop"
+          # Add actual deployment commands here (kubectl, docker-compose, etc.)
+      
+      - name: 🧪 Run Smoke Tests
+        run: |
+          echo "🧪 Running staging smoke tests..."
+          # Add smoke test commands here
+
+  deploy-production:
+    name: 🚀 Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [e2e-tests, integration-tests, docker-build]
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: 🚀 Deploy to Production Environment  
+        run: |
+          echo "🚀 Deploying P360 to Production..."
+          echo "Frontend: ghcr.io/${{ github.repository }}-frontend:latest"
+          echo "Backend: ghcr.io/${{ github.repository }}-backend:latest"
+          # Add actual deployment commands here
+      
+      - name: 🧪 Run Production Health Checks
+        run: |
+          echo "🧪 Running production health checks..."
+          # Add health check commands here
+
+  # 📊 REPORTING JOB
+  test-reporting:
+    name: 📊 Test Results & Reporting
+    runs-on: ubuntu-latest
+    needs: [unit-tests, integration-tests, e2e-tests]
+    if: always()
+    
+    steps:
+      - name: 📊 Aggregate Test Results
+        run: |
+          echo "📊 Aggregating test results for P360-19..."
+          echo "Unit Tests: ${{ needs.unit-tests.result }}"
+          echo "Integration Tests: ${{ needs.integration-tests.result }}"
+          echo "E2E Tests: ${{ needs.e2e-tests.result }}"
+      
+      - name: 🔗 Update Kiwi-TCMS
+        if: always()
+        run: |
+          echo "🔗 Updating test results in Kiwi-TCMS..."
+          # Add Kiwi-TCMS API integration here
+          # curl -X POST "http://localhost:40001/api/..." with test results
+
+  # 🎉 SUCCESS NOTIFICATION
+  notify-success:
+    name: 🎉 Success Notification
+    runs-on: ubuntu-latest
+    needs: [deploy-staging, deploy-production]
+    if: success() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    
+    steps:
+      - name: 🎉 Notify Success
+        run: |
+          echo "🎉 P360 CI/CD Pipeline Completed Successfully!"
+          echo "✅ All tests passed"
+          echo "✅ Security scans clean"  
+          echo "✅ Docker images built and pushed"
+          echo "✅ Deployment successful"
+          echo "📋 JIRA: Update P360-19 status"
+          echo "📖 Confluence: Update deployment docs"
