@@ -1,0 +1,61 @@
+# Development Docker Compose Override
+version: '3.8'
+
+services:
+  # Development Database
+  db:
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: p360_dev
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_password
+
+  # Development Backend (with hot reload)
+  backend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+      target: base
+    container_name: p360-backend-dev
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://dev_user:dev_password@db:5432/p360_dev
+      - REDIS_URL=redis://redis:6379
+      - PORT=8000
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npm run dev
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    networks:
+      - p360-network
+
+  # Development Frontend (with hot reload)
+  frontend-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      target: base
+    container_name: p360-frontend-dev
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend-dev
+    networks:
+      - p360-network
+
+profiles:
+  - dev

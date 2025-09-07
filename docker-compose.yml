@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:14-alpine
+    container_name: p360-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: p360
+      POSTGRES_USER: p360_user
+      POSTGRES_PASSWORD: p360_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - p360-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: p360-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - p360-network
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: p360-backend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://p360_user:p360_password@db:5432/p360
+      - REDIS_URL=redis://redis:6379
+      - PORT=8000
+      - JWT_SECRET=${JWT_SECRET}
+      - FIGMA_API_KEY=${FIGMA_API_KEY}
+      - FIGMA_FILE_KEY=${FIGMA_FILE_KEY}
+      - FIGMA_NODE_ID=${FIGMA_NODE_ID}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    networks:
+      - p360-network
+    volumes:
+      - ./logs:/app/logs
+
+  # Frontend Application
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: p360-frontend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - p360-network
+
+  # Development Services (optional)
+  adminer:
+    image: adminer:latest
+    container_name: p360-adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - p360-network
+    profiles:
+      - dev
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  p360-network:
+    driver: bridge
