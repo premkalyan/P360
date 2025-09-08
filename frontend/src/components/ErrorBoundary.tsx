@@ -36,7 +36,7 @@ class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       // Custom fallback UI
       if (this.props.fallback) {
-        return this.props.fallback;
+        return this.props.fallback as ReactNode;
       }
 
       // Default fallback UI
@@ -65,10 +65,10 @@ class ErrorBoundary extends Component<Props, State> {
             </button>
           </div>
         </div>
-      );
+      ) as ReactNode;
     }
 
-    return this.props.children;
+    return this.props.children as ReactNode;
   }
 }
 
