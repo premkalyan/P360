@@ -8,18 +8,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // P360 Brand Colors (Exact from Figma)
+        // P360 Brand Colors (ACTUAL from Figma node-id=7:1681)
         p360: {
-          'primary-blue': 'rgb(0, 7, 129)',      // Main brand blue
-          'primary-blue-alt': 'rgb(0, 7, 130)',  // Slight variant
-          'secondary-blue': 'rgb(0, 140, 254)',   // Interactive blue
-          'purple': 'rgb(133, 26, 254)',          // Primary purple
-          'purple-light': 'rgb(141, 24, 251)',    // Light purple
-          'purple-medium': 'rgb(173, 16, 236)',   // Medium purple
-          'accent-pink': 'rgb(229, 2, 208)',      // Accent pink
-          'light-gray': 'rgb(230, 230, 230)',     // Light background
-          'dark': 'rgb(0, 0, 0)',                 // Text dark
-          'white': 'rgb(255, 255, 255)',          // Pure white
+          'primary-blue': '#000781',      // Main brand blue from logo
+          'primary-blue-alt': '#000782',  // Slight variant from logo
+          'secondary-blue': '#008cfe',    // Interactive blue from logo
+          'purple': '#841AFF',            // Primary purple from Figma UI
+          'purple-light': '#8d18fb',      // Light purple gradient
+          'purple-medium': '#851afe',     // Medium purple gradient
+          'accent-pink': '#e502d0',       // Accent pink from logo
+          'magenta': '#dd04d5',           // Magenta from logo gradient
+          'light-blue': '#1b76ff',        // Light blue from logo
+          'gradient-blue': '#266cff',     // Gradient blue
+          'light-gray': '#e6e6e6',        // Light background from logo
+          'dark': '#000000',              // Text dark
+          'white': '#ffffff',             // Pure white
         },
         // Status colors aligned with P360 design
         status: {

@@ -1,11 +1,15 @@
 'use client';
 
 import React, { useState, useMemo, useCallback } from 'react';
-import Link from 'next/link';
 import { CampaignCard, Campaign } from '@/components/campaigns/CampaignCard';
+import { 
+  EmptyCampaigns,
+  EmptyResults, 
+  Button as DesignButton, 
+  Typography,
+  designTokens 
+} from '@/lib/design-system';
 import { Button } from '@/components/ui/Button';
-import { P360Logo } from '@/components/brand/P360Logo';
-import { Icon } from '@/components/ui/icons';
 
 export default function CampaignsPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,105 +20,72 @@ export default function CampaignsPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
   const [isCompareMode, setIsCompareMode] = useState(false);
+  const [showEmptyState, setShowEmptyState] = useState(true); // Toggle for testing empty vs populated
   
-  // Mock campaign data that matches test expectations
-  const campaigns: Campaign[] = useMemo(() => [
-    {
-      id: 'campaign-1',
-      name: 'Q4 Holiday Sale - Facebook & Google',
-      status: 'active',
-      type: 'conversion',
-      budget: 15000,
-      spent: 11250,
-      impressions: 250000,
-      clicks: 7500,
-      conversions: 375,
-      ctr: 3.0,
-      cpa: 30.0,
-      roas: 4.5,
-      startDate: '2024-11-01T00:00:00Z',
-      endDate: '2024-12-31T23:59:59Z',
-      lastModified: '2024-01-15T10:30:00Z',
-      programName: 'Holiday Program',
-      audienceSize: 125000,
-    },
-    {
-      id: 'campaign-2',
-      name: 'Brand Awareness - YouTube Campaign',
-      status: 'active',
-      type: 'awareness',
-      budget: 8000,
-      spent: 5600,
-      impressions: 180000,
-      clicks: 3600,
-      conversions: 72,
-      ctr: 2.0,
-      cpa: 77.78,
-      roas: 2.1,
-      startDate: '2024-10-01T00:00:00Z',
-      endDate: '2024-12-15T23:59:59Z',
-      lastModified: '2024-01-14T15:20:00Z',
-      programName: 'Brand Program',
-      audienceSize: 200000,
-    },
-    {
-      id: 'campaign-3',
-      name: 'Retargeting - Cart Abandoners',
-      status: 'paused',
-      type: 'retargeting',
-      budget: 5000,
-      spent: 4200,
-      impressions: 95000,
-      clicks: 2850,
-      conversions: 142,
-      ctr: 3.0,
-      cpa: 29.58,
-      roas: 3.8,
-      startDate: '2024-09-15T00:00:00Z',
-      endDate: '2024-11-30T23:59:59Z',
-      lastModified: '2024-01-13T09:45:00Z',
-      programName: 'Retargeting Program',
-      audienceSize: 45000,
-    },
-    {
-      id: 'campaign-4',
-      name: 'New Product Launch - Multi-Platform',
-      status: 'draft',
-      type: 'awareness',
-      budget: 20000,
-      spent: 0,
-      impressions: 0,
-      clicks: 0,
-      conversions: 0,
-      ctr: 0,
-      cpa: 0,
-      roas: 0,
-      startDate: '2024-12-01T00:00:00Z',
-      endDate: '2025-01-31T23:59:59Z',
-      lastModified: '2024-01-12T14:20:00Z',
-      programName: 'Product Launch Program',
-      audienceSize: 300000,
-    },
-    {
-      id: 'campaign-5',
-      name: 'Black Friday Flash Sale',
-      status: 'paused',
-      type: 'conversion',
-      budget: 25000,
-      spent: 18750,
-      impressions: 400000,
-      clicks: 12000,
-      conversions: 600,
-      ctr: 3.0,
-      cpa: 31.25,
-      roas: 6.2,
-      startDate: '2024-11-20T00:00:00Z',
-      endDate: '2024-11-30T23:59:59Z',
-      lastModified: '2024-01-16T11:15:00Z',
-      programName: 'Holiday Program',
-      audienceSize: 150000,
-    },
-  ], []);
+  // Campaign data - controlled by showEmptyState toggle
+  const campaigns: Campaign[] = useMemo(() => {
+    if (showEmptyState) return [];
+    
+    return [
+      {
+        id: 'campaign-1',
+        name: 'Q4 Holiday Sale - Facebook & Google',
+        status: 'active',
+        type: 'conversion',
+        budget: 15000,
+        spent: 11250,
+        impressions: 250000,
+        clicks: 7500,
+        conversions: 375,
+        ctr: 3.0,
+        cpa: 30.0,
+        roas: 4.5,
+        startDate: '2024-11-01T00:00:00Z',
+        endDate: '2024-12-31T23:59:59Z',
+        lastModified: '2024-01-15T10:30:00Z',
+        programName: 'Holiday Program',
+        audienceSize: 125000,
+      },
+      {
+        id: 'campaign-2',
+        name: 'Brand Awareness - YouTube Campaign',
+        status: 'active',
+        type: 'awareness',
+        budget: 8000,
+        spent: 5600,
+        impressions: 180000,
+        clicks: 3600,
+        conversions: 72,
+        ctr: 2.0,
+        cpa: 77.78,
+        roas: 2.1,
+        startDate: '2024-10-01T00:00:00Z',
+        endDate: '2024-12-15T23:59:59Z',
+        lastModified: '2024-01-14T15:20:00Z',
+        programName: 'Brand Program',
+        audienceSize: 200000,
+      },
+      {
+        id: 'campaign-3',
+        name: 'Retargeting - Cart Abandoners',
+        status: 'paused',
+        type: 'retargeting',
+        budget: 5000,
+        spent: 4200,
+        impressions: 95000,
+        clicks: 2850,
+        conversions: 142,
+        ctr: 3.0,
+        cpa: 29.58,
+        roas: 3.8,
+        startDate: '2024-09-15T00:00:00Z',
+        endDate: '2024-11-30T23:59:59Z',
+        lastModified: '2024-01-13T09:45:00Z',
+        programName: 'Retargeting Program',
+        audienceSize: 45000,
+      },
+    ];
+  }, [showEmptyState]);
 
   // Filter and sort campaigns
   const filteredAndSortedCampaigns = useMemo(() => {
@@ -221,50 +192,38 @@ export default function CampaignsPage() {
   }, [campaigns]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Top Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="flex items-center justify-between px-6 py-4">
-          {/* Logo */}
-          <div className="flex items-center space-x-3">
-            <P360Logo size="md" showText={true} />
-          </div>
+    <div className="p-6">
+      {/* Debug Toggle - Top Right Corner */}
+      <div className="fixed top-20 right-4 z-50">
+        <button
+          onClick={() => setShowEmptyState(!showEmptyState)}
+          className={`px-3 py-2 text-xs rounded-lg border font-medium transition-colors ${
+            showEmptyState 
+              ? 'bg-red-100 text-red-700 border-red-200 hover:bg-red-200' 
+              : 'bg-green-100 text-green-700 border-green-200 hover:bg-green-200'
+          }`}
+        >
+          {showEmptyState ? '📭 Empty State' : '📊 With Data'}
+        </button>
+      </div>
 
-          {/* Right Section */}
-          <div className="flex items-center space-x-4">
-            <Button variant="secondary" icon="chart" iconPosition="left">Analytics</Button>
-            <Button variant="primary" icon="campaigns" iconPosition="left">New Campaign</Button>
-          </div>
-        </div>
-      </header>
-
-      <div className="flex">
-        {/* Sidebar - keeping simplified version */}
-        <aside className="w-64 bg-white border-r border-gray-200 min-h-screen">
-          <div className="p-4 space-y-1">
-            <nav className="mt-6 space-y-1">
-              <Link href="/dashboard" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg gap-2">
-                <Icon name="home" size="sm" />
-                Home
-              </Link>
-              <Link href="/dashboard/programs" className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg gap-2">
-                <Icon name="programs" size="sm" />
-                Programs
-              </Link>
-              <Link href="/dashboard/campaigns" className="flex items-center px-3 py-2 text-sm font-medium bg-p360-purple/10 text-p360-purple rounded-lg gap-2">
-                <Icon name="campaigns" size="sm" />
-                Campaigns
-              </Link>
-            </nav>
-          </div>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 p-8">
+      {campaigns.length === 0 ? (
+        // Hide header for empty state - will show full Figma design
+        <></>
+      ) : (
+        <>
           {/* Page Header */}
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900">Campaign Dashboard</h1>
-            <p className="text-gray-600 mt-1">P360-67: Campaign Configuration UI - Performance Overview</p>
+          <div style={{ marginBottom: designTokens.spacing[8] }}>
+            <Typography variant="h2" color="primary">
+              Campaign Dashboard
+            </Typography>
+            <Typography 
+              variant="body" 
+              color="muted" 
+              style={{ marginTop: designTokens.spacing[1] }}
+            >
+              P360-67: Campaign Configuration UI - Performance Overview
+            </Typography>
           </div>
 
           {/* Quick Stats */}
@@ -289,7 +248,7 @@ export default function CampaignsPage() {
               <div className="text-sm text-gray-500">Avg ROAS</div>
               <div className="text-2xl font-bold">{stats.avgRoas}x</div>
             </div>
-                </div>
+          </div>
 
           {/* Filters and Controls */}
           <div className="bg-white p-4 rounded-lg border mb-6">
@@ -398,14 +357,29 @@ export default function CampaignsPage() {
                     </div>
                   </div>
           )}
+        </>
+      )}
 
           {/* Campaign Grid/List */}
-          {filteredAndSortedCampaigns.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-gray-500">
-                <div className="text-lg font-medium">No campaigns found</div>
-                <div className="text-sm mt-1">Try adjusting your search criteria or filters</div>
-              </div>
+          {campaigns.length === 0 ? (
+            // Clean EmptyCampaigns component using design system
+            <div 
+              className="flex-1 bg-white flex items-center justify-center"
+              style={{ minHeight: '906px' }}
+            >
+              <EmptyCampaigns
+                primaryAction={{
+                  label: 'Create Campaign',
+                  onClick: () => {
+                    // TODO: Navigate to campaign creation
+                    console.log('Create campaign clicked');
+                  },
+                }}
+              />
+            </div>
+          ) : filteredAndSortedCampaigns.length === 0 ? (
+            <div className="flex justify-center py-12">
+              <EmptyResults />
             </div>
           ) : (
             <>
@@ -442,8 +416,6 @@ export default function CampaignsPage() {
               )}
             </>
           )}
-        </main>
-      </div>
     </div>
   );
 }

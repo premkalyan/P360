@@ -6,7 +6,7 @@
 const { test, expect } = require('@playwright/test');
 
 // Test Configuration
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
+const BASE_URL = process.env.BASE_URL || 'http://localhost:6600';
 const TIMEOUT = 30000;
 
 test.describe('P360 Authentication Components E2E Tests', () => {
@@ -78,8 +78,8 @@ test.describe('P360 Authentication Components E2E Tests', () => {
       await page.fill('input[placeholder*="John"]', 'John');
       await page.fill('input[placeholder*="Doe"]', 'Doe');
       await page.fill('input[type="email"]', 'john.doe@example.com');
-      await page.fill('input[type="password"]').first(), 'SecurePass123!');
-      await page.fill('input[type="password"]').last(), 'SecurePass123!');
+      await page.fill(page.locator('input[type="password"]').first(), 'SecurePass123!');
+      await page.fill(page.locator('input[type="password"]').last(), 'SecurePass123!');
       
       // Accept terms
       await page.check('input[type="checkbox"]');
@@ -111,8 +111,8 @@ test.describe('P360 Authentication Components E2E Tests', () => {
       await page.fill('input[placeholder*="John"]', 'John');
       await page.fill('input[placeholder*="Doe"]', 'Doe');
       await page.fill('input[type="email"]', 'john.doe@p360test.com');
-      await page.fill('input[type="password"]').first(), 'SecurePassword123!');
-      await page.fill('input[type="password"]').last(), 'SecurePassword123!');
+      await page.fill(page.locator('input[type="password"]').first(), 'SecurePassword123!');
+      await page.fill(page.locator('input[type="password"]').last(), 'SecurePassword123!');
       
       // Step 4: Accept terms and conditions
       await page.check('input[type="checkbox"]');
@@ -191,14 +191,14 @@ test.describe('P360 Authentication Components E2E Tests', () => {
       await expect(page.locator('text=Email is invalid')).not.toBeVisible();
       
       // Step 4: Test password mismatch
-      await page.fill('input[type="password"]').first(), 'Password123!');
-      await page.fill('input[type="password"]').last(), 'DifferentPassword123!');
+      await page.fill(page.locator('input[type="password"]').first(), 'Password123!');
+      await page.fill(page.locator('input[type="password"]').last(), 'DifferentPassword123!');
       
       await page.click('button[type="submit"]');
       await expect(page.locator('text=Passwords do not match')).toBeVisible();
       
       // Step 5: Fix password mismatch
-      await page.fill('input[type="password"]').last(), 'Password123!');
+      await page.fill(page.locator('input[type="password"]').last(), 'Password123!');
       await expect(page.locator('text=Passwords do not match')).not.toBeVisible();
       
       // Step 6: Accept terms and submit successfully

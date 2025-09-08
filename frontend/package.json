@@ -4,7 +4,7 @@
   "description": "P360 Display Advertising Platform - Frontend (Next.js 14)",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 6500",
+    "dev": "next dev -p 6600",
     "build": "next build",
     "start": "next start -p 6500",
     "lint": "next lint",
