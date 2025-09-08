@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-09-08T06:08:01.603Z",
+  "product": {
+    "name": "P360 - Display Advertising Platform MVP",
+    "id": "placeholder-product-id"
+  },
+  "testPlans": 3,
+  "testCases": 62,
+  "breakdown": {
+    "P360 Authentication Features (P360-19)": 27,
+    "P360 Campaign Management Features (P360-67)": 22,
+    "P360 Backend API & Database Features (P360-6)": 13
+  }
+}

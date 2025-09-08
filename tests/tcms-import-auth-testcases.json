@@ -1,0 +1,534 @@
+{
+  "test_plan": {
+    "name": "P360 Authentication Features (P360-19)",
+    "product": "P360 - Display Advertising Platform MVP",
+    "version": "1.0.0",
+    "type": "Feature Testing",
+    "description": "Comprehensive testing of authentication components including login, signup, validation, and UI components"
+  },
+  "test_cases": [
+    {
+      "category": "Unit Tests - AuthLayout Component",
+      "cases": [
+        {
+          "id": "TC-001",
+          "title": "Verify responsive layout rendering",
+          "priority": "P1-critical",
+          "tags": ["unit", "auth", "layout", "responsive"],
+          "preconditions": "AuthLayout component is available",
+          "test_steps": [
+            "Render AuthLayout with title and subtitle props",
+            "Verify main structure elements are present",
+            "Check P360 branding elements",
+            "Validate title and subtitle display"
+          ],
+          "expected_result": "Layout renders correctly with all required elements",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-001",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-002", 
+          "title": "Validate branding panel display",
+          "priority": "P2-high",
+          "tags": ["unit", "auth", "branding"],
+          "preconditions": "AuthLayout component is available",
+          "test_steps": [
+            "Render AuthLayout component",
+            "Check for P360 logo and branding",
+            "Verify feature list display",
+            "Validate branding panel positioning"
+          ],
+          "expected_result": "Branding panel displays correctly with all elements",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-002",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-003",
+          "title": "Test mobile/tablet/desktop breakpoints", 
+          "priority": "P1-critical",
+          "tags": ["unit", "auth", "responsive", "mobile", "tablet", "desktop"],
+          "preconditions": "AuthLayout component with responsive design",
+          "test_steps": [
+            "Set viewport to mobile size (375px)",
+            "Verify layout adaptation",
+            "Set viewport to tablet size (768px)", 
+            "Verify layout changes",
+            "Set viewport to desktop size (1440px)",
+            "Verify full layout display"
+          ],
+          "expected_result": "Layout adapts correctly to all screen sizes",
+          "automated": true,
+          "automation_script": "tests/e2e/auth-components.spec.js::TC-052",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-004",
+          "title": "Verify accessibility compliance (WCAG)",
+          "priority": "P1-critical", 
+          "tags": ["unit", "auth", "accessibility", "wcag"],
+          "preconditions": "AuthLayout component rendered",
+          "test_steps": [
+            "Check for proper heading structure",
+            "Verify semantic HTML elements",
+            "Test keyboard navigation",
+            "Validate ARIA attributes",
+            "Check color contrast ratios"
+          ],
+          "expected_result": "Component meets WCAG 2.1 AA compliance",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-004",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-005",
+          "title": "Test layout with different content heights",
+          "priority": "P3-medium",
+          "tags": ["unit", "auth", "layout", "content"],
+          "preconditions": "AuthLayout component available",
+          "test_steps": [
+            "Render layout with short content",
+            "Verify layout positioning",
+            "Render layout with long content",
+            "Check for proper scrolling behavior",
+            "Test content overflow handling"
+          ],
+          "expected_result": "Layout handles various content heights correctly",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-005",
+          "story_link": "P360-19"
+        }
+      ]
+    },
+    {
+      "category": "Unit Tests - LoginForm Component",
+      "cases": [
+        {
+          "id": "TC-006",
+          "title": "Email field validation (valid/invalid formats)",
+          "priority": "P1-critical",
+          "tags": ["unit", "auth", "validation", "email"],
+          "preconditions": "LoginForm component rendered",
+          "test_steps": [
+            "Enter invalid email formats (missing @, domain)",
+            "Verify error messages appear",
+            "Enter valid email format",
+            "Verify error messages clear",
+            "Test edge cases (special characters)"
+          ],
+          "expected_result": "Email validation works correctly for all cases",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-006",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-007",
+          "title": "Password field validation (minimum length, required)",
+          "priority": "P1-critical",
+          "tags": ["unit", "auth", "validation", "password"],
+          "preconditions": "LoginForm component rendered",
+          "test_steps": [
+            "Submit form with empty password",
+            "Verify required error appears",
+            "Enter password shorter than minimum",
+            "Verify length error appears",
+            "Enter valid password",
+            "Verify errors clear"
+          ],
+          "expected_result": "Password validation enforces all rules correctly",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-007",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-008",
+          "title": "Remember me checkbox functionality",
+          "priority": "P2-high",
+          "tags": ["unit", "auth", "checkbox", "session"],
+          "preconditions": "LoginForm with remember me option",
+          "test_steps": [
+            "Verify checkbox starts unchecked",
+            "Click to check the checkbox",
+            "Verify checked state",
+            "Click to uncheck",
+            "Verify unchecked state",
+            "Test form submission with checkbox"
+          ],
+          "expected_result": "Checkbox functions correctly and affects form data",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-008",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-009",
+          "title": "Forgot password link navigation",
+          "priority": "P2-high",
+          "tags": ["unit", "auth", "navigation", "forgot-password"],
+          "preconditions": "LoginForm with forgot password link",
+          "test_steps": [
+            "Locate forgot password link",
+            "Verify link is clickable and accessible",
+            "Click forgot password link",
+            "Verify navigation behavior",
+            "Check link styling and hover states"
+          ],
+          "expected_result": "Forgot password link navigates correctly",
+          "automated": true,
+          "automation_script": "tests/e2e/auth-components.spec.js::TC-042",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-010",
+          "title": "Form submission with valid data",
+          "priority": "P1-critical",
+          "tags": ["unit", "auth", "form-submission", "validation"],
+          "preconditions": "LoginForm component with valid data",
+          "test_steps": [
+            "Fill email with valid address",
+            "Fill password with valid password",
+            "Check remember me (optional)",
+            "Submit form",
+            "Verify onSubmit called with correct data",
+            "Check loading state during submission"
+          ],
+          "expected_result": "Form submits successfully with correct data structure",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-010",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-011",
+          "title": "Form submission with invalid data",
+          "priority": "P1-critical",
+          "tags": ["unit", "auth", "validation", "error-handling"],
+          "preconditions": "LoginForm component with invalid data",
+          "test_steps": [
+            "Submit form with missing required fields",
+            "Verify validation errors appear",
+            "Verify form does not submit",
+            "Submit with invalid email format",
+            "Verify specific validation messages",
+            "Check error styling"
+          ],
+          "expected_result": "Form prevents submission and shows appropriate errors",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-011",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-012",
+          "title": "Loading state display during submission",
+          "priority": "P2-high",
+          "tags": ["unit", "auth", "loading", "ui-state"],
+          "preconditions": "LoginForm in loading state",
+          "test_steps": [
+            "Set loading prop to true",
+            "Verify submit button is disabled",
+            "Check loading spinner appears",
+            "Verify form fields remain accessible",
+            "Test loading state styling"
+          ],
+          "expected_result": "Loading state displays correctly and prevents interaction",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-012",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-013",
+          "title": "Error message display and clearing",
+          "priority": "P2-high",
+          "tags": ["unit", "auth", "error-messages", "validation"],
+          "preconditions": "LoginForm with validation errors",
+          "test_steps": [
+            "Trigger validation errors",
+            "Verify error messages appear with correct styling",
+            "Fix validation issues",
+            "Verify error messages clear",
+            "Test multiple error scenarios",
+            "Check error message accessibility"
+          ],
+          "expected_result": "Error messages display and clear correctly",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-013",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-014",
+          "title": "Real-time validation feedback",
+          "priority": "P2-high",
+          "tags": ["unit", "auth", "validation", "real-time"],
+          "preconditions": "LoginForm with real-time validation",
+          "test_steps": [
+            "Start typing in email field",
+            "Verify validation feedback as user types",
+            "Enter invalid then valid email",
+            "Check immediate validation response",
+            "Test password field real-time validation",
+            "Verify performance of validation"
+          ],
+          "expected_result": "Real-time validation provides immediate feedback",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-014", 
+          "story_link": "P360-19"
+        }
+      ]
+    },
+    {
+      "category": "Unit Tests - SignupForm Component",
+      "cases": [
+        {
+          "id": "TC-015",
+          "title": "First/Last name validation (required fields)",
+          "priority": "P1-critical",
+          "tags": ["unit", "auth", "validation", "required"],
+          "preconditions": "SignupForm component rendered",
+          "test_steps": [
+            "Submit form with empty first name",
+            "Verify required error appears",
+            "Submit form with empty last name", 
+            "Verify required error appears",
+            "Fill both names",
+            "Verify errors clear"
+          ],
+          "expected_result": "Name fields are properly validated as required",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-015",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-016", 
+          "title": "Email validation (format, uniqueness)",
+          "priority": "P1-critical",
+          "tags": ["unit", "auth", "validation", "email"],
+          "preconditions": "SignupForm component rendered",
+          "test_steps": [
+            "Enter invalid email formats",
+            "Verify format validation errors",
+            "Enter valid email format",
+            "Verify validation passes",
+            "Test email uniqueness validation (if applicable)"
+          ],
+          "expected_result": "Email validation enforces format and uniqueness rules",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-016",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-017",
+          "title": "Password strength validation",
+          "priority": "P1-critical",
+          "tags": ["unit", "auth", "validation", "password", "security"],
+          "preconditions": "SignupForm with password strength rules",
+          "test_steps": [
+            "Enter weak passwords (short, no uppercase, etc.)",
+            "Verify strength validation errors",
+            "Enter strong password meeting all criteria",
+            "Verify validation passes",
+            "Test password strength indicator"
+          ],
+          "expected_result": "Password strength validation enforces security rules",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-017",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-018",
+          "title": "Password confirmation matching",
+          "priority": "P1-critical", 
+          "tags": ["unit", "auth", "validation", "password", "confirmation"],
+          "preconditions": "SignupForm with password confirmation field",
+          "test_steps": [
+            "Enter password in first field",
+            "Enter different password in confirmation",
+            "Verify mismatch error appears",
+            "Enter matching password in confirmation",
+            "Verify error clears"
+          ],
+          "expected_result": "Password confirmation validation works correctly",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-018",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-019",
+          "title": "Terms and conditions checkbox requirement",
+          "priority": "P1-critical",
+          "tags": ["unit", "auth", "validation", "terms", "checkbox"],
+          "preconditions": "SignupForm with terms checkbox",
+          "test_steps": [
+            "Submit form without checking terms",
+            "Verify terms acceptance error",
+            "Check terms and conditions checkbox",
+            "Verify error clears",
+            "Submit form successfully"
+          ],
+          "expected_result": "Terms acceptance is required for form submission",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-019",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-020",
+          "title": "Multi-field validation interaction",
+          "priority": "P2-high",
+          "tags": ["unit", "auth", "validation", "integration"],
+          "preconditions": "SignupForm with multiple fields",
+          "test_steps": [
+            "Trigger multiple validation errors",
+            "Verify all errors display simultaneously",
+            "Fix errors in different order",
+            "Verify errors clear independently",
+            "Test validation dependencies"
+          ],
+          "expected_result": "Multi-field validation works correctly together",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-020",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-021",
+          "title": "Form submission flow",
+          "priority": "P1-critical",
+          "tags": ["unit", "auth", "form-submission"],
+          "preconditions": "SignupForm with valid data",
+          "test_steps": [
+            "Fill all required fields with valid data",
+            "Accept terms and conditions",
+            "Submit form",
+            "Verify onSubmit called with correct data structure",
+            "Check form data serialization"
+          ],
+          "expected_result": "Form submission works with complete valid data",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-021",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-022",
+          "title": "Loading states and error handling",
+          "priority": "P2-high",
+          "tags": ["unit", "auth", "loading", "error-handling"],
+          "preconditions": "SignupForm in various states",
+          "test_steps": [
+            "Test loading state during submission",
+            "Verify form becomes disabled",
+            "Test error state from server",
+            "Verify error display and recovery",
+            "Test success state handling"
+          ],
+          "expected_result": "All form states handle correctly with proper UX",
+          "automated": true,
+          "automation_script": "tests/unit/auth-components.test.jsx::TC-022",
+          "story_link": "P360-19"
+        }
+      ]
+    },
+    {
+      "category": "End-to-End Tests - Complete User Journeys",
+      "cases": [
+        {
+          "id": "TC-061",
+          "title": "New user registration complete flow",
+          "priority": "P1-critical",
+          "tags": ["e2e", "auth", "registration", "user-journey"],
+          "preconditions": "Application running, clean database state",
+          "test_steps": [
+            "Navigate to homepage",
+            "Click 'Get Started' button",
+            "Fill out registration form completely",
+            "Accept terms and conditions",
+            "Submit form",
+            "Verify success message or redirect",
+            "Verify flow completion time < 30 seconds"
+          ],
+          "expected_result": "Complete registration flow works end-to-end",
+          "automated": true,
+          "automation_script": "tests/e2e/auth-components.spec.js::TC-061",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-062",
+          "title": "Existing user login complete flow", 
+          "priority": "P1-critical",
+          "tags": ["e2e", "auth", "login", "user-journey"],
+          "preconditions": "Application running, existing user account",
+          "test_steps": [
+            "Navigate to homepage",
+            "Click login button",
+            "Enter valid credentials",
+            "Optional: Check remember me",
+            "Submit form",
+            "Verify successful login and redirect",
+            "Verify flow completion time < 20 seconds"
+          ],
+          "expected_result": "Complete login flow works end-to-end",
+          "automated": true,
+          "automation_script": "tests/e2e/auth-components.spec.js::TC-062",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-064",
+          "title": "Form validation error recovery flow",
+          "priority": "P2-high",
+          "tags": ["e2e", "auth", "validation", "error-recovery"],
+          "preconditions": "Application running",
+          "test_steps": [
+            "Navigate to signup page",
+            "Submit empty form to trigger all errors",
+            "Verify all error messages appear",
+            "Fix errors one by one",
+            "Verify errors clear as fixed",
+            "Submit successfully"
+          ],
+          "expected_result": "Error recovery flow provides good user experience",
+          "automated": true,
+          "automation_script": "tests/e2e/auth-components.spec.js::TC-064",
+          "story_link": "P360-19"
+        }
+      ]
+    },
+    {
+      "category": "Accessibility Tests - WCAG Compliance",
+      "cases": [
+        {
+          "id": "TC-070",
+          "title": "Keyboard navigation complete flow",
+          "priority": "P1-critical",
+          "tags": ["accessibility", "keyboard", "wcag", "navigation"],
+          "preconditions": "Authentication pages loaded",
+          "test_steps": [
+            "Use Tab to navigate through form",
+            "Verify logical tab order",
+            "Test form submission with Enter key",
+            "Verify focus indicators visible",
+            "Test Shift+Tab for reverse navigation",
+            "Ensure no keyboard traps"
+          ],
+          "expected_result": "Complete keyboard navigation works correctly",
+          "automated": true,
+          "automation_script": "tests/e2e/auth-components.spec.js::TC-070",
+          "story_link": "P360-19"
+        },
+        {
+          "id": "TC-073",
+          "title": "Focus management and visibility",
+          "priority": "P1-critical",
+          "tags": ["accessibility", "focus", "wcag", "visibility"],
+          "preconditions": "Authentication components rendered",
+          "test_steps": [
+            "Verify focus indicators are visible",
+            "Test focus order is logical",
+            "Check focus doesn't get trapped",
+            "Verify focus styles meet contrast requirements",
+            "Test focus management during state changes"
+          ],
+          "expected_result": "Focus management meets WCAG requirements",
+          "automated": true,
+          "automation_script": "tests/e2e/auth-components.spec.js::TC-073", 
+          "story_link": "P360-19"
+        }
+      ]
+    }
+  ]
+}

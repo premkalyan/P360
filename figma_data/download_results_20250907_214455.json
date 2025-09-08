@@ -1,0 +1,50 @@
+{
+  "success": true,
+  "total_nodes": 9,
+  "batches": 1,
+  "results": [
+    {
+      "batch": 1,
+      "nodes": [
+        "861:23458",
+        "861:23472",
+        "861:23503",
+        "861:23677",
+        "861:23915",
+        "861:24214",
+        "861:24228",
+        "I861:24229;5:685",
+        "861:24520"
+      ],
+      "png": {
+        "err": null,
+        "images": {
+          "861:23458": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/9f6c3120-01e5-4f86-8672-d62a9cef20b9",
+          "861:23472": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/6f9cddc6-fba1-4872-b25c-132724f1dc11",
+          "861:23503": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/7c64275f-2632-4829-8098-e8a01fb884ac",
+          "861:23677": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/4b36aa62-8819-4b1b-b21b-ca9d9b3ec0fc",
+          "861:23915": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/1e3da01f-3c10-42f7-9041-c08cf0dc1347",
+          "861:24214": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/a23e802e-a9f7-4c09-9f1a-adaef18458ce",
+          "861:24228": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/eaf77271-9680-4e53-ac58-12bd42116a02",
+          "I861:24229;5:685": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/2eef3058-fadb-47e5-bca9-a0d71040b8de",
+          "861:24520": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/fbca8d13-0e9c-4872-a11c-7b3a4170c40f"
+        }
+      },
+      "svg": {
+        "err": null,
+        "images": {
+          "861:23458": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/128e47d1-48f5-473d-b4eb-856d611da0d1",
+          "861:23472": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/48ed8301-52c5-4271-adc6-07d03a89c1ed",
+          "861:23503": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/9e89c4e1-800c-47d2-88a8-a5c4fdeb014f",
+          "861:23677": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/9270eb87-0580-41a2-b150-d59489511d24",
+          "861:23915": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/df78876a-e93a-46d5-ba03-2c3cc8245aea",
+          "861:24214": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/99933f3f-c6c9-43f5-977a-bf8a95b46f9f",
+          "861:24228": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/682e3f6b-5382-48fe-b6c5-7f9409feaa3c",
+          "I861:24229;5:685": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/28ed1d9a-3587-4d31-bd2c-4f7ae3ea6be0",
+          "861:24520": "https://figma-alpha-api.s3.us-west-2.amazonaws.com/images/1fec1451-306e-4c36-af36-ba3f72c274de"
+        }
+      }
+    }
+  ],
+  "completed_at": "2025-09-07T21:44:55.473096"
+}

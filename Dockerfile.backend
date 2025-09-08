@@ -8,7 +8,7 @@ WORKDIR /app
 
 # Copy package files
 COPY backend/package*.json ./
-RUN npm ci --only=production && npm cache clean --force
+RUN npm install --omit=dev && npm cache clean --force
 
 # Build stage
 FROM base AS builder
@@ -28,15 +28,15 @@ ENV NODE_ENV production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nodejs
 
-# Copy built application
+# Copy application
 COPY --from=builder /app/dist ./dist
 COPY --from=deps /app/node_modules ./node_modules
 COPY backend/package*.json ./
 
 USER nodejs
 
-EXPOSE 8000
+EXPOSE 6501
 
-ENV PORT 8000
+ENV PORT 6501
 
 CMD ["node", "dist/index.js"]
