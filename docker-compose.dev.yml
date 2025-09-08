@@ -5,7 +5,7 @@ services:
   # Development Database
   db:
     ports:
-      - "5432:5432"
+      - "6503:5432"
     environment:
       POSTGRES_DB: p360_dev
       POSTGRES_USER: dev_user

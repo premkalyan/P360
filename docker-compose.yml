@@ -64,7 +64,7 @@ services:
   postgres:
     image: postgres:15-alpine
     ports:
-      - "5432:5432"
+      - "6503:5432"
     environment:
       POSTGRES_DB: p360_prod
       POSTGRES_USER: p360_user
