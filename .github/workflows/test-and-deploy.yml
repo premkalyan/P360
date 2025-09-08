@@ -132,7 +132,7 @@ jobs:
       - name: 🐳 Start Services with Docker
         run: |
           echo "JWT_SECRET=test-secret-key" > .env.test
-          docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d --build
+          docker compose -f docker-compose.yml -f docker-compose.test.yml up -d --build
         env:
           NODE_ENV: test
       
@@ -157,7 +157,7 @@ jobs:
       
       - name: 🛑 Stop Services
         if: always()
-        run: docker-compose -f docker-compose.yml -f docker-compose.test.yml down
+        run: docker compose -f docker-compose.yml -f docker-compose.test.yml down
 
   # 📊 CODE QUALITY JOBS
   lint-and-type-check:
