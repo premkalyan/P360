@@ -18,7 +18,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "types": ["react", "react-dom", "node", "jest"],
+    "types": ["react", "react-dom", "node"],
     "typeRoots": ["./node_modules/@types", "./src/types"],
     "plugins": [
       {
