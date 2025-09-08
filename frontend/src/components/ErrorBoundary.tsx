@@ -52,7 +52,7 @@ class ErrorBoundary extends Component<Props, State> {
               Something went wrong
             </h3>
             <p className="text-gray-600 mb-4">
-              We're sorry for the inconvenience. Please try refreshing the page.
+              We&apos;re sorry for the inconvenience. Please try refreshing the page.
             </p>
             <button
               onClick={() => window.location.reload()}

@@ -64,7 +64,7 @@ export default function Home() {
             ✅ P360-67: Campaign Configuration UI - FIXED!
           </h3>
           <p className="text-green-700 mb-4">
-            Campaign dashboard now matches Figma "general - workspace" design exactly.
+            Campaign dashboard now matches Figma &ldquo;general - workspace&rdquo; design exactly.
           </p>
           <div className="flex justify-center space-x-4">
             <Link 

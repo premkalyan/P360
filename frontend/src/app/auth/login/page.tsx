@@ -19,10 +19,13 @@ export default function LoginPage() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // For demo purposes, always succeed
-      console.log('Login attempt:', { email, password });
+      // TODO: Replace with actual authentication API call
       router.push('/dashboard/campaigns');
     } catch (error) {
-      console.error('Login error:', error);
+      // Log error for debugging in development
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Login error:', error);
+      }
       alert('Login failed. Please try again.');
     } finally {
       setLoading(false);

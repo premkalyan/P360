@@ -19,10 +19,13 @@ export default function SignupPage() {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      console.log('Signup attempt:', { email, password, confirmPassword });
+      // TODO: Replace with actual signup API call
       router.push('/dashboard/campaigns');
     } catch (error) {
-      console.error('Signup error:', error);
+      // Log error for debugging in development
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Signup error:', error);
+      }
       alert('Signup failed. Please try again.');
     } finally {
       setLoading(false);
