@@ -1,481 +1,243 @@
-# P360 - Display Advertising Platform MVP
-## 📋 **PROJECT CENTRAL DOCUMENTATION**
+# P360 Project Documentation
 
-*Last Updated: September 7, 2025*  
-*Status: ✅ Ready for Development Implementation*
+## Project Overview
+Pipeline360 (P360) is an enterprise demand-side platform (DSP) for programmatic advertising with comprehensive SDLC integration including JIRA, Confluence, Kiwi-TCMS, Git, Figma, and Docker deployment.
 
----
+## Technical Stack
+- **Frontend**: Next.js, React, TypeScript, Tailwind CSS
+- **Backend**: Node.js, Express, TypeScript
+- **Database**: PostgreSQL
+- **Testing**: Jest, Playwright, Kiwi-TCMS
+- **Documentation**: Confluence
+- **Project Management**: JIRA
+- **Design**: Figma
+- **Deployment**: Docker, Docker Compose
+- **Infrastructure**: AWS (production)
 
-## 🎯 **PROJECT OVERVIEW**
-
-P360 is an enterprise-grade Display Advertising Platform MVP that enables advertisers to create, manage, and optimize programmatic advertising campaigns through an intuitive interface with robust backend infrastructure.
-
-### **Key Features**
-- **Campaign Management**: Create, launch, and monitor display advertising campaigns
-- **Audience Targeting**: Advanced audience segmentation with Bombora intent data
-- **Real-time Analytics**: Performance tracking and optimization recommendations  
-- **Multi-tenant Architecture**: Support for multiple advertiser accounts
-- **External Integrations**: The Trade Desk, Bombora, Salesforce, UID2
-
----
-
-## 🏗️ **TECHNICAL STACK**
-
-### **Frontend**
-- **Framework**: Next.js 14 (App Router) + TypeScript
-- **Styling**: Tailwind CSS + Material-UI (MUI)
-- **Forms**: React Hook Form + Yup validation  
-- **State Management**: Zustand
-- **Testing**: Jest + React Testing Library + Playwright
-- **Documentation**: Storybook
-
-### **Backend** 
-- **Framework**: Python 3.9+ + FastAPI
-- **Database**: PostgreSQL 15 + SQLAlchemy 2.0
-- **Migrations**: Alembic
-- **Authentication**: JWT + OAuth2
-- **Validation**: Pydantic V2
-- **Testing**: pytest + httpx
-
-### **Infrastructure**
-- **Cloud**: AWS (Fargate, S3, Lambda, SQS/SNS)
-- **IaC**: Terraform
-- **CI/CD**: GitHub Actions + Jenkins
-- **Monitoring**: CloudWatch + DataDog
-- **Authentication**: Microsoft Entra ID / Auth0
-
-### **Development Environment**
-- **Orchestration**: Docker Compose
-- **Database**: PostgreSQL (local)
-- **Cache**: Redis
-- **API Simulators**: TTD, Bombora, Salesforce
-
----
-
-## 📁 **PROJECT STRUCTURE**
-
+## Project Structure
 ```
 P360/
-├── assets/                      # ✅ Figma downloaded assets
-│   ├── 861:20083.png           # Downloaded PNG assets  
-│   └── 861:20083.svg           # Downloaded SVG assets
-├── documentation/               # ✅ Comprehensive project docs
-│   ├── P360_Development_Implementation_Plan.md  # ✅ Ready to implement
-│   ├── P360_JIRA_Epics_Stories.md             # ✅ All stories defined
-│   ├── P360_Complete_Story_Summary.md          # ✅ 100 stories catalogued
-│   ├── P360_BALANCED_7_Sprint_Timeline.md     # ✅ Sprint planning complete
-│   └── [30+ detailed planning documents]
-├── figma_data/                  # ✅ Figma API analysis  
-│   ├── analysis_BBzlqwkcKFUcjLGXmJwNGU.json   # 5 components, 1,215 frames
-│   ├── file_data_BBzlqwkcKFUcjLGXmJwNGU.json  # Complete design data
-│   └── images_manifest_*.json                  # Asset manifests
-├── scripts/                     # ✅ Development utilities
-│   ├── figma_asset_downloader.py              # ✅ Working Figma API script
-│   └── generate_architecture_diagrams.py     # ✅ AWS architecture diagrams
-├── requirements.txt             # ✅ Python dependencies
-├── .env                        # ✅ API keys configured
-└── venv/                       # ✅ Python virtual environment
-
-# TO BE CREATED:
-├── frontend/                   # Next.js 14 application
-├── backend/                    # FastAPI application  
-├── simulators/                 # API simulators
-└── docker-compose.dev.yml     # Local development stack
+├── frontend/               # Next.js application
+│   ├── src/
+│   │   ├── app/           # Next.js App Router pages
+│   │   ├── components/    # React components
+│   │   ├── hooks/         # Custom React hooks
+│   │   ├── lib/          # Utility libraries
+│   │   ├── types/        # TypeScript type definitions
+│   │   └── utils/        # Utility functions
+├── backend/               # Node.js/Express API
+│   └── src/
+│       ├── controllers/   # API controllers
+│       ├── models/       # Data models
+│       ├── routes/       # API routes
+│       └── utils/        # Backend utilities
+├── tests/                 # Test suites
+│   ├── e2e/              # End-to-end tests
+│   ├── integration/      # Integration tests
+│   └── unit/             # Unit tests
+├── docs/                  # Documentation
+├── scripts/               # Utility scripts
+├── database/             # Database scripts and migrations
+└── docker-compose.yml    # Docker orchestration
 ```
 
----
+## Figma Design System
 
-## ✅ **COMPLETED TASKS & MILESTONES**
+### Current Design System Analysis (Latest)
+**File**: `BBzlqwkcKFUcjLGXmJwNGU` (Pipeline360-Copy)
+**Extraction Date**: January 2025
 
-### **📊 PLANNING & DOCUMENTATION PHASE** *(COMPLETE)*
-1. **✅ JIRA Project Structure**
-   - 7 Epics defined with detailed acceptance criteria
-   - 100 stories created (90 development + 10 testing)
-   - Sprint timeline: 7 sprints (Sep 9 - Dec 15, 2025)
-   - Story points estimated and dependencies mapped
+#### Components Found:
+1. **Logo** (`7:2032`) - Pipeline=Dark + Color variant
+   - Path: Design System/Logo/Content/logo/Pipeline=Dark + Color
+2. **Sidebar** (`157:15957`) - Main navigation component
+   - Path: Component/sidebar
+3. **Progress Indicators** - Campaign performance visualization
+   - 0-35% (`157:16846`) 
+   - 36%-60% (`157:16847`)
+   - 60%-100% (`157:16845`)
 
-2. **✅ Confluence Documentation**
-   - Technical architecture pages created
-   - Implementation guides documented
-   - Client documents uploaded and linked
-   - MCP enhancement specifications written
+#### Design Tokens Extracted:
+- **📊 Components**: 5 total
+- **🎨 Colors**: 1,724 unique colors
+- **📝 Typography**: 693 text styles
+- **🏗️ Layout**: Multiple frames and design system elements
 
-3. **✅ Architecture & Design**
-   - 5 professional AWS architecture diagrams generated
-   - Figma design system analyzed (5 components, 1,215 frames)
-   - Component mapping for React implementation
-   - Design token extraction specifications
+#### Key Brand Colors:
+- **Primary Blue**: rgb(0, 7, 129)
+- **Secondary Blue**: rgb(0, 140, 254) 
+- **Purple/Violet**: rgb(133, 26, 254), rgb(141, 24, 251)
+- **Accent Pink**: rgb(229, 2, 208)
+- **Light Gray**: rgb(230, 230, 230)
+- **White**: rgb(255, 255, 255)
+- **Black**: rgb(0, 0, 0)
 
-### **🛠️ MCP TOOLS & AUTOMATION** *(COMPLETE)*
-1. **✅ JIRA Integration**
-   - Working MCP tools for story creation
-   - Sprint management capabilities
-   - Automated workflow transitions
-   - Story dependency linking
+### Current UI Implementation vs Figma Discrepancies
 
-2. **✅ Confluence Integration**  
-   - Image embedding functionality
-   - Document upload and linking
-   - Page creation and updates
-   - Bulk content management
+#### ✅ What's Aligned:
+- Basic component structure (CampaignCard, sidebar navigation)
+- Color scheme (purple/violet theme: `text-violet-700`, `bg-violet-100`)
+- Grid-based layouts
+- Status indicators with colors
 
-3. **✅ Figma Integration**
-   - Direct API access established
-   - Asset downloader script working
-   - Component analysis complete
-   - Design-to-code specifications ready
+#### ❌ Major Discrepancies Identified:
+1. **Icons**: Using emoji (🎯, 👁️, 🔄) instead of proper design system icons
+2. **Typography**: Not using Figma's typography scale (693 styles available)
+3. **Spacing**: Using arbitrary Tailwind spacing vs design system spacing tokens
+4. **Brand Identity**: Logo implementation differs from Figma Pipeline logo
+5. **Component Variants**: Missing design system component variants
+6. **Color Precision**: Using generic Tailwind colors vs exact brand colors
+7. **Layout Grid**: Not following Figma's layout grid system
 
-### **🎨 FIGMA DESIGN INTEGRATION** *(COMPLETE)*
-1. **✅ API Connection**
-   - Figma API key configured and tested
-   - File access verified (BBzlqwkcKFUcjLGXmJwNGU)
-   - Asset download pipeline operational
+## Development Commands
 
-2. **✅ Design Analysis**
-   - 5 core components identified:
-     - Pipeline=Dark + Color (Logo)
-     - sidebar (Navigation)  
-     - Property progress bars (3 variants)
-   - 1,215 frames catalogued
-   - Settings interface located
-   - 9 image assets ready for download
-
-3. **✅ Asset Management**
-   - PNG/SVG assets downloaded successfully
-   - Asset organization system established
-   - Figma-to-React conversion pipeline defined
-
----
-
-## 🎯 **CURRENT SPRINT STATUS**
-
-### **SPRINT 1** *(Sep 9-20, 2025)* - **IN PROGRESS**
-- **P360-34**: Development Environment Setup *(8 points)* → **READY TO START**
-- **P360-19**: Authentication UI Components *(5 points)* → **READY TO START** 
-- **P360-40**: API Framework Core *(8 points)* → **READY TO START**
-
-**Total Sprint 1**: 21 story points across 3 core infrastructure stories
-
-### **NEXT SPRINTS PLANNED**
-- **Sprint 2** *(Sep 23 - Oct 4)*: Database + Campaign Management Core
-- **Sprint 3** *(Oct 7-18)*: Audience Management + Basic Analytics
-- **Sprint 4** *(Oct 21 - Nov 1)*: Campaign Orchestration + TTD Integration
-- **Sprint 5** *(Nov 4-15)*: Data Processing + Reporting
-- **Sprint 6** *(Nov 18-29)*: Attribution + Advanced Features  
-- **Sprint 7** *(Dec 2-15)*: Administration + Final Testing
-
----
-
-## 🚀 **IMMEDIATE NEXT STEPS** *(Ready for Implementation)*
-
-### **TODAY'S PRIORITIES** *(Next 4-8 Hours)*
-1. **🏗️ Create Project Structure**
-   - Setup frontend/, backend/, simulators/ directories
-   - Initialize Next.js 14 + TypeScript project
-   - Create FastAPI project structure
-   - Setup Docker Compose for local development
-
-2. **📋 Start P360-34 Implementation**
-   - Transition JIRA story to "In Progress"  
-   - Create Git repository with proper .gitignore
-   - Setup PostgreSQL + Redis containers
-   - Create API simulators framework
-
-3. **🎨 Begin UI Development**
-   - Convert Figma sidebar component to React
-   - Setup Tailwind + MUI integration
-   - Create basic authentication pages
-   - Implement responsive layout system
-
-### **THIS WEEK'S DELIVERABLES**
-- ✅ Working local development environment
-- ✅ Basic Next.js application with Figma components
-- ✅ PostgreSQL database with initial schema  
-- ✅ API simulators for TTD, Bombora, Salesforce
-- ✅ First PR merged with authentication flow
-
----
-
-## 🔧 **DEVELOPMENT WORKFLOW**
-
-### **Story Implementation Process**
+### Environment Setup
 ```bash
-1. Select story from JIRA Sprint backlog
-2. Transition story to "In Progress" 
-3. Create feature branch: feature/P360-{NUMBER}-{description}
-4. Download required Figma assets
-5. Implement component/feature
-6. Write tests (unit, integration, accessibility)
-7. Create PR with JIRA story reference  
-8. Code review + acceptance criteria validation
-9. Merge to main → Deploy to staging
-10. Update JIRA story to "Done"
-```
-
-### **Figma-to-Code Pipeline** 
-```bash
-1. Run figma_asset_downloader.py for components
-2. Extract design tokens (colors, spacing, fonts)
-3. Convert SVGs to React components
-4. Apply Tailwind utilities + MUI base components
-5. Add responsive breakpoints + accessibility
-6. Create Storybook stories for documentation
-7. Write visual regression tests
-```
-
----
-
-## 📚 **KEY DOCUMENTATION FILES**
-
-### **📋 Planning & Strategy**
-- `P360_Development_Implementation_Plan.md` - **Complete implementation roadmap**
-- `P360_BALANCED_7_Sprint_Timeline.md` - Sprint planning with story distribution
-- `P360_Complete_Story_Summary.md` - All 100 stories with JIRA numbers
-
-### **🏗️ Architecture & Design**  
-- `P360_Technical_Architecture.md` - System design and component architecture
-- `P360_AWS_Architecture_Diagrams.md` - Cloud infrastructure specifications
-- `P360_Database_Schema_Design.md` - Multi-tenant data model
-
-### **🔧 MCP Tools & Integration**
-- `P360_Confluence_MCP_Image_Embedding_Implementation_Guide.md`
-- `P360_Figma_MCP_Enhancement_Specs.md`
-- `P360_Figma_MCP_Testing_Framework.md`
-
-### **📊 JIRA & Project Management**
-- `P360_JIRA_Epics_Stories.md` - Complete epic and story breakdown
-- `P360_Epic[1-7]_Detailed_Stories.md` - Detailed story specifications
-
----
-
-## 🛡️ **QUALITY ASSURANCE STANDARDS**
-
-### **Testing Requirements**
-- **Unit Testing**: Jest + React Testing Library (>90% coverage)
-- **Integration Testing**: Full API endpoint validation
-- **E2E Testing**: Playwright for user workflows  
-- **Visual Testing**: Storybook + Chromatic
-- **Accessibility**: axe-core + WCAG 2.1 AA compliance
-- **Performance**: Core Web Vitals optimization
-
-### **Code Quality**
-- **Linting**: ESLint + TypeScript strict mode
-- **Formatting**: Prettier with consistent rules
-- **Security**: OWASP best practices
-- **Documentation**: JSDoc for all public APIs
-
----
-
-## 🔐 **SECURITY & COMPLIANCE**
-
-### **Authentication & Authorization**
-- JWT tokens with refresh mechanism
-- Multi-tenant row-level security (RLS)
-- OAuth2 integration with Microsoft Entra ID
-- API key management for external services
-
-### **Data Protection**
-- GDPR compliance for user data
-- SOC 2 Type II preparation
-- Encryption at rest and in transit
-- Audit logging for all user actions
-
----
-
-## 📞 **TEAM COORDINATION**
-
-### **Communication Channels**
-- **JIRA**: Story tracking and sprint management
-- **Confluence**: Technical documentation and decisions
-- **GitHub**: Code reviews and pull requests  
-- **Slack**: Daily coordination and quick updates
-
-### **Meeting Cadence**
-- **Daily Standups**: Progress updates and blocker resolution
-- **Sprint Planning**: Story sizing and commitment  
-- **Sprint Reviews**: Demo completed functionality
-- **Retrospectives**: Process improvement and lessons learned
-
----
-
-## 🎯 **SUCCESS METRICS & KPIs**
-
-### **Development Velocity**
-- **Story Points Completed**: Target 20-25 per sprint
-- **Bug Resolution Time**: <24 hours for critical issues
-- **Code Review Time**: <4 hours for PR approval
-- **Test Coverage**: Maintain >90% across all modules
-
-### **Quality Metrics**
-- **Performance**: Page load times <2 seconds
-- **Accessibility**: 100% WCAG 2.1 AA compliance  
-- **Security**: Zero critical vulnerabilities
-- **User Experience**: Design-to-implementation accuracy >95%
-
----
-
-## 🚨 **RISKS & MITIGATION STRATEGIES**
-
-### **Technical Risks**
-1. **Figma Design Changes** → Version control design tokens and components
-2. **API Integration Delays** → Use simulators for parallel development
-3. **Performance Issues** → Early performance testing and optimization
-4. **Security Vulnerabilities** → Regular security audits and penetration testing
-
-### **Process Risks**  
-1. **Scope Creep** → Strict acceptance criteria and change control
-2. **Resource Constraints** → Flexible sprint planning and priority management
-3. **External Dependencies** → Alternative approaches and fallback plans
-4. **Quality Regression** → Automated testing and continuous integration
-
----
-
-## 🎯 **P360-67 CAMPAIGN UI - ✅ FIXED!**
-
-### **✅ PROBLEM RESOLVED**
-- **Issue**: localhost:7600/dashboard/campaigns didn't match Figma design
-- **JIRA**: P360-67 - Campaign Configuration UI
-- **Status**: ✅ **FIXED** - Now matches Figma "general - workspace" design exactly
-
-### **✅ IMPLEMENTATION COMPLETED** *(September 7, 2025)*
-1. **GeneralWorkspace.tsx** - Figma "general - workspace" layout ✅
-2. **FigmaSidebar.tsx** - Figma sidebar component (ID: 157:15957) ✅  
-3. **CampaignConfiguration.tsx** - Campaign management interface ✅
-4. **Fixed Dashboard Page** - localhost:7600/dashboard/campaigns ✅
-
-### **🚀 READY FOR TESTING**
-```bash
-cd frontend
+# Install dependencies
 npm install
-npm run dev
-# Visit: http://localhost:7600/dashboard/campaigns
-# ✅ Now matches Figma design exactly!
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your credentials
 ```
 
-**🚀 STATUS: P360-67 FIXED & READY FOR TESTING**
-
-*Campaign dashboard now matches Figma "general - workspace" design perfectly*
-
----
-
-## 🧪 **KIWI-TCMS TEST MANAGEMENT - ✅ READY FOR SETUP!**
-
-### **✅ TCMS STRUCTURE DESIGNED** *(September 8, 2025)*
-- **Organization Strategy**: Feature-Based (Recommended over Story-Based)
-- **Total Test Cases Prepared**: 113 test cases across 2 feature areas
-- **Import Files Created**: Ready for TCMS import
-- **Automation Integration**: Mapped to existing test files
-
-### **🏗️ TCMS STRUCTURE PLAN**
-```
-Product: P360 - Display Advertising Platform MVP
-├── Test Plan 1: P360 Authentication Features (P360-19) - 78 test cases
-│   ├── Unit Tests: AuthLayout, LoginForm, SignupForm, Button, Input (39 cases)
-│   ├── Integration Tests: Navigation, Form Interactions (11 cases)
-│   ├── Visual Regression Tests: Cross-browser, Responsive (10 cases)
-│   ├── E2E Tests: User Journeys, Performance (14 cases)
-│   └── Security Tests: XSS, CSRF, Input Validation (4 cases)
-├── Test Plan 2: P360 Campaign Management Features (P360-67) - 35 test cases
-│   ├── Unit Tests: CampaignCard Component (7 cases)
-│   ├── Integration Tests: Dashboard, Search, Filters (8 cases)
-│   ├── Visual Regression Tests: Desktop, Mobile (3 cases)
-│   ├── Performance Tests: Load, Search Performance (2 cases)
-│   └── Responsive Design Tests: Mobile, Tablet (2 cases)
-```
-
-### **📋 READY IMPORT FILES**
+### Development
 ```bash
-tests/tcms-import-auth-testcases.json        # 78 Authentication test cases
-tests/tcms-import-campaign-testcases.json    # 35 Campaign test cases  
-tests/kiwi-tcms-structure-plan.md           # Complete structure docs
-tests/tcms-setup-script.md                  # Step-by-step setup guide
-tests/verify-tcms-setup.js                  # Verification script
-```
-
-### **🎯 TEST CASE MAPPING TO AUTOMATION**
-```
-Authentication Tests → tests/unit/auth-components.test.jsx (Unit)
-                    → tests/e2e/auth-components.spec.js (E2E)
-Campaign Tests     → tests/unit/campaigns/CampaignCard.test.tsx (Unit)
-                    → tests/integration/campaigns/CampaignsPage.test.tsx (Integration)
-```
-
-### **🏷️ COMPREHENSIVE TAGGING STRATEGY**
-- **Type Tags**: unit, integration, e2e, visual, performance, accessibility, security
-- **Priority Tags**: P1-critical, P2-high, P3-medium, P4-low
-- **Feature Tags**: auth, campaigns, dashboard, forms, ui-components
-- **Technology Tags**: react, typescript, tailwind, playwright, jest
-- **Device Tags**: desktop, mobile, tablet, chrome, firefox, safari
-
-### **🚀 NEXT STEPS FOR TCMS IMPLEMENTATION**
-1. **Manual Setup Required**: Login to TCMS (port 40000) and create product/plans
-2. **Import Test Cases**: Use JSON files to bulk import test cases
-3. **Automation Integration**: Link CI/CD pipeline to TCMS reporting
-4. **Quality Dashboards**: Set up test execution schedules and reporting
-
-### **📊 EXPECTED OUTCOMES**
-- ✅ **Complete Traceability**: JIRA stories → Test Plans → Test Cases → Automation
-- ✅ **Quality Metrics**: 90%+ unit test coverage, 80%+ integration coverage
-- ✅ **Automated Reporting**: CI/CD results automatically update TCMS
-- ✅ **Scalable Structure**: Ready for additional features and stories
-
-**🎯 STATUS: TCMS READY FOR IMPLEMENTATION - JIRA ALIGNMENT IDENTIFIED**
-
-### **📊 FINAL TEST COVERAGE SUMMARY**
-- ✅ **113 Test Cases Ready**: P360-19 (78) + P360-67 (35) - **IMMEDIATE IMPORT**
-- ⏳ **45+ Test Cases Prepared**: Backend (18) + Upcoming Features (27+) - **READY FOR IMPLEMENTATION**  
-- ⚠️ **JIRA Status Misalignment**: 3 stories marked "In Progress" but not implemented
-- 🎯 **Clear Action Plan**: Comprehensive roadmap created
-
-### **🚨 CRITICAL JIRA STATUS UPDATES NEEDED**
-```
-P360-67: In Progress → DONE (Campaign UI complete)
-P360-51: In Progress → To Do (No audience components found)  
-P360-47: In Progress → To Do (No CSV upload components found)
-P360-6:  In Progress → To Do (Backend directories empty)
-```
-
-*Comprehensive test structure complete, JIRA alignment required, ready for TCMS implementation*
-
----
-
-## 🔗 **USEFUL COMMANDS & SHORTCUTS**
-
-### **Figma Asset Management**
-```bash
-# Download single asset for testing
-python3 scripts/figma_asset_downloader.py single [node_id]
-
-# Download all assets from design file  
-python3 scripts/figma_asset_downloader.py all
-
-# Analyze file structure only
-python3 scripts/figma_asset_downloader.py analyze
-```
-
-### **Development Environment**
-```bash
-# Start local development stack
+# Start development environment
 docker-compose -f docker-compose.dev.yml up
 
-# Run frontend development server
+# Frontend only (port 3000)
 cd frontend && npm run dev
 
-# Run backend with hot reload
-cd backend && uvicorn main:app --reload
+# Backend only (port 3001)
+cd backend && npm run dev
 
-# Run all tests
-npm run test:all
+# Database setup
+docker-compose up postgres
 ```
 
-### **JIRA Integration**
+### Testing
 ```bash
-# Update story status
-# Via MCP tools or manual JIRA interface
+# Run all tests
+npm test
 
-# Create feature branch
-git checkout -b feature/P360-{NUMBER}-{description}
+# Frontend tests
+cd frontend && npm test
 
-# Link PR to JIRA story  
-# Include P360-{NUMBER} in PR title and description
+# Backend tests  
+cd backend && npm test
+
+# E2E tests
+npm run test:e2e
+
+# E2E tests in development mode
+npm run test:e2e:dev
 ```
+
+### Production Deployment
+```bash
+# Build and deploy
+docker-compose up --build
+
+# Simple deployment (optimized)
+docker-compose -f docker-compose.simple.yml up
+
+# Test deployment
+docker-compose -f docker-compose.test.yml up
+```
+
+### Figma Integration
+
+#### Access Methods:
+1. **Smart Fetch Script**: `node scripts/smart-figma-fetch.js`
+2. **Direct API**: Uses `FIGMA_API_KEY` from .env
+3. **Cached Data**: Available in `figma_data/` directory
+4. **Assets**: Downloaded to `assets/` directory
+
+#### Figma File Information:
+- **File Key**: `BBzlqwkcKFUcjLGXmJwNGU`
+- **URL**: https://www.figma.com/design/BBzlqwkcKFUcjLGXmJwNGU/Pipeline360-Copy?node-id=861-20083
+- **Current Node ID**: `861-20083`
+
+#### Asset Management:
+```bash
+# Download all Figma assets
+node scripts/fetch-all-figma-assets.js
+
+# Smart fetch with fallback
+node scripts/smart-figma-fetch.js
+
+# Python asset downloader
+python scripts/figma_asset_downloader.py
+```
+
+## JIRA Integration
+
+### Project Information:
+- **Project Key**: P360
+- **JIRA URL**: https://bounteous.atlassian.net
+- **Confluence**: https://bounteous.jira.com/wiki/spaces/P360
+
+### Story Workflow:
+1. Search existing stories
+2. Get story details  
+3. Transition to "In Progress"
+4. Add implementation comments
+5. Link PR when complete
+6. Transition to "Done"
+
+## Current Task Status
+
+### Completed ✅
+- [x] Extract design system from existing Figma JSON files
+- [x] Set up comprehensive development environment
+- [x] Implement basic Campaign Dashboard UI
+- [x] Create CampaignCard component with performance metrics
+- [x] Set up testing infrastructure (Jest, Playwright)
+- [x] Docker deployment configuration
+
+### In Progress 🔄
+- [ ] Analyze Figma components and identify UI discrepancies
+- [ ] Generate P360-compatible components from Figma data
+
+### Pending 📋
+- [ ] Implement Figma design system tokens in Tailwind config
+- [ ] Replace emoji icons with proper design system icons
+- [ ] Align typography with Figma typography scale
+- [ ] Update color palette to match exact Figma brand colors
+- [ ] Implement proper logo component from Figma
+- [ ] Create sidebar component matching Figma design
+- [ ] Add campaign progress indicators matching Figma variants
+- [ ] Implement responsive grid system from Figma
+- [ ] Add proper spacing tokens from design system
+- [ ] Create comprehensive component library
+
+## Useful Paths
+- **Config Files**: `.env`, `docker-compose.*.yml`, `tailwind.config.js`
+- **Main App**: `frontend/src/app/page.tsx`
+- **Components**: `frontend/src/components/`
+- **API Routes**: `backend/src/routes/`
+- **Tests**: `tests/`, `frontend/src/**/*.test.*`
+- **Documentation**: `docs/`, `documentation/`
+- **Scripts**: `scripts/`
+- **Figma Data**: `figma_data/`, `assets/`
+
+## Known Issues
+
+### MCP Integration Issues:
+- Figma MCP tool currently failing
+- Using fallback methods: direct API, smart-fetch script, cached data
+
+### UI/UX Gaps:
+- Current implementation uses placeholder styling
+- Missing proper design system integration
+- Typography not following Figma scale
+- Icons using emojis instead of design system
+- Color values approximate rather than exact
+
+## Next Steps Priority
+1. 🎨 **Design System Integration**: Implement exact Figma design tokens
+2. 🏗️ **Component Library**: Create pixel-perfect components from Figma
+3. 📱 **Responsive Design**: Implement Figma's responsive grid system
+4. 🎯 **Brand Alignment**: Replace all placeholder elements with brand elements
+5. 🧪 **Visual Testing**: Add visual regression tests for design compliance
