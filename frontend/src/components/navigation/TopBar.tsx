@@ -13,7 +13,6 @@
 'use client';
 
 import React from 'react';
-import { P360Logo } from '@/components/brand/P360Logo';
 
 export interface TopBarProps {
   className?: string;

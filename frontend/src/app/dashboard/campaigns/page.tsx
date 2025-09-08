@@ -5,7 +5,6 @@ import { CampaignCard, Campaign } from '@/components/campaigns/CampaignCard';
 import { 
   EmptyCampaigns,
   EmptyResults, 
-  Button as DesignButton, 
   Typography,
   designTokens 
 } from '@/lib/design-system';
@@ -217,13 +216,14 @@ export default function CampaignsPage() {
             <Typography variant="h2" color="primary">
               Campaign Dashboard
             </Typography>
-            <Typography 
-              variant="body" 
-              color="muted" 
-              style={{ marginTop: designTokens.spacing[1] }}
-            >
-              P360-67: Campaign Configuration UI - Performance Overview
-            </Typography>
+            <div style={{ marginTop: designTokens.spacing[1] }}>
+              <Typography 
+                variant="body" 
+                color="muted"
+              >
+                P360-67: Campaign Configuration UI - Performance Overview
+              </Typography>
+            </div>
           </div>
 
           {/* Quick Stats */}
@@ -325,7 +325,7 @@ export default function CampaignsPage() {
 
               {/* Compare Mode */}
               <Button
-                variant="default"
+                variant="secondary"
                 onClick={toggleCompareMode}
               >
                 📊 Compare

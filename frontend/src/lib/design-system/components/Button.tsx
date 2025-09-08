@@ -108,7 +108,7 @@ const getVariantStyles = (variant: ButtonProps['variant']) => {
           borderColor: designTokens.colors.semantic.error[600],
         },
         ':focus': {
-          boxShadow: `0 0 0 3px ${designTokens.colors.semantic.error[200]}`,
+          boxShadow: `0 0 0 3px ${designTokens.colors.semantic.error[50]}`,
         },
       };
 

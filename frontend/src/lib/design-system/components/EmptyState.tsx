@@ -151,7 +151,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
               variant="primary"
               size={size}
               onClick={primaryAction.onClick}
-              {...primaryAction}
+              {...(({ onClick, label, ...rest }) => rest)(primaryAction)}
             >
               {primaryAction.label}
             </Button>
@@ -162,7 +162,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
               variant="ghost"
               size={size}
               onClick={secondaryAction.onClick}
-              {...secondaryAction}
+              {...(({ onClick, label, ...rest }) => rest)(secondaryAction)}
             >
               {secondaryAction.label}
             </Button>

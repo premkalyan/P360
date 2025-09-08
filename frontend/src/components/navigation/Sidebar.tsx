@@ -6,6 +6,7 @@
 'use client';
 
 import React from 'react';
+// @ts-ignore - Next.js Link type conflict due to React version mismatch in monorepo
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -18,7 +19,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
 
   // Check if a path is active
   const isActive = (path: string) => {
-    return pathname === path || pathname.startsWith(`${path}/`);
+    return pathname === path || pathname?.startsWith(`${path}/`);
   };
 
   return (
