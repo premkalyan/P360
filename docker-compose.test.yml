@@ -1,0 +1,77 @@
+# Test Environment Docker Compose Override
+
+services:
+  # Test Database
+  db:
+    environment:
+      POSTGRES_DB: p360_test
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_password
+
+  # Test Backend
+  backend-test:
+    build:
+      context: ./backend
+      dockerfile: ../Dockerfile.backend
+      target: base
+    container_name: p360-backend-test
+    environment:
+      - NODE_ENV=test
+      - DATABASE_URL=postgresql://test_user:test_password@db:5432/p360_test
+      - REDIS_URL=redis://redis:6379
+      - PORT=8000
+      - JWT_SECRET=test-secret-key-for-testing
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run build && npm start"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    networks:
+      - p360-network
+
+  # Test Frontend
+  frontend-test:
+    build:
+      context: ./frontend
+      dockerfile: ../Dockerfile.frontend
+      target: base
+    container_name: p360-frontend-test
+    environment:
+      - NODE_ENV=test
+      - NEXT_PUBLIC_BACKEND_URL=http://backend-test:8000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: sh -c "npm install && npm run build && npm start"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend-test
+    networks:
+      - p360-network
+
+  # Test Report Service (for Kiwi-TCMS integration)
+  test-reporter:
+    image: node:18-alpine
+    container_name: p360-test-reporter
+    volumes:
+      - ./tests:/app/tests
+      - ./test-results:/app/test-results
+    working_dir: /app
+    command: sh -c "sleep 10 && node tests/setup-kiwi-tcms.js && node tests/report-to-kiwi.js"
+    depends_on:
+      - frontend-test
+      - backend-test
+    networks:
+      - p360-network
+    environment:
+      - KIWI_TCMS_URL=http://host.docker.internal:40001
+      - TEST_RESULTS_PATH=/app/test-results
+
+networks:
+  p360-network:
+    driver: bridge
