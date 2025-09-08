@@ -1,0 +1,283 @@
+{
+  "test_plan": {
+    "name": "P360 Backend API & Database Features (P360-6)",
+    "product": "P360 - Display Advertising Platform MVP",
+    "version": "1.0.0", 
+    "type": "Backend Testing",
+    "description": "Backend API endpoints, database schema, and data processing functionality testing"
+  },
+  "test_cases": [
+    {
+      "category": "API Endpoint Tests",
+      "cases": [
+        {
+          "id": "API-001",
+          "title": "Health Check Endpoint Validation",
+          "priority": "P1-critical",
+          "tags": ["api", "health-check", "monitoring"],
+          "preconditions": "Backend server is running",
+          "test_steps": [
+            "Send GET request to /health endpoint",
+            "Verify response status is 200",
+            "Verify response contains status, timestamp, service name",
+            "Verify response time is under 100ms",
+            "Test endpoint during server startup",
+            "Test endpoint during high load"
+          ],
+          "expected_result": "Health check responds correctly with system status",
+          "automated": true,
+          "automation_script": "tests/backend/api/health.test.js",
+          "story_link": "P360-6"
+        },
+        {
+          "id": "API-002", 
+          "title": "Authentication API Endpoints",
+          "priority": "P1-critical",
+          "tags": ["api", "auth", "security", "jwt"],
+          "preconditions": "Authentication endpoints implemented",
+          "test_steps": [
+            "Test POST /api/v1/auth/login with valid credentials",
+            "Test POST /api/v1/auth/login with invalid credentials",
+            "Test POST /api/v1/auth/register with valid data",
+            "Test POST /api/v1/auth/register with duplicate email",
+            "Test JWT token generation and validation",
+            "Test token refresh functionality"
+          ],
+          "expected_result": "Authentication API handles all scenarios correctly",
+          "automated": true,
+          "automation_script": "tests/backend/api/auth.test.js",
+          "story_link": "P360-6"
+        },
+        {
+          "id": "API-003",
+          "title": "User Management API Endpoints",
+          "priority": "P1-critical",
+          "tags": ["api", "users", "crud"],
+          "preconditions": "User management endpoints implemented",
+          "test_steps": [
+            "Test GET /api/v1/users (list users)",
+            "Test GET /api/v1/users/:id (get user details)",
+            "Test PUT /api/v1/users/:id (update user)",
+            "Test DELETE /api/v1/users/:id (delete user)",
+            "Test user role and permission validation",
+            "Test multi-tenant data isolation"
+          ],
+          "expected_result": "User management API works with proper authorization",
+          "automated": true,
+          "automation_script": "tests/backend/api/users.test.js",
+          "story_link": "P360-6"
+        },
+        {
+          "id": "API-004",
+          "title": "Organization Management API",
+          "priority": "P1-critical",
+          "tags": ["api", "organizations", "multi-tenant"],
+          "preconditions": "Organization endpoints implemented",
+          "test_steps": [
+            "Test POST /api/v1/organizations (create org)",
+            "Test GET /api/v1/organizations (list orgs)",
+            "Test PUT /api/v1/organizations/:id (update org)",
+            "Test organization-level data isolation",
+            "Test organization user management",
+            "Test organization settings and configuration"
+          ],
+          "expected_result": "Organization API maintains proper data isolation",
+          "automated": true,
+          "automation_script": "tests/backend/api/organizations.test.js",
+          "story_link": "P360-6"
+        }
+      ]
+    },
+    {
+      "category": "Database Schema Tests",
+      "cases": [
+        {
+          "id": "DB-001",
+          "title": "Database Schema Validation",
+          "priority": "P1-critical",
+          "tags": ["database", "schema", "migrations"],
+          "preconditions": "Database schema is defined",
+          "test_steps": [
+            "Validate all table structures exist",
+            "Check primary key constraints",
+            "Verify foreign key relationships",
+            "Test database indexes are created",
+            "Validate column types and constraints",
+            "Test migration scripts run without errors"
+          ],
+          "expected_result": "Database schema matches design specifications",
+          "automated": true,
+          "automation_script": "tests/backend/database/schema.test.js",
+          "story_link": "P360-6"
+        },
+        {
+          "id": "DB-002",
+          "title": "Multi-tenant Data Isolation",
+          "priority": "P1-critical",
+          "tags": ["database", "multi-tenant", "security", "RLS"],
+          "preconditions": "Row-level security implemented",
+          "test_steps": [
+            "Create data for multiple organizations",
+            "Test that org A cannot access org B data",
+            "Verify RLS policies are enforced",
+            "Test data filtering at database level",
+            "Test cross-organization query prevention",
+            "Validate tenant isolation under load"
+          ],
+          "expected_result": "Complete data isolation between organizations",
+          "automated": true,
+          "automation_script": "tests/backend/database/isolation.test.js",
+          "story_link": "P360-6"
+        },
+        {
+          "id": "DB-003",
+          "title": "Database Performance Testing",
+          "priority": "P2-high",
+          "tags": ["database", "performance", "indexes"],
+          "preconditions": "Database with sample data",
+          "test_steps": [
+            "Test query performance with 1M+ records",
+            "Verify index usage in query plans",
+            "Test concurrent connection handling",
+            "Measure connection pool performance",
+            "Test backup and restore procedures",
+            "Validate query optimization"
+          ],
+          "expected_result": "Database performs within acceptable thresholds",
+          "automated": true,
+          "automation_script": "tests/backend/performance/database.test.js",
+          "story_link": "P360-6"
+        }
+      ]
+    },
+    {
+      "category": "Data Processing Tests",
+      "cases": [
+        {
+          "id": "DATA-001",
+          "title": "CSV Upload Processing",
+          "priority": "P1-critical",
+          "tags": ["data-processing", "csv", "validation"],
+          "preconditions": "CSV processing engine implemented",
+          "test_steps": [
+            "Test CSV file validation (format, structure)",
+            "Test large file processing (100MB+)",
+            "Test invalid data handling and error reporting",
+            "Test duplicate detection and resolution",
+            "Test data cleansing and normalization",
+            "Test processing status and progress tracking"
+          ],
+          "expected_result": "CSV processing handles all scenarios correctly",
+          "automated": true,
+          "automation_script": "tests/backend/data/csv-processing.test.js",
+          "story_link": "P360-47"
+        },
+        {
+          "id": "DATA-002",
+          "title": "Audience Data Model Validation",
+          "priority": "P1-critical", 
+          "tags": ["data-model", "audience", "validation"],
+          "preconditions": "Audience data models implemented",
+          "test_steps": [
+            "Test audience segment creation and storage",
+            "Test audience size calculation accuracy",
+            "Test audience overlap detection",
+            "Test audience metadata tracking",
+            "Test audience versioning and change tracking",
+            "Test audience query performance"
+          ],
+          "expected_result": "Audience data model supports all required operations",
+          "automated": true,
+          "automation_script": "tests/backend/data/audience-model.test.js",
+          "story_link": "P360-48"
+        }
+      ]
+    },
+    {
+      "category": "Integration Tests",
+      "cases": [
+        {
+          "id": "INT-001",
+          "title": "Frontend-Backend Integration",
+          "priority": "P1-critical",
+          "tags": ["integration", "api", "frontend"],
+          "preconditions": "Frontend and backend running",
+          "test_steps": [
+            "Test authentication flow end-to-end",
+            "Test user management operations from UI",
+            "Test campaign data flow from API to UI",
+            "Test error handling and user feedback",
+            "Test API response format consistency",
+            "Test real-time data updates"
+          ],
+          "expected_result": "Frontend and backend integrate seamlessly",
+          "automated": true,
+          "automation_script": "tests/integration/frontend-backend.test.js",
+          "story_link": "P360-6"
+        },
+        {
+          "id": "INT-002",
+          "title": "Database-API Integration",
+          "priority": "P1-critical",
+          "tags": ["integration", "database", "api"],
+          "preconditions": "Database and API layer implemented",
+          "test_steps": [
+            "Test CRUD operations through API",
+            "Test transaction handling and rollback",
+            "Test connection pool management",
+            "Test database error propagation to API",
+            "Test API data validation and sanitization",
+            "Test concurrent request handling"
+          ],
+          "expected_result": "Database and API layer work together correctly",
+          "automated": true,
+          "automation_script": "tests/integration/database-api.test.js",
+          "story_link": "P360-6"
+        }
+      ]
+    },
+    {
+      "category": "Security Tests",
+      "cases": [
+        {
+          "id": "SEC-001",
+          "title": "API Security Validation",
+          "priority": "P1-critical",
+          "tags": ["security", "api", "authentication"],
+          "preconditions": "API security measures implemented",
+          "test_steps": [
+            "Test unauthorized API access prevention",
+            "Test SQL injection prevention",
+            "Test XSS prevention in API responses",
+            "Test rate limiting functionality",
+            "Test CORS configuration",
+            "Test API key and JWT token validation"
+          ],
+          "expected_result": "API is secure against common attack vectors",
+          "automated": true,
+          "automation_script": "tests/backend/security/api-security.test.js",
+          "story_link": "P360-6"
+        },
+        {
+          "id": "SEC-002",
+          "title": "Data Encryption and Privacy",
+          "priority": "P1-critical",
+          "tags": ["security", "encryption", "privacy"],
+          "preconditions": "Encryption and privacy measures implemented",
+          "test_steps": [
+            "Test password hashing and validation",
+            "Test sensitive data encryption at rest",
+            "Test data transmission encryption",
+            "Test PII data handling compliance",
+            "Test data retention policy enforcement",
+            "Test audit logging for sensitive operations"
+          ],
+          "expected_result": "Data is properly encrypted and privacy is maintained",
+          "automated": true,
+          "automation_script": "tests/backend/security/data-privacy.test.js",
+          "story_link": "P360-6"
+        }
+      ]
+    }
+  ]
+}

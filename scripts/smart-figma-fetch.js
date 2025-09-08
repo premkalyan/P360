@@ -22,17 +22,39 @@ class SmartFigmaFetch {
     }
 
     readEnv() {
-        const envContent = fs.readFileSync(this.envPath, 'utf8');
-        const env = {};
-        
-        envContent.split('\n').forEach(line => {
-            if (line.includes('=') && !line.startsWith('#')) {
-                const [key, value] = line.split('=');
-                env[key.trim()] = value.trim().replace(/['"]/g, '');
-            }
-        });
-        
-        return env;
+        // Validate .env file exists and is readable
+        if (!fs.existsSync(this.envPath)) {
+            throw new Error('.env file not found. Please create .env file with FIGMA_API_KEY and FIGMA_FILE_KEY');
+        }
+
+        try {
+            const envContent = fs.readFileSync(this.envPath, 'utf8');
+            const env = {};
+            
+            envContent.split('\n').forEach(line => {
+                if (line.includes('=') && !line.startsWith('#')) {
+                    const [key, value] = line.split('=', 2); // Limit split to 2 parts for security
+                    if (key && value) {
+                        const cleanKey = key.trim();
+                        const cleanValue = value.trim().replace(/^['"]|['"]$/g, ''); // Remove quotes safely
+                        
+                        // Validate Figma keys format for basic security
+                        if (cleanKey === 'FIGMA_API_KEY' && cleanValue.length < 20) {
+                            console.warn('⚠️ FIGMA_API_KEY seems too short. Please verify your API key.');
+                        }
+                        if (cleanKey === 'FIGMA_FILE_KEY' && !/^[A-Za-z0-9]+$/.test(cleanValue)) {
+                            console.warn('⚠️ FIGMA_FILE_KEY contains invalid characters. Expected alphanumeric only.');
+                        }
+                        
+                        env[cleanKey] = cleanValue;
+                    }
+                }
+            });
+            
+            return env;
+        } catch (error) {
+            throw new Error(`Failed to read .env file: ${error.message}`);
+        }
     }
 
     async fetchWithFallback() {

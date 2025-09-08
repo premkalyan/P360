@@ -1,0 +1,31 @@
+{
+  "timestamp": 1757255090816,
+  "fileKey": "BBzlqwkcKFUcjLGXmJwNGU",
+  "nodeId": "861-20083",
+  "data": {
+    "document": {
+      "id": "mock-doc",
+      "name": "P360 Design System",
+      "type": "DOCUMENT",
+      "children": [
+        {
+          "id": "861-20083",
+          "name": "P360 Components",
+          "type": "CANVAS",
+          "children": [
+            {
+              "id": "campaign-card-1",
+              "name": "CampaignCard",
+              "type": "COMPONENT"
+            },
+            {
+              "id": "metric-card-1",
+              "name": "MetricCard",
+              "type": "COMPONENT"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

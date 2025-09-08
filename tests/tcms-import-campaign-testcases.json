@@ -1,0 +1,445 @@
+{
+  "test_plan": {
+    "name": "P360 Campaign Management Features (P360-67)",
+    "product": "P360 - Display Advertising Platform MVP", 
+    "version": "1.0.0",
+    "type": "Feature Testing",
+    "description": "Testing of campaign management functionality including dashboard, campaign cards, filtering, search, and analytics"
+  },
+  "test_cases": [
+    {
+      "category": "Unit Tests - CampaignCard Component",
+      "cases": [
+        {
+          "id": "CC-001",
+          "title": "Campaign Performance Overview Display",
+          "priority": "P1-critical",
+          "tags": ["unit", "campaigns", "performance", "display"],
+          "preconditions": "CampaignCard component with mock campaign data",
+          "test_steps": [
+            "Render CampaignCard with complete campaign data",
+            "Verify campaign name displays correctly",
+            "Check program name with icon",
+            "Verify status indicator and styling",
+            "Check campaign type icon display"
+          ],
+          "expected_result": "All campaign basic information displays correctly",
+          "automated": true,
+          "automation_script": "tests/unit/campaigns/CampaignCard.test.tsx::CC-001",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "CC-002", 
+          "title": "Campaign Metrics Display Accuracy",
+          "priority": "P1-critical",
+          "tags": ["unit", "campaigns", "metrics", "data-display"],
+          "preconditions": "CampaignCard with performance metrics",
+          "test_steps": [
+            "Verify impressions display with K formatting",
+            "Check clicks display with proper formatting",
+            "Verify CTR percentage display (2 decimals)",
+            "Check CPA currency formatting",
+            "Verify conversions count display",
+            "Check ROAS display with 'x' suffix"
+          ],
+          "expected_result": "All metrics display with correct formatting",
+          "automated": true,
+          "automation_script": "tests/unit/campaigns/CampaignCard.test.tsx::CC-002",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "CC-003",
+          "title": "Budget Information with Utilization",
+          "priority": "P1-critical", 
+          "tags": ["unit", "campaigns", "budget", "utilization"],
+          "preconditions": "CampaignCard with budget data",
+          "test_steps": [
+            "Verify spent/total budget display",
+            "Check utilization percentage calculation",
+            "Test budget formatting with currency",
+            "Verify utilization percentage formatting",
+            "Check budget progress visual indicator"
+          ],
+          "expected_result": "Budget information displays accurately with utilization",
+          "automated": true,
+          "automation_script": "tests/unit/campaigns/CampaignCard.test.tsx::CC-003",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "CC-004",
+          "title": "Real-time Performance Feedback",
+          "priority": "P1-critical",
+          "tags": ["unit", "campaigns", "performance", "alerts"],
+          "preconditions": "CampaignCard with various performance states",
+          "test_steps": [
+            "Test over-budget warning display",
+            "Verify optimization alert for zero conversions", 
+            "Check high performer indicator (ROAS >= 4)",
+            "Test ROAS color coding (green/yellow/red)",
+            "Verify alert styling and messaging"
+          ],
+          "expected_result": "Performance feedback displays correctly based on metrics",
+          "automated": true,
+          "automation_script": "tests/unit/campaigns/CampaignCard.test.tsx::CC-004",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "CC-005",
+          "title": "Campaign Status Display",
+          "priority": "P1-critical",
+          "tags": ["unit", "campaigns", "status", "ui-state"],
+          "preconditions": "CampaignCard with different status values",
+          "test_steps": [
+            "Test active status display with green styling",
+            "Test paused status display with yellow styling",
+            "Test draft status display",
+            "Verify status icons are correct",
+            "Check status text and color consistency"
+          ],
+          "expected_result": "Campaign status displays correctly with proper styling",
+          "automated": true,
+          "automation_script": "tests/unit/campaigns/CampaignCard.test.tsx::CC-005",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "CC-006",
+          "title": "Action Buttons Functionality",
+          "priority": "P1-critical",
+          "tags": ["unit", "campaigns", "actions", "buttons"],
+          "preconditions": "CampaignCard with action handlers",
+          "test_steps": [
+            "Verify all action buttons render by default",
+            "Test View button calls correct handler",
+            "Test Edit button calls correct handler",
+            "Test Pause/Resume button functionality",
+            "Test Clone button calls correct handler",
+            "Verify buttons hide when showQuickActions is false"
+          ],
+          "expected_result": "Action buttons function correctly with proper event handling",
+          "automated": true,
+          "automation_script": "tests/unit/campaigns/CampaignCard.test.tsx::CC-006",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "CC-007",
+          "title": "Responsive Compact Mode",
+          "priority": "P2-high",
+          "tags": ["unit", "campaigns", "responsive", "compact"],
+          "preconditions": "CampaignCard with compact prop",
+          "test_steps": [
+            "Render CampaignCard with compact=true",
+            "Verify essential information still displays",
+            "Check that detailed metrics grid is hidden",
+            "Verify compact styling is applied",
+            "Test that core functionality remains"
+          ],
+          "expected_result": "Compact mode displays correctly with essential information",
+          "automated": true,
+          "automation_script": "tests/unit/campaigns/CampaignCard.test.tsx::CC-007",
+          "story_link": "P360-67"
+        }
+      ]
+    },
+    {
+      "category": "Integration Tests - Campaign Dashboard",
+      "cases": [
+        {
+          "id": "CD-001",
+          "title": "Campaign Dashboard Display",
+          "priority": "P1-critical",
+          "tags": ["integration", "campaigns", "dashboard", "display"],
+          "preconditions": "CampaignsPage component with mock data",
+          "test_steps": [
+            "Render CampaignsPage component",
+            "Verify dashboard header displays",
+            "Check quick stats section renders",
+            "Verify all campaigns display by default",
+            "Check campaign count display"
+          ],
+          "expected_result": "Dashboard displays correctly with all campaigns",
+          "automated": true,
+          "automation_script": "tests/integration/campaigns/CampaignsPage.test.tsx::CD-001",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "CD-002",
+          "title": "Advanced Search Functionality",
+          "priority": "P1-critical",
+          "tags": ["integration", "campaigns", "search", "filtering"],
+          "preconditions": "CampaignsPage with multiple campaigns",
+          "test_steps": [
+            "Enter search term in campaign name",
+            "Verify filtered results display",
+            "Search by program name",
+            "Verify program name filtering works",
+            "Search for non-existent campaign",
+            "Verify no results message displays"
+          ],
+          "expected_result": "Search functionality filters campaigns correctly",
+          "automated": true,
+          "automation_script": "tests/integration/campaigns/CampaignsPage.test.tsx::CD-002",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "CD-003",
+          "title": "Advanced Filtering System",
+          "priority": "P1-critical",
+          "tags": ["integration", "campaigns", "filtering", "dropdown"],
+          "preconditions": "CampaignsPage with various campaign types/statuses",
+          "test_steps": [
+            "Filter campaigns by status (active/paused)",
+            "Verify status filtering works correctly",
+            "Filter campaigns by type (conversion/awareness)",
+            "Verify type filtering works",
+            "Combine search and filter criteria",
+            "Verify combined filtering works"
+          ],
+          "expected_result": "Filtering system works correctly for all criteria",
+          "automated": true,
+          "automation_script": "tests/integration/campaigns/CampaignsPage.test.tsx::CD-003",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "CD-004",
+          "title": "Sorting Functionality",
+          "priority": "P2-high",
+          "tags": ["integration", "campaigns", "sorting", "ordering"],
+          "preconditions": "CampaignsPage with multiple campaigns",
+          "test_steps": [
+            "Sort campaigns by name A-Z",
+            "Verify alphabetical sorting works",
+            "Sort by highest ROAS",
+            "Verify ROAS sorting works correctly",
+            "Sort by latest first (default)",
+            "Verify date sorting works"
+          ],
+          "expected_result": "Sorting works correctly for all available criteria",
+          "automated": true,
+          "automation_script": "tests/integration/campaigns/CampaignsPage.test.tsx::CD-004",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "CD-005",
+          "title": "Campaign Comparison Tool",
+          "priority": "P2-high",
+          "tags": ["integration", "campaigns", "comparison", "selection"],
+          "preconditions": "CampaignsPage with comparison functionality",
+          "test_steps": [
+            "Click Compare button to enable comparison mode",
+            "Verify checkboxes appear on campaign cards",
+            "Select multiple campaigns for comparison",
+            "Verify selection count displays",
+            "Check bulk action buttons appear",
+            "Test comparison interface"
+          ],
+          "expected_result": "Campaign comparison tool functions correctly",
+          "automated": true,
+          "automation_script": "tests/integration/campaigns/CampaignsPage.test.tsx::CD-005",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "CD-006",
+          "title": "View Mode Toggle (Grid/List)",
+          "priority": "P2-high",
+          "tags": ["integration", "campaigns", "view-mode", "ui-toggle"],
+          "preconditions": "CampaignsPage with view toggle buttons",
+          "test_steps": [
+            "Default view should be grid mode",
+            "Click List view button",
+            "Verify campaigns display in compact/list mode",
+            "Click Grid view button",
+            "Verify campaigns return to grid mode",
+            "Check view state persistence"
+          ],
+          "expected_result": "View mode toggle works correctly between grid and list",
+          "automated": true,
+          "automation_script": "tests/integration/campaigns/CampaignsPage.test.tsx::CD-006", 
+          "story_link": "P360-67"
+        },
+        {
+          "id": "CD-007",
+          "title": "Clear Filters Functionality",
+          "priority": "P2-high",
+          "tags": ["integration", "campaigns", "filters", "reset"],
+          "preconditions": "CampaignsPage with applied filters",
+          "test_steps": [
+            "Apply search and filter criteria",
+            "Verify filtered results display",
+            "Click Clear Filters button",
+            "Verify all filters are reset",
+            "Verify all campaigns display again",
+            "Check filter UI returns to default state"
+          ],
+          "expected_result": "Clear Filters resets all filters and shows all campaigns",
+          "automated": true,
+          "automation_script": "tests/integration/campaigns/CampaignsPage.test.tsx::CD-007",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "CD-008",
+          "title": "Campaign Actions Integration",
+          "priority": "P1-critical",
+          "tags": ["integration", "campaigns", "actions", "handlers"],
+          "preconditions": "CampaignsPage with clickable campaign actions",
+          "test_steps": [
+            "Click Edit button on campaign card",
+            "Verify edit handler called with campaign ID",
+            "Enable comparison mode",
+            "Select multiple campaigns",
+            "Test bulk action buttons",
+            "Verify bulk actions work correctly"
+          ],
+          "expected_result": "Campaign actions integrate correctly with handlers",
+          "automated": true,
+          "automation_script": "tests/integration/campaigns/CampaignsPage.test.tsx::CD-008",
+          "story_link": "P360-67"
+        }
+      ]
+    },
+    {
+      "category": "Visual Regression Tests",
+      "cases": [
+        {
+          "id": "VR-001",
+          "title": "Campaign Dashboard Visual Consistency (Desktop)",
+          "priority": "P2-high", 
+          "tags": ["visual", "campaigns", "desktop", "regression"],
+          "preconditions": "CampaignsPage loaded on desktop viewport",
+          "test_steps": [
+            "Set desktop viewport (1440x900)",
+            "Navigate to campaigns dashboard",
+            "Wait for all campaigns to load",
+            "Take full page screenshot",
+            "Compare with baseline image"
+          ],
+          "expected_result": "Dashboard visual appearance matches baseline",
+          "automated": true,
+          "automation_script": "tests/visual/campaigns-visual.spec.js::VR-001",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "VR-002",
+          "title": "Campaign Dashboard Visual Consistency (Mobile)",
+          "priority": "P2-high",
+          "tags": ["visual", "campaigns", "mobile", "responsive"],
+          "preconditions": "CampaignsPage loaded on mobile viewport",
+          "test_steps": [
+            "Set mobile viewport (375x812)", 
+            "Navigate to campaigns dashboard",
+            "Wait for responsive layout",
+            "Take full page screenshot",
+            "Compare with mobile baseline"
+          ],
+          "expected_result": "Mobile dashboard appearance matches baseline",
+          "automated": true,
+          "automation_script": "tests/visual/campaigns-visual.spec.js::VR-002",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "VR-003",
+          "title": "CampaignCard States Visual Comparison",
+          "priority": "P2-high",
+          "tags": ["visual", "campaigns", "card-states", "comparison"],
+          "preconditions": "CampaignCard in various states",
+          "test_steps": [
+            "Render CampaignCard in active state",
+            "Take screenshot of active state",
+            "Render CampaignCard in paused state", 
+            "Take screenshot of paused state",
+            "Render CampaignCard with over-budget alert",
+            "Take screenshot of alert state",
+            "Compare all states with baselines"
+          ],
+          "expected_result": "All campaign card states match visual baselines",
+          "automated": true,
+          "automation_script": "tests/visual/campaign-card-visual.spec.js::VR-003",
+          "story_link": "P360-67"
+        }
+      ]
+    },
+    {
+      "category": "Performance Tests",
+      "cases": [
+        {
+          "id": "PERF-001",
+          "title": "Campaign Dashboard Load Performance",
+          "priority": "P2-high",
+          "tags": ["performance", "campaigns", "load-time", "dashboard"],
+          "preconditions": "Clean browser state, network conditions normal",
+          "test_steps": [
+            "Navigate to campaigns dashboard",
+            "Measure initial page load time",
+            "Measure time to interactive",
+            "Measure largest contentful paint",
+            "Verify load time < 2 seconds"
+          ],
+          "expected_result": "Dashboard loads within performance thresholds",
+          "automated": true,
+          "automation_script": "tests/performance/campaigns-perf.spec.js::PERF-001",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "PERF-002",
+          "title": "Search and Filter Performance",
+          "priority": "P2-high",
+          "tags": ["performance", "campaigns", "search", "filter"],
+          "preconditions": "Dashboard loaded with many campaigns",
+          "test_steps": [
+            "Measure search response time",
+            "Test filter application speed",
+            "Measure sort operation performance",
+            "Test combined filter performance",
+            "Verify response time < 500ms"
+          ],
+          "expected_result": "Search/filter operations perform within thresholds",
+          "automated": true,
+          "automation_script": "tests/performance/campaigns-perf.spec.js::PERF-002",
+          "story_link": "P360-67"
+        }
+      ]
+    },
+    {
+      "category": "Responsive Design Tests",
+      "cases": [
+        {
+          "id": "RD-001",
+          "title": "Mobile Viewport Adaptation",
+          "priority": "P1-critical",
+          "tags": ["responsive", "campaigns", "mobile", "adaptation"],
+          "preconditions": "CampaignsPage loaded on mobile device",
+          "test_steps": [
+            "Set mobile viewport (375px width)",
+            "Verify navigation adapts to mobile",
+            "Check campaign cards stack properly",
+            "Verify search/filter controls adapt",
+            "Test touch interactions work",
+            "Check scrolling performance"
+          ],
+          "expected_result": "Dashboard fully functional and usable on mobile",
+          "automated": true,
+          "automation_script": "tests/responsive/campaigns-mobile.spec.js::RD-001",
+          "story_link": "P360-67"
+        },
+        {
+          "id": "RD-002",
+          "title": "Tablet Viewport Optimization",
+          "priority": "P2-high",
+          "tags": ["responsive", "campaigns", "tablet", "optimization"],
+          "preconditions": "CampaignsPage loaded on tablet viewport",
+          "test_steps": [
+            "Set tablet viewport (768px width)",
+            "Verify layout optimization for tablet",
+            "Check campaign grid adapts properly",
+            "Test touch targets are adequate",
+            "Verify all functionality works",
+            "Check landscape/portrait orientations"
+          ],
+          "expected_result": "Dashboard optimized for tablet experience",
+          "automated": true,
+          "automation_script": "tests/responsive/campaigns-tablet.spec.js::RD-002",
+          "story_link": "P360-67"
+        }
+      ]
+    }
+  ]
+}

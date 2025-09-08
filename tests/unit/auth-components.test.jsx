@@ -100,6 +100,7 @@ describe('P360 Authentication Components Unit Tests', () => {
       // Test valid email
       await user.clear(emailInput);
       await user.type(emailInput, 'valid@example.com');
+      await user.click(submitButton);
       
       // Error should clear
       await waitFor(() => {
@@ -132,6 +133,7 @@ describe('P360 Authentication Components Unit Tests', () => {
       // Test valid password
       await user.clear(passwordInput);
       await user.type(passwordInput, 'validpassword');
+      await user.click(submitButton);
       
       // Error should clear
       await waitFor(() => {
