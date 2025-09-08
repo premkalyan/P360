@@ -10,8 +10,8 @@ services:
   # P360 Frontend - Next.js 14 with Fixed Campaigns UI
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: frontend/Dockerfile
     ports:
       - "6500:6500"
     environment:
@@ -40,8 +40,8 @@ services:
   # P360 Backend - Node.js Express API
   backend:
     build:
-      context: ./backend
-      dockerfile: ../Dockerfile.backend
+      context: .
+      dockerfile: Dockerfile.backend
     ports:
       - "6501:6501"
     environment:
