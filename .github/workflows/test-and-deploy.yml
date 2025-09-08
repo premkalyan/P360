@@ -32,11 +32,10 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: '${{ matrix.workspace }}/package-lock.json'
+          cache-dependency-path: 'package-lock.json'
       
-      - name: 🔧 Install Dependencies
-        working-directory: ./${{ matrix.workspace }}
-        run: npm install
+      - name: 🔧 Install Dependencies (Workspaces)
+        run: npm install --workspaces
       
       - name: 🧪 Run Unit Tests
         working-directory: ./${{ matrix.workspace }}
@@ -178,11 +177,10 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: '${{ matrix.workspace }}/package-lock.json'
+          cache-dependency-path: 'package-lock.json'
       
-      - name: 🔧 Install Dependencies
-        working-directory: ./${{ matrix.workspace }}
-        run: npm install
+      - name: 🔧 Install Dependencies (Workspaces)
+        run: npm install --workspaces
       
       - name: 📝 Run ESLint
         working-directory: ./${{ matrix.workspace }}
