@@ -138,14 +138,14 @@ jobs:
       
       - name: ⏳ Wait for Services
         run: |
-          timeout 60s bash -c 'until curl -s http://localhost:7600 > /dev/null; do sleep 1; done'
-          timeout 60s bash -c 'until curl -s http://localhost:7601 > /dev/null; do sleep 1; done'
+          timeout 60s bash -c 'until curl -s http://localhost:6500 > /dev/null; do sleep 1; done'
+          timeout 60s bash -c 'until curl -s http://localhost:6501 > /dev/null; do sleep 1; done'
       
       - name: 🧪 Run E2E Tests
         run: npm run test:e2e
         env:
-          BASE_URL: http://localhost:7600
-          API_URL: http://localhost:7601
+          BASE_URL: http://localhost:6500
+          API_URL: http://localhost:6501
       
       - name: 📸 Upload Screenshots
         uses: actions/upload-artifact@v3

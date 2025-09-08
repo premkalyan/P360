@@ -35,8 +35,8 @@ COPY backend/package*.json ./
 
 USER nodejs
 
-EXPOSE 8000
+EXPOSE 6501
 
-ENV PORT 8000
+ENV PORT 6501
 
 CMD ["node", "dist/index.js"]

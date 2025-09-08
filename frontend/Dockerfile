@@ -41,7 +41,7 @@ RUN adduser --system --uid 1001 nextjs
 # Set environment variables
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV PORT=7600
+ENV PORT=6500
 ENV HOSTNAME="0.0.0.0"
 
 # Copy built application
@@ -51,11 +51,11 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-EXPOSE 7600
+EXPOSE 6500
 
 # Health check using the API endpoint we created
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-  CMD curl -f http://localhost:7600/api/health || exit 1
+  CMD curl -f http://localhost:6500/api/health || exit 1
 
 # Start the application
 CMD ["node", "server.js"]

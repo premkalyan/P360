@@ -13,11 +13,11 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "7600:7600"
+      - "6500:6500"
     environment:
       - NODE_ENV=production
       - NEXT_TELEMETRY_DISABLED=1
-      - PORT=7600
+      - PORT=6500
       - HOSTNAME=0.0.0.0
     volumes:
       # Mount Figma assets for development
@@ -27,7 +27,7 @@ services:
     networks:
       - p360-network
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:7600"]
+      test: ["CMD", "curl", "-f", "http://localhost:6500"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -37,26 +37,24 @@ services:
       - "com.p360.service=frontend"
       - "com.p360.description=P360 Frontend with fixed P360-67 campaigns UI"
 
-  # P360 Backend - FastAPI (Future implementation)
+  # P360 Backend - Node.js Express API
   backend:
-    image: python:3.9-alpine
+    build:
+      context: ./backend
+      dockerfile: ../Dockerfile.backend
     ports:
-      - "3001:8000"
+      - "6501:6501"
     environment:
-      - PYTHON_ENV=production
+      - NODE_ENV=production
+      - PORT=6501
       - DATABASE_URL=postgresql://p360_user:p360_pass@postgres:5432/p360_prod
-      - REDIS_URL=redis://redis:6379
+      - REDIS_URL=redis://redis:6502
+      - JWT_SECRET=production-jwt-secret-change-in-production
     networks:
       - p360-network
     depends_on:
       - postgres
       - redis
-    command: |
-      sh -c "
-        echo 'Backend service placeholder - FastAPI implementation pending'
-        echo 'P360-67 campaigns UI testing can proceed with frontend only'
-        python -c 'import time; time.sleep(31536000)'  # Sleep for 1 year (placeholder)
-      "
     restart: unless-stopped
     labels:
       - "com.p360.service=backend"
@@ -92,7 +90,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "6502:6379"
     command: redis-server --appendonly yes --requirepass p360_redis_pass
     volumes:
       - redis_data:/data
