@@ -1,0 +1,106 @@
+---
+description: P360 Enterprise Development Rules - SDLC with MCP Integration
+globs:
+alwaysApply: true
+---
+
+# P360 Development Rules - Enterprise SDLC
+# =======================================
+
+## 🎯 MANDATORY SDLC PROCESS
+- **NEVER start coding without a JIRA story**
+- Always follow: Story → Implementation → Tests → PR → Review → Merge
+- Use MCP tools for JIRA, Confluence, Kiwi-TCMS integration
+- Update story status throughout development
+
+## 📊 ENVIRONMENT ARCHITECTURE (3-Tier)
+```bash
+Local Dev:  Frontend 6600 ↔ Backend 6601 (NODE_ENV=development)
+UAT:        Frontend 6500 ↔ Backend 6501 (NODE_ENV=production) 
+QA/CI:      Frontend 6700 ↔ Backend 6701 (NODE_ENV=test)
+```
+
+## 🗄️ DATABASE STRATEGY (Prisma + PostgreSQL)
+```typescript
+// Always design schema FIRST, then implement features
+// Use Prisma migrations for all schema changes
+// Environment-specific databases: p360_dev, p360_prod, p360_test
+// Backend port configuration: environment-aware defaults in src/index.js
+```
+
+## 🔄 GIT WORKFLOW
+```bash
+# Branch naming: {type}/P360-{number}-{description}
+feature/P360-109-campaign-database-schema
+bugfix/P360-106-figma-design-system
+
+# Commit format: P360-{number}: {summary}
+```
+
+## 🧪 TESTING STRATEGY
+- **Unit tests**: Every component (ComponentName.test.tsx)
+- **Integration tests**: Page workflows (PageName.test.tsx) 
+- **E2E tests**: Critical user journeys (Playwright)
+- **Kiwi-TCMS**: Link all tests to test management system
+
+## 📱 COMPONENT ARCHITECTURE
+```typescript
+// P360 Component Pattern
+export interface ComponentProps { /* TypeScript types */ }
+export const ComponentName: React.FC<ComponentProps> = ({ props }) => {
+  return <div className="p360-component-class">{/* content */}</div>;
+};
+export default ComponentName;
+```
+
+## 🚀 MCP TOOLS (Essential Commands)
+```typescript
+// JIRA Management
+mcp_jira-orengrinker_search_issues         // Find stories
+mcp_jira-orengrinker_get_issue_details     // Get requirements  
+mcp_jira-orengrinker_transition_issue      // Update status
+mcp_jira-orengrinker_add_comment          // Progress updates
+
+// Design Integration  
+mcp_figma-mcp_get_figma_data               // Get Figma specs
+mcp_figma-mcp_figma_tokens_to_p360_theme  // Extract tokens
+
+// Documentation
+mcp_confluence-mcp_confluence_create_page  // Create docs
+mcp_confluence-mcp_confluence_search       // Find existing docs
+
+// Test Management
+mcp_kiwi_list_products                     // List test products
+mcp_kiwi_create_case                       // Create test cases
+```
+
+## 🐳 DOCKER ENVIRONMENTS
+```bash
+# Local Development (6600/6601)
+npm run dev:frontend && npm run dev:backend
+
+# UAT Environment (6500/6501) 
+npm run docker:uat
+
+# QA/CI Environment (6700/6701)
+npm run docker:test
+```
+
+## ✅ QUALITY STANDARDS
+- **Performance**: <2s page loads, optimized bundles
+- **Accessibility**: WCAG 2.1 AA compliance  
+- **Security**: Input validation, XSS/CSRF protection
+- **Testing**: >90% coverage, E2E for critical paths
+- **Documentation**: Confluence for features, ADRs
+
+## 📋 DEFINITION OF DONE
+- [ ] JIRA story → In Progress → Done with PR link
+- [ ] All acceptance criteria implemented & tested
+- [ ] Unit, integration, E2E tests passing
+- [ ] Code review approved  
+- [ ] Kiwi-TCMS test cases executed
+- [ ] Documentation updated
+- [ ] Deployment verified
+
+---
+**P360 Enterprise SDLC ensures quality, security, and maintainability with full MCP integration.**
