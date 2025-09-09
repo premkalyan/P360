@@ -80,11 +80,11 @@ export default ComponentName;
 
 ## 🚀 MCP TOOLS (Essential Commands)
 ```typescript
-// JIRA Management (Use JIRA Wiki Markup: h1., h2., *bold*, * bullets)
+// JIRA Management (Use plain text formatting: UPPERCASE, -, ✅ emojis)
 mcp_jira-orengrinker_search_issues         // Find stories
 mcp_jira-orengrinker_get_issue_details     // Get requirements  
 mcp_jira-orengrinker_transition_issue      // Update status
-mcp_jira-orengrinker_add_comment          // Progress updates (Wiki markup)
+mcp_jira-orengrinker_add_comment          // Progress updates (plain text)
 
 // PR Management (Agent-Driven) - COMPLETE PROCESS REQUIRED
 gh pr create --title "..." --body "..." --base main  // Create PR via CLI
@@ -173,18 +173,15 @@ npm run docker:test
 
 ### **⚠️ CRITICAL: Different platforms use different formatting**
 
-### **🔹 JIRA Comments - Use JIRA Wiki Markup:**
+### **🔹 JIRA Comments - Plain Text Only:**
 ```
-h1. Main Title
-h2. Section Header  
-h3. Subsection
-h4. Sub-subsection
-*Bold Text*
-_Italic Text_
-* Bullet point
-* Another point
-# Numbered item
-# Next item
+MAIN TITLE (use UPPERCASE for emphasis)
+Section Header (use simple structure)
+- Bullet points with dashes
+- Another bullet point  
+✅ Checkmarks for completed items
+🔄 Emojis for status indicators
+📊 Visual separators with emojis
 ```
 
 ### **🔹 Confluence Pages - Use HTML:**
@@ -216,12 +213,12 @@ _Italic Text_
 - List item      → displays as: - List item
 ```
 
-#### **✅ JIRA Comments (Wiki Markup):**
+#### **✅ JIRA Comments (Plain Text):**
 ```
-h1. Title        → renders as large title
-h2. Header       → renders as section header
-*Bold*           → renders as Bold
-* List item      → renders as • List item
+TITLE (UPPERCASE)    → Clear visual hierarchy
+Section Header       → Simple text structure
+- List item          → Dash bullets
+✅ Completed         → Emoji indicators
 ```
 
 #### **✅ Confluence Pages (HTML):**
