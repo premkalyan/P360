@@ -192,15 +192,15 @@ export default function CampaignsPage() {
 
           {/* Pagination - Bottom positioning */}
           <div className="flex justify-between items-center pt-6 border-t border-gray-200">
-            <div className="p360-text-body text-gray-600">
-              {/* Results summary can go here if needed */}
-            </div>
-            
             <CampaignPagination
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={handlePageChange}
             />
+            
+            <div className="p360-text-body text-gray-600">
+              {/* Results summary can go here if needed */}
+            </div>
           </div>
         </div>
       )}
