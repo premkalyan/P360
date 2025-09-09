@@ -21,7 +21,7 @@ import path from 'path';
 
 describe('P360-8: Database Migration System Integration Tests', () => {
   let prisma: PrismaClient;
-  const backendPath = path.resolve('/Users/premkalyan/code/P360/backend');
+  const backendPath = path.resolve(__dirname, '../../..');
 
   // Skip database tests in CI environment if no database is available
   const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
@@ -81,6 +81,7 @@ describe('P360-8: Database Migration System Integration Tests', () => {
         expect(Number(tables[0].count)).toBeGreaterThan(5); // Should have our tables
       } catch (error) {
         console.warn('Database reset test skipped due to environment constraints');
+        return; // Skip test when environment is not set up
       }
     });
 

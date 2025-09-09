@@ -21,7 +21,7 @@ import path from 'path';
 
 describe('P360-8: Database Reset/Rebuild E2E Tests', () => {
   let prisma: PrismaClient;
-  const backendPath = path.resolve('/Users/premkalyan/code/P360/backend');
+  const backendPath = path.resolve(__dirname, '../../..');
 
   // Skip database tests in CI environment if no database is available
   const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
@@ -76,7 +76,7 @@ describe('P360-8: Database Reset/Rebuild E2E Tests', () => {
         expect(output).toContain('Database: p360_test');
       } catch (error) {
         console.warn('Database reset script test skipped due to environment constraints');
-        // This test requires proper shell environment and database access
+        return; // Skip test when environment is not set up
       }
     });
 

@@ -17,6 +17,7 @@
 
 import { PrismaClient } from '../../../src/generated/prisma';
 import { execSync } from 'child_process';
+import path from 'path';
 
 describe('P360-8: Prisma Client Unit Tests', () => {
   let prisma: PrismaClient;
@@ -40,7 +41,7 @@ describe('P360-8: Prisma Client Unit Tests', () => {
     // Reset test database before running tests
     try {
       execSync('npm run db:reset', { 
-        cwd: '/Users/premkalyan/code/P360/backend',
+        cwd: path.resolve(__dirname, '../../..'),
         stdio: 'inherit',
         env: { ...process.env, NODE_ENV: 'test' }
       });

@@ -15,7 +15,7 @@ alwaysApply: true
 2. **💻 Implementation** (Development work)
 3. **🧪 Testing** (Unit + Integration + E2E tests)
 4. **📤 PR Creation** (Agent creates PR using git/GitHub CLI commands)
-5. **🔍 MCP-Assisted Review** (PR review using MCP tools)
+5. **🔍 MCP-Assisted Review** (PR review using MCP tools: pr_review + pr_improve + fix ALL issues)
 6. **🔄 Feedback Incorporation** (Address review comments)
 7. **✅ Git Actions Success** (All CI/CD checks pass)
 8. **🔀 Branch Merge** (Merge to main branch)
@@ -81,10 +81,11 @@ mcp_jira-orengrinker_get_issue_details     // Get requirements
 mcp_jira-orengrinker_transition_issue      // Update status
 mcp_jira-orengrinker_add_comment          // Progress updates
 
-// PR Management (Agent-Driven)
+// PR Management (Agent-Driven) - COMPLETE PROCESS REQUIRED
 gh pr create --title "..." --body "..." --base main  // Create PR via CLI
-mcp_pr-agent-mcp_pr_review                 // AI-assisted PR review
-mcp_pr-agent-mcp_pr_improve               // Code improvement suggestions
+mcp_pr-agent-mcp_pr_review                 // AI-assisted PR review (MUST check success)
+mcp_pr-agent-mcp_pr_improve               // Code improvement suggestions (MUST check success)
+// Fix ALL review comments and improvements BEFORE triggering Git Actions
 
 // Design Integration  
 mcp_figma-mcp_get_figma_data               // Get Figma specs

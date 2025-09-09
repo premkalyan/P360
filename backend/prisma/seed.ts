@@ -31,7 +31,7 @@ async function main() {
       id: '550e8400-e29b-41d4-a716-446655440001',
       tenantId: demoTenant.id,
       email: 'demo@p360.com',
-      passwordHash: '$2b$10$K9V1P8sLzR4ZQgF1VxJGJuLMNaP0tM5KmS0K2R4VnS2Q8W9L5pV8K', // bcrypt hash for 'demo123'
+      passwordHash: process.env.DEMO_USER_PASSWORD_HASH || '$2b$10$K9V1P8sLzR4ZQgF1VxJGJuLMNaP0tM5KmS0K2R4VnS2Q8W9L5pV8K', // Use env var or fallback
       firstName: 'Demo',
       lastName: 'User',
       role: 'manager',
