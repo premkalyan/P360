@@ -1,25 +1,22 @@
 'use client';
 
 import React, { useState, useMemo, useCallback } from 'react';
-import { CampaignCard, Campaign } from '@/components/campaigns/CampaignCard';
+import { Campaign } from '@/components/campaigns/CampaignCard';
+import { CampaignTable } from '@/components/campaigns/CampaignTable';
+import { CampaignFilters } from '@/components/campaigns/CampaignFilters';
 import { 
   EmptyCampaigns,
-  EmptyResults, 
-  Typography,
-  designTokens 
 } from '@/lib/design-system';
-import { Button } from '@/components/ui/Button';
+import '@/styles/typography.css';
 
 export default function CampaignsPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [typeFilter, setTypeFilter] = useState('all');
-  const [sortBy, setSortBy] = useState('lastModified');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showEmptyState, setShowEmptyState] = useState(false); // Toggle for testing empty vs populated
   const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
-  const [isCompareMode, setIsCompareMode] = useState(false);
-  const [showEmptyState, setShowEmptyState] = useState(true); // Toggle for testing empty vs populated
+  
+  // Pagination settings
+  const itemsPerPage = 10;
   
   // Campaign data - controlled by showEmptyState toggle
   const campaigns: Campaign[] = useMemo(() => {
@@ -86,112 +83,56 @@ export default function CampaignsPage() {
     ];
   }, [showEmptyState]);
 
-  // Filter and sort campaigns
-  const filteredAndSortedCampaigns = useMemo(() => {
-    const filtered = campaigns.filter((campaign) => {
+  // Filter campaigns and apply pagination
+  const filteredCampaigns = useMemo(() => {
+    return campaigns.filter((campaign) => {
       const matchesSearch = 
         campaign.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         campaign.programName.toLowerCase().includes(searchTerm.toLowerCase());
       
-      const matchesStatus = statusFilter === 'all' || campaign.status === statusFilter;
-      const matchesType = typeFilter === 'all' || campaign.type === typeFilter;
-      
-      return matchesSearch && matchesStatus && matchesType;
+      return matchesSearch;
     });
+  }, [campaigns, searchTerm]);
 
-    // Sort campaigns
-    filtered.sort((a, b) => {
-      let aValue: unknown = a[sortBy as keyof Campaign];
-      let bValue: unknown = b[sortBy as keyof Campaign];
-      
-      if (sortBy === 'lastModified') {
-        aValue = new Date(aValue as string).getTime();
-        bValue = new Date(bValue as string).getTime();
-      }
-      
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        const comparison = aValue.localeCompare(bValue);
-        return sortOrder === 'asc' ? comparison : -comparison;
-      }
-      
-      if (aValue === bValue) {
-        return 0;
-      }
-      
-      return sortOrder === 'asc'
-        ? ((aValue as number) > (bValue as number) ? 1 : -1)
-        : ((aValue as number) < (bValue as number) ? 1 : -1);
-    });
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredCampaigns.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedCampaigns = filteredCampaigns.slice(startIndex, startIndex + itemsPerPage);
 
-    return filtered;
-  }, [campaigns, searchTerm, statusFilter, typeFilter, sortBy, sortOrder]);
-
-  // Campaign action handlers
-  const handleEdit = useCallback((_id: string) => {
-    // TODO: Implement edit functionality
-    // console.log('edit campaign:', id);
+  // Event handlers
+  const handleCampaignClick = useCallback((id: string) => {
+    // TODO: Navigate to campaign details
+    console.log('Campaign clicked:', id);
   }, []);
 
-  const handlePause = useCallback((_id: string) => {
-    // TODO: Implement pause/resume functionality
-    // console.log('pause/resume campaign:', id);
+  const handleNewCampaign = useCallback(() => {
+    // TODO: Navigate to campaign creation
+    console.log('New campaign clicked');
   }, []);
 
-  const handleDuplicate = useCallback((_id: string) => {
-    // TODO: Implement duplicate functionality
-    // console.log('duplicate campaign:', id);
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
   }, []);
 
-  const handleView = useCallback((_id: string) => {
-    // TODO: Implement view functionality
-    // console.log('view campaign:', id);
+  // Selection handlers
+  const handleSelectAll = useCallback((selected: boolean) => {
+    if (selected) {
+      setSelectedCampaigns(paginatedCampaigns.map(campaign => campaign.id));
+    } else {
+      setSelectedCampaigns([]);
+    }
+  }, [paginatedCampaigns]);
+
+  const handleSelectCampaign = useCallback((campaignId: string, selected: boolean) => {
+    if (selected) {
+      setSelectedCampaigns(prev => [...prev, campaignId]);
+    } else {
+      setSelectedCampaigns(prev => prev.filter(id => id !== campaignId));
+    }
   }, []);
-
-  const handleClearFilters = useCallback(() => {
-    // Batch all state updates together to prevent issues
-    setSearchTerm('');
-    setStatusFilter('all');
-    setTypeFilter('all');
-    setSortBy('lastModified');
-    setSortOrder('desc');
-  }, []);
-
-  const handleCampaignSelection = useCallback((id: string) => {
-    setSelectedCampaigns(prev => 
-      prev.includes(id) 
-        ? prev.filter(cId => cId !== id)
-        : [...prev, id]
-    );
-  }, []);
-
-  const toggleCompareMode = useCallback(() => {
-    setIsCompareMode(prev => {
-      const newCompareMode = !prev;
-      if (!newCompareMode) {
-        setSelectedCampaigns([]);
-      }
-      return newCompareMode;
-    });
-  }, []);
-
-  // Quick stats calculation
-  const stats = useMemo(() => {
-    const activeCampaigns = campaigns.filter(c => c.status === 'active');
-    const totalBudget = campaigns.reduce((sum, c) => sum + c.budget, 0);
-    const totalConversions = campaigns.reduce((sum, c) => sum + c.conversions, 0);
-    const avgRoas = campaigns.reduce((sum, c) => sum + c.roas, 0) / campaigns.length;
-
-    return {
-      total: campaigns.length,
-      active: activeCampaigns.length,
-      totalBudget,
-      conversions: totalConversions,
-      avgRoas: avgRoas.toFixed(1),
-    };
-  }, [campaigns]);
 
   return (
-    <div className="p-6">
+    <div className="min-h-screen">
       {/* Debug Toggle - Top Right Corner */}
       <div className="fixed top-20 right-4 z-50">
         <button
@@ -207,215 +148,202 @@ export default function CampaignsPage() {
       </div>
 
       {campaigns.length === 0 ? (
-        // Hide header for empty state - will show full Figma design
-        <></>
+        // Empty state - Full screen with centered empty campaigns component
+        <div 
+          className="flex items-center justify-center"
+          style={{ minHeight: 'calc(100vh - 80px)' }}
+        >
+          <EmptyCampaigns
+            primaryAction={{
+              label: 'Create Campaign',
+              onClick: handleNewCampaign,
+            }}
+          />
+        </div>
       ) : (
-        <>
-          {/* Page Header */}
-          <div style={{ marginBottom: designTokens.spacing[8] }}>
-            <Typography variant="h2" color="primary">
-              Campaign Dashboard
-            </Typography>
-            <div style={{ marginTop: designTokens.spacing[1] }}>
-              <Typography 
-                variant="body" 
-                color="muted"
-              >
-                P360-67: Campaign Configuration UI - Performance Overview
-              </Typography>
-            </div>
-          </div>
+        // Main campaigns view with table layout
+        <div className="p-6">
+          {/* Filters Component */}
+          <CampaignFilters
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            onNewCampaign={handleNewCampaign}
+            className="mb-6"
+          />
 
-          {/* Quick Stats */}
-          <div className="grid grid-cols-5 gap-6 mb-8">
-            <div className="bg-white p-4 rounded-lg border">
-              <div className="text-sm text-gray-500">Total Campaigns</div>
-              <div className="text-2xl font-bold">{stats.total}</div>
-            </div>
-            <div className="bg-white p-4 rounded-lg border">
-              <div className="text-sm text-gray-500">Active</div>
-              <div className="text-2xl font-bold text-green-600">{stats.active}</div>
-            </div>
-            <div className="bg-white p-4 rounded-lg border">
-              <div className="text-sm text-gray-500">Total Budget</div>
-              <div className="text-2xl font-bold">${stats.totalBudget.toLocaleString()}</div>
-            </div>
-            <div className="bg-white p-4 rounded-lg border">
-              <div className="text-sm text-gray-500">Conversions</div>
-              <div className="text-2xl font-bold">{stats.conversions}</div>
-            </div>
-            <div className="bg-white p-4 rounded-lg border">
-              <div className="text-sm text-gray-500">Avg ROAS</div>
-              <div className="text-2xl font-bold">{stats.avgRoas}x</div>
-            </div>
-          </div>
-
-          {/* Filters and Controls */}
-          <div className="bg-white p-4 rounded-lg border mb-6">
-            <div className="flex flex-wrap items-center gap-4">
-              {/* Search */}
-              <div className="flex-1 min-w-64">
-                <input
-                  type="text"
-                  placeholder="Search campaigns by name or program..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-violet-500"
-                />
-              </div>
-
-              {/* Status Filter */}
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-violet-500"
-              >
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="paused">Paused</option>
-                <option value="draft">Draft</option>
-              </select>
-
-              {/* Type Filter */}
-              <select
-                value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-violet-500"
-              >
-                <option value="all">All Types</option>
-                <option value="conversion">Conversion</option>
-                <option value="awareness">Awareness</option>
-                <option value="retargeting">Retargeting</option>
-              </select>
-
-              {/* Sort */}
-              <select
-                value={`${sortBy}-${sortOrder}`}
-                onChange={(e) => {
-                  const parts = e.target.value.split('-');
-                  const field = parts[0] || 'lastModified';
-                  const order = parts[1] || 'desc';
-                  setSortBy(field);
-                  setSortOrder(order as 'asc' | 'desc');
-                }}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-violet-500"
-              >
-                <option value="lastModified-desc">Latest First</option>
-                <option value="name-asc">Name A-Z</option>
-                <option value="name-desc">Name Z-A</option>
-                <option value="roas-desc">Highest ROAS</option>
-                <option value="budget-desc">Highest Budget</option>
-              </select>
-
-              {/* View Mode Toggle */}
-              <div className="flex border border-gray-300 rounded-lg overflow-hidden">
-                <button
-                  onClick={() => setViewMode('grid')}
-                  className={`px-3 py-2 text-sm ${viewMode === 'grid' ? 'bg-violet-100 text-violet-700' : 'bg-white text-gray-700'}`}
-                >
-                  ⊞ Grid
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  className={`px-3 py-2 text-sm border-l border-gray-300 ${viewMode === 'list' ? 'bg-violet-100 text-violet-700' : 'bg-white text-gray-700'}`}
-                >
-                  ≡ List
-                </button>
-              </div>
-
-              {/* Compare Mode */}
-              <Button
-                variant="secondary"
-                onClick={toggleCompareMode}
-              >
-                📊 Compare
-              </Button>
-
-              {/* Clear Filters */}
-              <Button variant="outline" onClick={handleClearFilters}>
-                Clear Filters
-              </Button>
-            </div>
-          </div>
-
-          {/* Results Count */}
-          <div className="mb-4">
-            <span className="text-sm text-gray-600">
-              {filteredAndSortedCampaigns.length} campaigns found
+          {/* Results count */}
+          <div className="mb-6">
+            <span className="p360-text-body text-gray-600">
+              {filteredCampaigns.length} campaigns found
             </span>
           </div>
 
-          {/* Bulk Actions */}
-          {selectedCampaigns.length > 0 && (
-            <div className="bg-violet-50 border border-violet-200 rounded-lg p-4 mb-6">
-                <div className="flex items-center justify-between">
-                <span className="text-sm text-violet-700">{selectedCampaigns.length} selected</span>
-                <div className="flex space-x-2">
-                  <Button size="sm" variant="outline">Bulk Edit</Button>
-                  <Button size="sm" variant="outline">Bulk Pause</Button>
-                      </div>
-                    </div>
-                  </div>
-          )}
-        </>
-      )}
+          {/* Campaign Table */}
+          <div className="mb-8">
+            <CampaignTable
+              campaigns={paginatedCampaigns}
+              onCampaignClick={handleCampaignClick}
+              onSelectAll={handleSelectAll}
+              selectedCampaigns={selectedCampaigns}
+              onSelectCampaign={handleSelectCampaign}
+            />
+          </div>
 
-          {/* Campaign Grid/List */}
-          {campaigns.length === 0 ? (
-            // Clean EmptyCampaigns component using design system
+          {/* Pagination - Bottom positioning */}
+          <div className="flex justify-between items-center pt-6 border-t border-gray-200">
+            {/* Page Dropdown - Left Side */}
             <div 
-              className="flex-1 bg-white flex items-center justify-center"
-              style={{ minHeight: '906px' }}
+              className="relative"
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                padding: '4px 16px 4px 12px',
+                gap: '10px',
+                width: '116px',
+                height: '40px',
+                background: '#FFFFFF',
+                border: '1px solid #E5E7EB',
+                boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.05)',
+                borderRadius: '4px',
+                flex: 'none',
+                order: 0,
+                flexGrow: 0
+              }}
             >
-              <EmptyCampaigns
-                primaryAction={{
-                  label: 'Create Campaign',
-                  onClick: () => {
-                    // TODO: Navigate to campaign creation
-                    console.log('Create campaign clicked');
-                  },
+              <select
+                value={currentPage}
+                onChange={(e) => handlePageChange(Number(e.target.value))}
+                className="appearance-none bg-transparent border-none outline-none w-full"
+                style={{
+                  width: '62px',
+                  height: '20px',
+                  fontFamily: 'Lexend Deca',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  fontSize: '14px',
+                  lineHeight: '20px',
+                  color: '#4A5565',
+                  flex: 'none',
+                  order: 0,
+                  flexGrow: 0
                 }}
-              />
-            </div>
-          ) : filteredAndSortedCampaigns.length === 0 ? (
-            <div className="flex justify-center py-12">
-              <EmptyResults />
-            </div>
-          ) : (
-            <>
-              <div className={`grid gap-6 ${viewMode === 'grid' ? 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
-                {filteredAndSortedCampaigns.map((campaign) => (
-                  <div key={campaign.id} className="relative">
-                    {isCompareMode && (
-                      <div className="absolute top-2 left-2 z-10">
-                        <input
-                          type="checkbox"
-                          checked={selectedCampaigns.includes(campaign.id)}
-                          onChange={() => handleCampaignSelection(campaign.id)}
-                          className="w-4 h-4 text-violet-600 rounded focus:ring-violet-500"
-                        />
-          </div>
-                    )}
-                    <CampaignCard
-                      campaign={campaign}
-                      onEdit={handleEdit}
-                      onPause={handlePause}
-                      onDuplicate={handleDuplicate}
-                      onView={handleView}
-                      compact={viewMode === 'list'}
-                    />
+              >
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <option key={page} value={page}>
+                    Page {page}/{totalPages}
+                  </option>
+                ))}
+              </select>
+              <div 
+                style={{
+                  width: '16px',
+                  height: '16px',
+                  flex: 'none',
+                  order: 1,
+                  flexGrow: 0
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M3 6L8 11L13 6"
+                    stroke="#4A5565"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
               </div>
-            ))}
-          </div>
+            </div>
 
-              {/* Load More (placeholder for pagination) */}
-              {filteredAndSortedCampaigns.length >= 10 && (
-                <div className="text-center mt-8">
-                  <Button variant="outline">Load More Campaigns</Button>
+            {/* Navigation Buttons - Right Side (aligned with table) */}
+            <div 
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: '8px'
+              }}
+            >
+              {/* Previous Button */}
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage <= 1}
+                style={{
+                  boxSizing: 'border-box',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  padding: '4px 16px',
+                  gap: '10px',
+                  width: '40px',
+                  height: '40px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E5E7EB',
+                  boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.05)',
+                  borderRadius: '4px',
+                  flex: 'none',
+                  order: 0,
+                  flexGrow: 0,
+                  cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
+                  opacity: currentPage <= 1 ? 0.5 : 1
+                }}
+              >
+                <div style={{ width: '16px', height: '16px' }}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M10 4L6 8L10 12"
+                      stroke="#6A7282"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </div>
-              )}
-            </>
-          )}
+              </button>
+
+              {/* Next Button */}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage >= totalPages}
+                style={{
+                  boxSizing: 'border-box',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  padding: '4px 16px',
+                  gap: '10px',
+                  width: '40px',
+                  height: '40px',
+                  background: '#FFFFFF',
+                  border: '1px solid #E5E7EB',
+                  boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.05)',
+                  borderRadius: '4px',
+                  flex: 'none',
+                  order: 1,
+                  flexGrow: 0,
+                  cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
+                  opacity: currentPage >= totalPages ? 0.5 : 1
+                }}
+              >
+                <div style={{ width: '16px', height: '16px' }}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path
+                      d="M6 4L10 8L6 12"
+                      stroke="#6A7282"
+                      strokeWidth="1.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

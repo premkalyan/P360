@@ -28,9 +28,10 @@ const config = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
-  testTimeout: 30000,
-  verbose: true,
+  testTimeout: process.env.CI ? 60000 : 30000, // Longer timeout in CI
+  verbose: !process.env.CI, // Less verbose output in CI to reduce memory usage
   collectCoverage: false, // Enable only when --coverage flag is used
+  maxWorkers: process.env.CI ? 2 : '50%', // Limit workers in CI environment
   coverageThreshold: {
     global: {
       branches: 0,

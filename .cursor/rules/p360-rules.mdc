@@ -80,11 +80,11 @@ export default ComponentName;
 
 ## 🚀 MCP TOOLS (Essential Commands)
 ```typescript
-// JIRA Management
+// JIRA Management (Use plain text formatting: UPPERCASE, -, ✅ emojis)
 mcp_jira-orengrinker_search_issues         // Find stories
 mcp_jira-orengrinker_get_issue_details     // Get requirements  
 mcp_jira-orengrinker_transition_issue      // Update status
-mcp_jira-orengrinker_add_comment          // Progress updates
+mcp_jira-orengrinker_add_comment          // Progress updates (plain text)
 
 // PR Management (Agent-Driven) - COMPLETE PROCESS REQUIRED
 gh pr create --title "..." --body "..." --base main  // Create PR via CLI
@@ -123,8 +123,9 @@ mcp_pr-agent-mcp_pr_complete_workflow({
 mcp_figma-mcp_get_figma_data               // Get Figma specs
 mcp_figma-mcp_figma_tokens_to_p360_theme  // Extract tokens
 
-// Documentation
-mcp_confluence-mcp_confluence_create_page  // Create docs
+// Documentation (Confluence uses HTML, NOT Markdown)
+mcp_confluence-mcp_confluence_create_page  // Create docs (use HTML: <h1>, <h2>, <strong>, <ul>, <li>)
+mcp_confluence-mcp_confluence_update_page  // Update docs (use HTML formatting)
 mcp_confluence-mcp_confluence_search       // Find existing docs
 
 // Test Management
@@ -152,7 +153,7 @@ npm run docker:test
 - **Testing**: >90% coverage, unit/integration/E2E, Kiwi-TCMS integration
 - **Architecture**: Prisma best practices, Docker deployment readiness, port compliance
 - **Design**: Figma design system compliance, responsive design patterns
-- **Documentation**: Confluence for features, comprehensive inline documentation
+- **Documentation**: Confluence for features (HTML format required), comprehensive inline documentation
 
 ## 📋 DEFINITION OF DONE (Excellence Standards)
 - [ ] JIRA story → In Progress → Done with PR link
@@ -162,9 +163,71 @@ npm run docker:test
 - [ ] Unit, integration, E2E tests passing (>90% coverage)
 - [ ] **CI/CD ALL GREEN**: 100% successful checks before merge
 - [ ] Kiwi-TCMS test cases executed and documented
-- [ ] Confluence documentation updated with technical details
+- [ ] Confluence documentation updated with technical details (HTML format required)
 - [ ] **HUMAN-APPROVED MERGE**: AI agents prepare, humans execute merge
 - [ ] Production deployment verified
+
+---
+
+## 📝 PLATFORM FORMATTING REQUIREMENTS
+
+### **⚠️ CRITICAL: Different platforms use different formatting**
+
+### **🔹 JIRA Comments - Plain Text Only:**
+```
+MAIN TITLE (use UPPERCASE for emphasis)
+Section Header (use simple structure)
+- Bullet points with dashes
+- Another bullet point  
+✅ Checkmarks for completed items
+🔄 Emojis for status indicators
+📊 Visual separators with emojis
+```
+
+### **🔹 Confluence Pages - Use HTML:**
+
+#### **✅ Correct Confluence HTML Syntax:**
+```html
+<h1>Main Title</h1>
+<h2>Section Header</h2>
+<h3>Subsection</h3>
+<p><strong>Bold Text</strong></p>
+<p><em>Italic Text</em></p>
+<ul>
+  <li>Bullet point</li>
+  <li>Another point</li>
+</ul>
+<ol>
+  <li>Numbered item</li>
+  <li>Next item</li>
+</ol>
+<p><a href="URL">Link Text</a></p>
+<pre><code>Code block content</code></pre>
+```
+
+#### **❌ Wrong (Markdown displays literally in both platforms):**
+```markdown
+# Title          → displays as: # Title
+## Header        → displays as: ## Header  
+**Bold**         → displays as: **Bold**
+- List item      → displays as: - List item
+```
+
+#### **✅ JIRA Comments (Plain Text):**
+```
+TITLE (UPPERCASE)    → Clear visual hierarchy
+Section Header       → Simple text structure
+- List item          → Dash bullets
+✅ Completed         → Emoji indicators
+```
+
+#### **✅ Confluence Pages (HTML):**
+```html
+<h1>Title</h1>           → renders as large title
+<h2>Header</h2>          → renders as section header
+<strong>Bold</strong>    → renders as Bold
+<ul><li>List item</li></ul> → renders as • List item
+```
 
 ---
 **P360 Enterprise SDLC ensures quality, security, and maintainability with full MCP integration.**

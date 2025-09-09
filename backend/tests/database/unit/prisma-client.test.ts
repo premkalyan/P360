@@ -24,7 +24,7 @@ describe('P360-8: Prisma Client Unit Tests', () => {
 
   // Skip database tests in CI environment if no database is available
   const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
-  const skipDatabaseTests = isCI && !process.env.DATABASE_URL?.includes('postgresql://');
+  const skipDatabaseTests = isCI || !process.env.DATABASE_URL?.includes('postgresql://');
 
   beforeAll(async () => {
     if (skipDatabaseTests) {

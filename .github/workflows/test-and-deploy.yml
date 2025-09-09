@@ -37,12 +37,21 @@ jobs:
       - name: 🔧 Install Dependencies (Workspaces)
         run: npm install --workspaces
       
+      - name: 🔧 Generate Prisma Client (Backend Only)
+        if: matrix.workspace == 'backend'
+        working-directory: ./backend
+        run: npx prisma generate
+      
       - name: 🧪 Run Unit Tests
         working-directory: ./${{ matrix.workspace }}
-        run: npm run test -- --coverage --watchAll=false --passWithNoTests
+        run: npm run test:ci
+        env:
+          CI: true
+          NODE_ENV: test
       
       - name: 📊 Upload Coverage
         uses: codecov/codecov-action@v3
+        if: false  # Disabled for performance - enable only when needed
         with:
           file: ./${{ matrix.workspace }}/coverage/lcov.info
           flags: ${{ matrix.workspace }}

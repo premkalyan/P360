@@ -13,6 +13,7 @@
 'use client';
 
 import React from 'react';
+import '../../styles/typography.css';
 
 export interface TopBarProps {
   className?: string;
@@ -44,18 +45,19 @@ export const TopBar: React.FC<TopBarProps> = ({ className = '' }) => {
         {/* Org Selector - Exact Figma Implementation */}
         <div className="flex items-center gap-2 px-2">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-900">
+            <span className="p360-text-button text-gray-900">
               Vercel
             </span>
-            <div className="px-1.5 py-0.5 rounded text-xs bg-gray-100 text-gray-600">
+            <div className="px-1.5 py-0.5 rounded p360-text-small-medium bg-gray-100 text-gray-600">
               #1234
             </div>
           </div>
           
-          {/* Dropdown Arrow */}
+          {/* Dropdown Arrow - User's Figma SVG */}
           <button className="p-1 rounded hover:bg-gray-100">
-            <svg className="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-4 h-4">
+              <path d="M8.47075 1.97365C8.2103 1.71321 7.78808 1.71321 7.52764 1.97365L4.41652 5.08476C4.15608 5.34521 4.15608 5.76743 4.41652 6.02788C4.67697 6.28832 5.09919 6.28832 5.35964 6.02788L7.99964 3.38788L10.6396 6.02788C10.7694 6.15765 10.9401 6.22343 11.1107 6.22343C11.2814 6.22343 11.4521 6.15854 11.5819 6.02788C11.8423 5.76743 11.8423 5.34521 11.5819 5.08476L8.47075 1.97365Z" fill="#6A7282"/>
+              <path d="M10.6396 9.97365L7.99964 12.6137L5.35964 9.97365C5.09919 9.71321 4.67697 9.71321 4.41652 9.97365C4.15608 10.2341 4.15608 10.6563 4.41652 10.9168L7.52764 14.0279C7.65741 14.1577 7.82808 14.2234 7.99875 14.2234C8.16941 14.2234 8.34008 14.1585 8.46986 14.0279L11.581 10.9168C11.8414 10.6563 11.8414 10.2341 11.581 9.97365C11.3205 9.71321 10.8983 9.71321 10.6379 9.97365H10.6396Z" fill="#6A7282"/>
             </svg>
           </button>
         </div>

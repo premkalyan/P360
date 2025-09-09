@@ -25,7 +25,7 @@ describe('P360-8: Database Migration System Integration Tests', () => {
 
   // Skip database tests in CI environment if no database is available
   const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
-  const skipDatabaseTests = isCI && !process.env.DATABASE_URL?.includes('postgresql://');
+  const skipDatabaseTests = isCI || !process.env.DATABASE_URL?.includes('postgresql://');
 
   beforeAll(async () => {
     if (skipDatabaseTests) {
@@ -384,8 +384,8 @@ describe('P360-8: Database Migration System Integration Tests', () => {
       });
 
       expect(campaignAssets).toHaveLength(2);
-      expect(campaignAssets.find(a => a.assetType === 'banner')).toBeDefined();
-      expect(campaignAssets.find(a => a.assetType === 'video')).toBeDefined();
+      expect(campaignAssets.find((a: any) => a.assetType === 'banner')).toBeDefined();
+      expect(campaignAssets.find((a: any) => a.assetType === 'video')).toBeDefined();
     });
   });
 

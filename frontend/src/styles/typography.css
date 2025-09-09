@@ -1,0 +1,158 @@
+/**
+ * P360 Typography System - Extracted from Figma Design System
+ * Source: https://www.figma.com/design/BBzlqwkcKFUcjLGXmJwNGU/Pipeline360-Copy?node-id=7-5750
+ */
+
+/* Import Lexend Deca font */
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;500;600;700&display=swap');
+
+/* Base typography classes matching Figma specifications */
+.p360-font-base {
+  font-family: 'Lexend Deca', sans-serif;
+  font-feature-settings: 'kern' 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Scale - Matching Figma Text Styles */
+
+/* Headers */
+.p360-text-h1 {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1em;
+  letter-spacing: -1%;
+}
+
+.p360-text-h2 {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.25em;
+  letter-spacing: -1.67%;
+}
+
+.p360-text-h3 {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.3em;
+  letter-spacing: -1%;
+}
+
+/* Body Text */
+.p360-text-body {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5em;
+  letter-spacing: -0.5%;
+}
+
+.p360-text-body-medium {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5em;
+  letter-spacing: -0.5%;
+}
+
+/* Table Text */
+.p360-text-table-header {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4285714285714286em;
+  letter-spacing: -0.5%;
+}
+
+.p360-text-table-cell {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.1428571428571428em;
+  letter-spacing: -1.43%;
+}
+
+.p360-text-table-cell-medium {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.1428571428571428em;
+  letter-spacing: -1.43%;
+}
+
+/* Small Text */
+.p360-text-small {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.3333333333333333em;
+  letter-spacing: -0.5%;
+}
+
+.p360-text-small-medium {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.3333333333333333em;
+  letter-spacing: -0.5%;
+}
+
+/* Button Text */
+.p360-text-button {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.4285714285714286em;
+  letter-spacing: -0.5%;
+}
+
+/* Link Text */
+.p360-text-link {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.1428571428571428em;
+  letter-spacing: -1.43%;
+  color: #841AFF;
+  text-decoration: none;
+}
+
+.p360-text-link:hover {
+  text-decoration: underline;
+}
+
+/* Badge Text */
+.p360-text-badge {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.4285714285714286em;
+  letter-spacing: -0.5%;
+}
+
+/* Progress Text */
+.p360-text-progress {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 500;
+  font-size: 8px;
+  line-height: 1em;
+  letter-spacing: -1%;
+}
+
+/* Utility Classes */
+.p360-text-weight-300 { font-weight: 300; }
+.p360-text-weight-400 { font-weight: 400; }
+.p360-text-weight-500 { font-weight: 500; }
+.p360-text-weight-600 { font-weight: 600; }
+.p360-text-weight-700 { font-weight: 700; }
+
+.p360-text-nowrap { white-space: nowrap; }
+.p360-text-truncate { 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+}
