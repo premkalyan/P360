@@ -76,11 +76,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
                 ? 'bg-p360-purple/10 text-p360-purple' 
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
             }`}>
-              <svg className="w-4 h-4" stroke="currentColor" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2z"/>
-                <path d="M8 5v4"/>
-                <path d="M12 5v4"/>
-                <path d="M16 5v4"/>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-4 h-4">
+                <path d="M8.0623 12.9375L9.1924 16.3271C9.3746 16.8733 8.9679 17.4375 8.3919 17.4375H7.3581C6.9947 17.4375 6.6724 17.2052 6.5576 16.8604L4.5 10.6875" stroke="currentColor" strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M5.0625 10.6875V3.375" stroke="currentColor" strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M15.75 8.6226C16.4053 8.3908 16.875 7.7659 16.875 7.0313C16.875 6.2966 16.4053 5.6717 15.75 5.4399" stroke="currentColor" strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M14.0625 12.9375H12.9375C12.9375 12.9375 12.375 10.6875 8.4375 10.6875H4.7812C2.7619 10.6875 1.125 9.0506 1.125 7.0312C1.125 5.0119 2.7619 3.375 4.7812 3.375H8.4375C12.375 3.375 12.9375 1.125 12.9375 1.125H14.0625V12.9375Z" stroke="currentColor" strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               Campaigns
             </div>
