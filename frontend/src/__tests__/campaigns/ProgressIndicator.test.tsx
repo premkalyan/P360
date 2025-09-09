@@ -105,7 +105,7 @@ describe('ProgressIndicator', () => {
       const { container } = render(<ProgressIndicator percentage={50} />);
       const text = container.querySelector('span');
       
-      expect(text).toHaveStyle('font-family: Lexend Deca, sans-serif');
+      expect(text).toHaveClass('p360-text-progress');
     });
 
     it('displays correct percentage for screen readers', () => {

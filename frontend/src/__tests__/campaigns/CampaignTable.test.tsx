@@ -133,7 +133,7 @@ describe('CampaignTable', () => {
       
       // CPM should be calculated as (spent / impressions) * 1000
       // Campaign 1: (11250 / 250000) * 1000 = 45
-      expect(screen.getByText('45')).toBeInTheDocument();
+      expect(screen.getByText('$45')).toBeInTheDocument();
     });
   });
 
@@ -209,7 +209,7 @@ describe('CampaignTable', () => {
       render(<CampaignTable campaigns={mockCampaigns} />);
       
       const campaignName = screen.getByText('Q4 Holiday Sale Campaign');
-      expect(campaignName).toHaveStyle('font-family: Lexend Deca');
+      expect(campaignName).toHaveClass('p360-text-link');
     });
   });
 
@@ -260,12 +260,15 @@ describe('CampaignTable', () => {
         impressions: 0,
       };
       
-      const { container } = render(<CampaignTable campaigns={[campaignWithZeroImpressions]} />);
+      render(<CampaignTable campaigns={[campaignWithZeroImpressions]} />);
       
-      // Should display 0 for CPM when no impressions - check in CPM column specifically
-      const cpmCells = container.querySelectorAll('td');
-      const cpmCell = Array.from(cpmCells).find(cell => cell.textContent === '0' && cell.style.width === '160px');
-      expect(cpmCell).toBeInTheDocument();
+      // Should display $0 for CPM when no impressions
+      // The CPM column is the 11th column (0-based index 10)
+      const rows = screen.getAllByRole('row');
+      const dataRow = rows[1]; // First data row (header is index 0)
+      const cells = dataRow.querySelectorAll('td');
+      const cpmCell = cells[10]; // CPM is 11th column (0-based index 10)
+      expect(cpmCell).toHaveTextContent('$0');
     });
 
     it('handles missing optional props gracefully', () => {

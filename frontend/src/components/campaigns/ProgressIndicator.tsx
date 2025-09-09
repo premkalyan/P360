@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import '@/styles/typography.css';
 
 export interface ProgressIndicatorProps {
   percentage: number;
@@ -113,11 +114,10 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
       
       {/* Percentage text */}
       <span
-        className="relative font-medium leading-none"
+        className="relative p360-text-progress leading-none"
         style={{
           color: colors.text,
           fontSize: dimensions.fontSize,
-          fontFamily: 'Lexend Deca, sans-serif',
         }}
       >
         {Math.round(clampedPercentage)}%

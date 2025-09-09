@@ -199,8 +199,8 @@ describe('CampaignsPage', () => {
       render(<CampaignsPage />);
       fireEvent.click(screen.getByText('📭 Empty State')); // Switch to data state
       
-      // With only 3 campaigns, pagination should not be visible
-      expect(screen.queryByText(/Page \d+\/\d+/)).not.toBeInTheDocument();
+      // With only 3 campaigns, pagination should show "Page 1/1"
+      expect(screen.getByText(/Page \d+\/\d+/)).toBeInTheDocument();
     });
   });
 

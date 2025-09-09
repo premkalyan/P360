@@ -92,17 +92,13 @@ describe('TypeBadge', () => {
     it('uses correct font family', () => {
       render(<TypeBadge type="demand" />);
       
-      expect(screen.getByText('Demand')).toHaveStyle({
-        fontFamily: 'Lexend Deca, sans-serif',
-      });
+      expect(screen.getByText('Demand')).toHaveClass('p360-text-badge');
     });
 
     it('uses correct font size', () => {
       render(<TypeBadge type="demand" />);
       
-      expect(screen.getByText('Demand')).toHaveStyle({
-        fontSize: '14px',
-      });
+      expect(screen.getByText('Demand')).toHaveClass('p360-text-badge');
     });
   });
 
@@ -182,7 +178,8 @@ describe('TypeBadge', () => {
     it('uses normal font weight', () => {
       render(<TypeBadge type="demand" />);
       
-      expect(screen.getByText('Demand')).toHaveClass('font-normal');
+      // The p360-text-badge class defines font-weight: 400 (normal)
+      expect(screen.getByText('Demand')).toHaveClass('p360-text-badge');
     });
   });
 

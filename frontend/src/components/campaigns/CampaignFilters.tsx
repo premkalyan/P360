@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import '@/styles/typography.css';
 
 export interface CampaignFiltersProps {
   searchTerm: string;
@@ -22,28 +23,16 @@ export const CampaignFilters: React.FC<CampaignFiltersProps> = ({
     <div className={`bg-white ${className}`}>
       {/* Header with Title and New Campaign Button */}
       <div className="flex justify-between items-center mb-6">
-        <h1 
-          className="text-2xl font-semibold text-gray-700"
-          style={{ 
-            fontFamily: 'Lexend Deca',
-            fontWeight: 600,
-            fontSize: '24px',
-            lineHeight: '1.25',
-            letterSpacing: '-1.67%',
-          }}
-        >
+        <h1 className="p360-text-h2 text-gray-700">
           Campaigns
         </h1>
         
         <button
           onClick={onNewCampaign}
-          className="px-3 py-1 text-white rounded border"
+          className="px-3 py-1 text-white rounded border p360-text-button"
           style={{
             backgroundColor: '#841AFF',
             borderColor: '#7600FF',
-            fontFamily: 'Lexend Deca',
-            fontSize: '14px',
-            lineHeight: '1.4285714285714286',
             height: '34px',
             minHeight: '34px',
           }}
@@ -70,10 +59,7 @@ export const CampaignFilters: React.FC<CampaignFiltersProps> = ({
                 <div className="w-1 h-1 bg-gray-400"></div>
               </div>
             </div>
-            <span 
-              className="text-sm text-gray-700"
-              style={{ fontFamily: 'Lexend Deca', fontSize: '14px' }}
-            >
+            <span className="p360-text-button text-gray-700">
               Status
             </span>
           </div>
@@ -91,10 +77,7 @@ export const CampaignFilters: React.FC<CampaignFiltersProps> = ({
                 <div className="w-full h-0.5 bg-gray-400"></div>
               </div>
             </div>
-            <span 
-              className="text-sm text-gray-700"
-              style={{ fontFamily: 'Lexend Deca', fontSize: '14px' }}
-            >
+            <span className="p360-text-button text-gray-700">
               Filters
             </span>
           </div>
@@ -115,10 +98,7 @@ export const CampaignFilters: React.FC<CampaignFiltersProps> = ({
                 <div className="w-0.5 h-3 bg-gray-400"></div>
               </div>
             </div>
-            <span 
-              className="text-sm text-gray-700"
-              style={{ fontFamily: 'Lexend Deca', fontSize: '14px' }}
-            >
+            <span className="p360-text-button text-gray-700">
               Columns
             </span>
           </div>
@@ -140,12 +120,8 @@ export const CampaignFilters: React.FC<CampaignFiltersProps> = ({
             placeholder="Search campaigns..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="flex-1 outline-none text-sm"
+            className="flex-1 outline-none p360-text-table-cell"
             style={{
-              fontFamily: 'Lexend Deca',
-              fontSize: '14px',
-              lineHeight: '1.1428571428571428',
-              letterSpacing: '-1.43%',
               color: searchTerm ? '#4A5565' : '#707070',
             }}
           />

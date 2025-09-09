@@ -8,6 +8,7 @@ import { CampaignPagination } from '@/components/campaigns/CampaignPagination';
 import { 
   EmptyCampaigns,
 } from '@/lib/design-system';
+import '@/styles/typography.css';
 
 export default function CampaignsPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -154,31 +155,34 @@ export default function CampaignsPage() {
           />
 
           {/* Results count */}
-          <div className="mb-4">
-            <span 
-              className="text-sm text-gray-600"
-              style={{ fontFamily: 'Lexend Deca' }}
-            >
+          <div className="mb-6">
+            <span className="p360-text-body text-gray-600">
               {filteredCampaigns.length} campaigns found
             </span>
           </div>
 
           {/* Campaign Table */}
-          <CampaignTable
-            campaigns={paginatedCampaigns}
-            onCampaignClick={handleCampaignClick}
-            className="mb-6"
-          />
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <CampaignPagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-              className="mt-6"
+          <div className="mb-8">
+            <CampaignTable
+              campaigns={paginatedCampaigns}
+              onCampaignClick={handleCampaignClick}
             />
-          )}
+          </div>
+
+          {/* Pagination - Bottom positioning */}
+          <div className="flex justify-between items-center pt-6 border-t border-gray-200">
+            <div className="p360-text-body text-gray-600">
+              Page {currentPage}/{totalPages}
+            </div>
+            
+            {totalPages > 1 && (
+              <CampaignPagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
+          </div>
         </div>
       )}
     </div>

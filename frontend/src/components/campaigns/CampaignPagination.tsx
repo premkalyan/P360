@@ -1,9 +1,10 @@
 /**
  * P360-107: Campaign Pagination Component
- * Pagination with Page X/Y display matching Figma design
+ * Simple navigation arrows for bottom-right positioning
  */
 
 import React from 'react';
+import '@/styles/typography.css';
 
 export interface CampaignPaginationProps {
   currentPage: number;
@@ -31,7 +32,7 @@ export const CampaignPagination: React.FC<CampaignPaginationProps> = ({
   };
 
   return (
-    <div className={`flex justify-center items-center gap-3 ${className}`}>
+    <div className={`flex items-center gap-2 ${className}`}>
       {/* Previous Button */}
       <button
         onClick={handlePrevious}
@@ -55,18 +56,6 @@ export const CampaignPagination: React.FC<CampaignPaginationProps> = ({
           />
         </svg>
       </button>
-
-      {/* Page Display */}
-      <span
-        className="text-sm text-gray-700"
-        style={{
-          fontFamily: 'Lexend Deca',
-          fontSize: '14px',
-          lineHeight: '1.4285714285714286',
-        }}
-      >
-        Page {currentPage}/{totalPages}
-      </span>
 
       {/* Next Button */}
       <button

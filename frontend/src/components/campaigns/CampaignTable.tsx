@@ -8,6 +8,7 @@ import { Campaign } from './CampaignCard';
 import { ProgressIndicator } from './ProgressIndicator';
 import { StatusBadge, CampaignStatus } from './StatusBadge';
 import { TypeBadge, CampaignType } from './TypeBadge';
+import '@/styles/typography.css';
 
 export interface CampaignTableProps {
   campaigns: Campaign[];
@@ -102,43 +103,43 @@ export const CampaignTable: React.FC<CampaignTableProps> = ({
           {/* Table Header */}
           <thead style={{ backgroundColor: '#F9FAFB' }}>
             <tr style={{ borderBottom: '1px solid #E5E7EB' }}>
-              <th className="text-left py-3 px-4 font-medium text-sm text-gray-700" style={{ width: '320px', fontFamily: 'Lexend Deca' }}>
+              <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '320px', minWidth: '320px' }}>
                 Campaign name
               </th>
-              <th className="text-left py-3 px-4 font-medium text-sm text-gray-700" style={{ width: '240px', fontFamily: 'Lexend Deca' }}>
+              <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '200px', minWidth: '200px' }}>
                 Program
               </th>
-              <th className="text-left py-3 px-4 font-medium text-sm text-gray-700" style={{ width: '100px', fontFamily: 'Lexend Deca' }}>
+              <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '80px', minWidth: '80px' }}>
                 Pacing
               </th>
-              <th className="text-left py-3 px-4 font-medium text-sm text-gray-700" style={{ width: '140px', fontFamily: 'Lexend Deca' }}>
+              <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '120px', minWidth: '120px' }}>
                 Type
               </th>
-              <th className="text-left py-3 px-4 font-medium text-sm text-gray-700" style={{ width: '140px', fontFamily: 'Lexend Deca' }}>
+              <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '120px', minWidth: '120px' }}>
                 Status
               </th>
-              <th className="text-left py-3 px-4 font-medium text-sm text-gray-700" style={{ width: '160px', fontFamily: 'Lexend Deca' }}>
+              <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '140px', minWidth: '140px' }}>
                 Last modified
               </th>
-              <th className="text-left py-3 px-4 font-medium text-sm text-gray-700" style={{ width: '160px', fontFamily: 'Lexend Deca' }}>
+              <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '120px', minWidth: '120px' }}>
                 Start Date
               </th>
-              <th className="text-left py-3 px-4 font-medium text-sm text-gray-700" style={{ width: '160px', fontFamily: 'Lexend Deca' }}>
+              <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '120px', minWidth: '120px' }}>
                 End Date
               </th>
-              <th className="text-left py-3 px-4 font-medium text-sm text-gray-700" style={{ width: '160px', fontFamily: 'Lexend Deca' }}>
+              <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '140px', minWidth: '140px' }}>
                 Impressions Served
               </th>
-              <th className="text-left py-3 px-4 font-medium text-sm text-gray-700" style={{ width: '160px', fontFamily: 'Lexend Deca' }}>
+              <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '100px', minWidth: '100px' }}>
                 Clicks
               </th>
-              <th className="text-left py-3 px-4 font-medium text-sm text-gray-700" style={{ width: '160px', fontFamily: 'Lexend Deca' }}>
+              <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '80px', minWidth: '80px' }}>
                 CPM
               </th>
-              <th className="text-left py-3 px-4 font-medium text-sm text-gray-700" style={{ width: '160px', fontFamily: 'Lexend Deca' }}>
+              <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '120px', minWidth: '120px' }}>
                 Current Spend
               </th>
-              <th className="text-left py-3 px-4 font-medium text-sm text-gray-700" style={{ width: '160px', fontFamily: 'Lexend Deca' }}>
+              <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '100px', minWidth: '100px' }}>
                 Conversions
               </th>
             </tr>
@@ -158,20 +159,14 @@ export const CampaignTable: React.FC<CampaignTableProps> = ({
                   onClick={() => onCampaignClick?.(campaign.id)}
                 >
                   {/* Campaign Name */}
-                  <td className="py-4 px-4" style={{ width: '320px' }}>
+                  <td className="py-4 px-4" style={{ width: '320px', minWidth: '320px' }}>
                     <div className="flex items-center">
-                      <div className="w-4 h-4 border border-gray-300 rounded-sm mr-4"></div>
-                      <div>
-                        <div 
-                          className="font-medium text-purple-600 text-sm" 
-                          style={{ fontFamily: 'Lexend Deca', color: '#841AFF' }}
-                        >
+                      <div className="w-4 h-4 border border-gray-300 rounded-sm mr-4 flex-shrink-0"></div>
+                      <div className="min-w-0 flex-1">
+                        <div className="p360-text-link p360-text-nowrap">
                           {campaign.name}
                         </div>
-                        <div 
-                          className="text-xs text-gray-500 mt-1" 
-                          style={{ fontFamily: 'Lexend Deca' }}
-                        >
+                        <div className="p360-text-small text-gray-500 mt-1 p360-text-nowrap">
                           ID: {campaign.id.replace('campaign-', '').padStart(7, '0')}
                         </div>
                       </div>
@@ -179,108 +174,81 @@ export const CampaignTable: React.FC<CampaignTableProps> = ({
                   </td>
 
                   {/* Program */}
-                  <td className="py-4 px-4" style={{ width: '240px' }}>
-                    <span 
-                      className="text-sm text-gray-700" 
-                      style={{ fontFamily: 'Lexend Deca' }}
-                    >
+                  <td className="py-4 px-4" style={{ width: '200px', minWidth: '200px' }}>
+                    <span className="p360-text-table-cell text-gray-700 p360-text-nowrap">
                       {campaign.programName}
                     </span>
                   </td>
 
                   {/* Pacing */}
-                  <td className="py-4 px-4" style={{ width: '100px' }}>
+                  <td className="py-4 px-4" style={{ width: '80px', minWidth: '80px' }}>
                     <div className="flex justify-center">
                       <ProgressIndicator percentage={pacing} />
                     </div>
                   </td>
 
                   {/* Type */}
-                  <td className="py-4 px-4" style={{ width: '140px' }}>
+                  <td className="py-4 px-4" style={{ width: '120px', minWidth: '120px' }}>
                     <TypeBadge type={mapCampaignType(campaign.type)} />
                   </td>
 
                   {/* Status */}
-                  <td className="py-4 px-4" style={{ width: '140px' }}>
+                  <td className="py-4 px-4" style={{ width: '120px', minWidth: '120px' }}>
                     <StatusBadge status={mapCampaignStatus(campaign.status)} />
                   </td>
 
                   {/* Last Modified */}
-                  <td className="py-4 px-4" style={{ width: '160px' }}>
-                    <span 
-                      className="text-sm text-gray-700" 
-                      style={{ fontFamily: 'Lexend Deca' }}
-                    >
+                  <td className="py-4 px-4" style={{ width: '140px', minWidth: '140px' }}>
+                    <span className="p360-text-table-cell text-gray-700 p360-text-nowrap">
                       {formatDateTime(campaign.lastModified)}
                     </span>
                   </td>
 
                   {/* Start Date */}
-                  <td className="py-4 px-4" style={{ width: '160px' }}>
-                    <span 
-                      className="text-sm text-gray-700" 
-                      style={{ fontFamily: 'Lexend Deca' }}
-                    >
+                  <td className="py-4 px-4" style={{ width: '120px', minWidth: '120px' }}>
+                    <span className="p360-text-table-cell text-gray-700 p360-text-nowrap">
                       {formatDate(campaign.startDate)}
                     </span>
                   </td>
 
                   {/* End Date */}
-                  <td className="py-4 px-4" style={{ width: '160px' }}>
-                    <span 
-                      className="text-sm text-gray-700" 
-                      style={{ fontFamily: 'Lexend Deca' }}
-                    >
+                  <td className="py-4 px-4" style={{ width: '120px', minWidth: '120px' }}>
+                    <span className="p360-text-table-cell text-gray-700 p360-text-nowrap">
                       {formatDate(campaign.endDate)}
                     </span>
                   </td>
 
                   {/* Impressions Served */}
-                  <td className="py-4 px-4" style={{ width: '160px' }}>
-                    <span 
-                      className="text-sm text-gray-700" 
-                      style={{ fontFamily: 'Lexend Deca' }}
-                    >
+                  <td className="py-4 px-4" style={{ width: '140px', minWidth: '140px' }}>
+                    <span className="p360-text-table-cell text-gray-700 p360-text-nowrap">
                       {formatNumber(campaign.impressions)}
                     </span>
                   </td>
 
                   {/* Clicks */}
-                  <td className="py-4 px-4" style={{ width: '160px' }}>
-                    <span 
-                      className="text-sm text-gray-700" 
-                      style={{ fontFamily: 'Lexend Deca' }}
-                    >
+                  <td className="py-4 px-4" style={{ width: '100px', minWidth: '100px' }}>
+                    <span className="p360-text-table-cell text-gray-700 p360-text-nowrap">
                       {formatNumber(campaign.clicks)}
                     </span>
                   </td>
 
                   {/* CPM */}
-                  <td className="py-4 px-4" style={{ width: '160px' }}>
-                    <span 
-                      className="text-sm text-gray-700" 
-                      style={{ fontFamily: 'Lexend Deca' }}
-                    >
-                      {formatNumber(Math.round(cpm))}
+                  <td className="py-4 px-4" style={{ width: '80px', minWidth: '80px' }}>
+                    <span className="p360-text-table-cell text-gray-700 p360-text-nowrap">
+                      {formatCurrency(Math.round(cpm))}
                     </span>
                   </td>
 
                   {/* Current Spend */}
-                  <td className="py-4 px-4" style={{ width: '160px' }}>
-                    <span 
-                      className="text-sm text-gray-700" 
-                      style={{ fontFamily: 'Lexend Deca' }}
-                    >
+                  <td className="py-4 px-4" style={{ width: '120px', minWidth: '120px' }}>
+                    <span className="p360-text-table-cell text-gray-700 p360-text-nowrap">
                       {formatCurrency(campaign.spent)}
                     </span>
                   </td>
 
                   {/* Conversions */}
-                  <td className="py-4 px-4" style={{ width: '160px' }}>
-                    <span 
-                      className="text-sm text-gray-700" 
-                      style={{ fontFamily: 'Lexend Deca' }}
-                    >
+                  <td className="py-4 px-4" style={{ width: '100px', minWidth: '100px' }}>
+                    <span className="p360-text-table-cell text-gray-700 p360-text-nowrap">
                       {Math.round(campaign.conversions * 100)}%
                     </span>
                   </td>

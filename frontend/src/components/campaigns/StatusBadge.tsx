@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import '@/styles/typography.css';
 
 export type CampaignStatus = 'active' | 'paused' | 'draft' | 'completed' | 'in_review';
 
@@ -61,13 +62,10 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-1 rounded text-sm font-normal ${className}`}
+      className={`inline-flex items-center px-2.5 py-1 rounded p360-text-badge ${className}`}
       style={{
         backgroundColor: config.bgColor,
         color: config.textColor,
-        fontFamily: 'Lexend Deca, sans-serif',
-        fontSize: '14px',
-        lineHeight: '1.4285714285714286',
         height: '30px',
         minHeight: '30px',
       }}

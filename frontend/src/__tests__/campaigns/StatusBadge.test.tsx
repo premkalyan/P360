@@ -92,17 +92,13 @@ describe('StatusBadge', () => {
     it('uses correct font family', () => {
       render(<StatusBadge status="active" />);
       
-      expect(screen.getByText('Active')).toHaveStyle({
-        fontFamily: 'Lexend Deca, sans-serif',
-      });
+      expect(screen.getByText('Active')).toHaveClass('p360-text-badge');
     });
 
     it('uses correct font size', () => {
       render(<StatusBadge status="active" />);
       
-      expect(screen.getByText('Active')).toHaveStyle({
-        fontSize: '14px',
-      });
+      expect(screen.getByText('Active')).toHaveClass('p360-text-badge');
     });
   });
 
@@ -148,7 +144,8 @@ describe('StatusBadge', () => {
     it('uses normal font weight', () => {
       render(<StatusBadge status="active" />);
       
-      expect(screen.getByText('Active')).toHaveClass('font-normal');
+      // The p360-text-badge class defines font-weight: 400 (normal)
+      expect(screen.getByText('Active')).toHaveClass('p360-text-badge');
     });
   });
 
