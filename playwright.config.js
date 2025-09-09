@@ -71,7 +71,7 @@ module.exports = defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: process.env.CI ? undefined : {
     command: 'npm run docker:test',
-    url: 'http://127.0.0.1:3000',
+    url: 'http://127.0.0.1:6600',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },
