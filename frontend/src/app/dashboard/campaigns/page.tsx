@@ -13,7 +13,7 @@ import '@/styles/typography.css';
 export default function CampaignsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [showEmptyState, setShowEmptyState] = useState(true); // Toggle for testing empty vs populated
+  const [showEmptyState, setShowEmptyState] = useState(false); // Toggle for testing empty vs populated
   
   // Pagination settings
   const itemsPerPage = 10;
