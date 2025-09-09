@@ -52,7 +52,7 @@ test.describe('TopBar Navigation - P360-106', () => {
     await expect(searchBox).toHaveValue('test campaign');
 
     // Test search clearing
-    await searchBox.clear();
+    await searchBox.fill('');
     await expect(searchBox).toHaveValue('');
   });
 

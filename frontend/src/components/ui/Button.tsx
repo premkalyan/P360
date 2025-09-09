@@ -217,20 +217,20 @@ export interface IconButtonProps extends Omit<ButtonProps, 'children' | 'icon'> 
   'aria-label': string;
 }
 
-export const IconButton: React.FC<IconButtonProps> = ({ icon, ...props }) => {
-  return (
-    <Button {...props} className={`!px-2 ${props.className || ''}`}>
-      <Icon name={icon} size={iconSize[props.size || 'md']} />
-    </Button>
-  );
-};
-
 const iconSize = {
   xs: 'xs' as const,
   sm: 'sm' as const,
   md: 'sm' as const,
   lg: 'md' as const,
   xl: 'lg' as const
+};
+
+export const IconButton: React.FC<IconButtonProps> = ({ icon, ...props }) => {
+  return (
+    <Button {...props} className={`!px-2 ${props.className || ''}`}>
+      <Icon name={icon} size={iconSize[props.size || 'md']} />
+    </Button>
+  );
 };
 
 export default Button;

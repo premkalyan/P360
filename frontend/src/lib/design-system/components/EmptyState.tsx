@@ -146,27 +146,33 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 
       {(primaryAction || secondaryAction) && (
         <div style={actionsStyles}>
-          {primaryAction && (
-            <Button
-              variant="primary"
-              size={size}
-              onClick={primaryAction.onClick}
-              {...(({ onClick, label, ...rest }) => rest)(primaryAction)}
-            >
-              {primaryAction.label}
-            </Button>
-          )}
+          {primaryAction && (() => {
+            const { onClick: primaryOnClick, label: primaryLabel, ...primaryRest } = primaryAction;
+            return (
+              <Button
+                variant="primary"
+                size={size}
+                onClick={primaryOnClick}
+                {...primaryRest}
+              >
+                {primaryLabel}
+              </Button>
+            );
+          })()}
 
-          {secondaryAction && (
-            <Button
-              variant="ghost"
-              size={size}
-              onClick={secondaryAction.onClick}
-              {...(({ onClick, label, ...rest }) => rest)(secondaryAction)}
-            >
-              {secondaryAction.label}
-            </Button>
-          )}
+          {secondaryAction && (() => {
+            const { onClick: secondaryOnClick, label: secondaryLabel, ...secondaryRest } = secondaryAction;
+            return (
+              <Button
+                variant="ghost"
+                size={size}
+                onClick={secondaryOnClick}
+                {...secondaryRest}
+              >
+                {secondaryLabel}
+              </Button>
+            );
+          })()}
         </div>
       )}
     </div>

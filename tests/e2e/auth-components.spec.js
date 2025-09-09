@@ -6,7 +6,7 @@
 const { test, expect } = require('@playwright/test');
 
 // Test Configuration
-const BASE_URL = process.env.BASE_URL || 'http://localhost:6600';
+const BASE_URL = process.env.BASE_URL || (process.env.CI ? 'http://localhost:6700' : 'http://localhost:6600');
 const TIMEOUT = 30000;
 
 test.describe('P360 Authentication Components E2E Tests', () => {
@@ -78,8 +78,8 @@ test.describe('P360 Authentication Components E2E Tests', () => {
       await page.fill('input[placeholder*="John"]', 'John');
       await page.fill('input[placeholder*="Doe"]', 'Doe');
       await page.fill('input[type="email"]', 'john.doe@example.com');
-      await page.fill(page.locator('input[type="password"]').first(), 'SecurePass123!');
-      await page.fill(page.locator('input[type="password"]').last(), 'SecurePass123!');
+      await page.locator('input[type="password"]').first().fill('SecurePass123!');
+      await page.locator('input[type="password"]').last().fill('SecurePass123!');
       
       // Accept terms
       await page.check('input[type="checkbox"]');
