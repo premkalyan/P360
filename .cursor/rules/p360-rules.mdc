@@ -59,6 +59,7 @@ feature/P360-109-campaign-database-schema
 bugfix/P360-106-figma-design-system
 
 # Commit format: P360-{number}: {summary}
+# Git operations: Use brief, essential messages only
 ```
 
 ## 🧪 TESTING STRATEGY
@@ -85,26 +86,24 @@ mcp_jira-orengrinker_get_issue_details     // Get requirements
 mcp_jira-orengrinker_transition_issue      // Update status
 mcp_jira-orengrinker_add_comment          // Progress updates
 
-// PR Management (Agent-Driven) - 5-PHASE COMPREHENSIVE REVIEW
+// PR Management (Agent-Driven) - COMPLETE PROCESS REQUIRED
 gh pr create --title "..." --body "..." --base main  // Create PR via CLI
 
-// PHASE 1: Documentation & Setup
-mcp_pr-agent-mcp_pr_describe              // Auto-generate proper PR documentation
-
-// PHASE 2: P360-Specific Quality Assessment
-mcp_pr-agent-mcp_pr_review({
+// OPTION 1: Complete 5-Phase Workflow (Single Tool)
+mcp_pr-agent-mcp_pr_complete_workflow({
   pr_url: "...",
-  extra_instructions: "P360 Enterprise SDLC Review: Focus on Prisma schema design, database performance, Next.js/React best practices, TypeScript type safety, security (authentication, data protection), Docker deployment readiness, test coverage (unit/integration/E2E), Figma design system compliance, campaign feature extensibility, and multi-tenant architecture. Verify compliance with P360 port allocation (6600/6601, 6500/6501, 6700/6701) and environment separation."
+  quality_threshold: 7,                   // P360 quality gate (7/10 minimum)
+  extended_analysis: true,                // Thorough technical analysis
+  extra_instructions: "P360 Enterprise SDLC Review: Focus on Prisma schema design, database performance, Next.js/React best practices, TypeScript type safety, security (authentication, data protection), Docker deployment readiness, test coverage (unit/integration/E2E), Figma design system compliance, campaign feature extensibility, and multi-tenant architecture. Verify compliance with P360 port allocation (6600/6601, 6500/6501, 6700/6701) and environment separation.",
+  workflow_steps: ["describe", "review", "analyze", "improve"]
 })
 
-// PHASE 3: Deep Technical Analysis (for complex PRs)
-mcp_pr-agent-mcp_pr_analyze               // Component-level architectural analysis
-
-// PHASE 4: Actionable Improvements
-mcp_pr-agent-mcp_pr_improve({ extended: true })  // Committable code suggestions
-
-// PHASE 5: Interactive Clarification
-mcp_pr-agent-mcp_pr_ask                   // Ask specific P360 context questions
+// OPTION 2: Manual 5-Phase Process (Individual Tools)
+// PHASE 1: mcp_pr-agent-mcp_pr_describe              // Documentation
+// PHASE 2: mcp_pr-agent-mcp_pr_review                // Quality assessment  
+// PHASE 3: mcp_pr-agent-mcp_pr_analyze               // Technical analysis
+// PHASE 4: mcp_pr-agent-mcp_pr_improve               // Improvements
+// PHASE 5: mcp_pr-agent-mcp_pr_ask                   // Clarification
 
 // ⚠️ CRITICAL: Fix ALL issues from ALL phases BEFORE Git Actions
 // 🚫 AI AGENTS NEVER MERGE - HUMAN ONLY ACTION
