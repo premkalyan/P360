@@ -201,8 +201,10 @@ describe('CampaignTable', () => {
     it('applies correct border styling', () => {
       const { container } = render(<CampaignTable campaigns={mockCampaigns} />);
       
-      const tableContainer = container.querySelector('.bg-white.rounded-lg.border.border-gray-200');
-      expect(tableContainer).toBeInTheDocument();
+      // Check that table exists with proper structure (styling was removed in P360-123)
+      const table = container.querySelector('table');
+      expect(table).toBeInTheDocument();
+      expect(table).toHaveClass('w-full');
     });
 
     it('uses correct font family for text', () => {
@@ -224,8 +226,9 @@ describe('CampaignTable', () => {
     it('sets fixed column widths', () => {
       render(<CampaignTable campaigns={mockCampaigns} />);
       
+      // Check that headers have min-width styling for responsiveness
       const campaignNameHeader = screen.getByText('Campaign name');
-      expect(campaignNameHeader).toHaveStyle('width: 320px');
+      expect(campaignNameHeader.closest('th')).toHaveStyle('min-width: 320px');
     });
   });
 
