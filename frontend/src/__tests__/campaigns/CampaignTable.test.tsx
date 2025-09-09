@@ -256,7 +256,7 @@ describe('CampaignTable', () => {
   describe('Edge Cases', () => {
     it('handles zero impressions for CPM calculation', () => {
       const campaignWithZeroImpressions: Campaign = {
-        ...mockCampaigns[0],
+        ...mockCampaigns[0]!,
         impressions: 0,
       };
       
@@ -266,8 +266,8 @@ describe('CampaignTable', () => {
       // The CPM column is the 11th column (0-based index 10)
       const rows = screen.getAllByRole('row');
       const dataRow = rows[1]; // First data row (header is index 0)
-      const cells = dataRow.querySelectorAll('td');
-      const cpmCell = cells[10]; // CPM is 11th column (0-based index 10)
+      const cells = dataRow?.querySelectorAll('td');
+      const cpmCell = cells?.[10]; // CPM is 11th column (0-based index 10)
       expect(cpmCell).toHaveTextContent('$0');
     });
 
@@ -290,7 +290,7 @@ describe('CampaignTable', () => {
   describe('Data Formatting Edge Cases', () => {
     it('handles very large numbers correctly', () => {
       const campaignWithLargeNumbers: Campaign = {
-        ...mockCampaigns[0],
+        ...mockCampaigns[0]!,
         impressions: 1000000,
         clicks: 50000,
         spent: 100000,

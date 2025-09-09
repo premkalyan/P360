@@ -117,7 +117,7 @@ export const CampaignTable: React.FC<CampaignTableProps> = ({
   const allSelected = campaigns.length > 0 && campaigns.every(campaign => selectedCampaigns.includes(campaign.id));
   const someSelected = selectedCampaigns.length > 0 && !allSelected;
 
-  const handleSelectAll = (event: React.MouseEvent) => {
+  const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
     if (onSelectAll) {
       onSelectAll(!allSelected);
