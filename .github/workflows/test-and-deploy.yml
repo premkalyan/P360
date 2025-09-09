@@ -355,11 +355,82 @@ jobs:
           # Add Kiwi-TCMS API integration here
           # curl -X POST "http://localhost:40001/api/..." with test results
 
+  # 🚀 UAT DEPLOYMENT (Port 6500) - Auto-deploy on Main Merge
+  deploy-uat:
+    name: 🚀 Deploy to UAT Environment (Port 6500)
+    runs-on: ubuntu-latest
+    needs: [integration-tests, e2e-tests]
+    if: github.event.pull_request.merged == true && github.base_ref == 'main'
+    
+    steps:
+      - name: 🔄 Checkout Code
+        uses: actions/checkout@v4
+        
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '${{ env.NODE_VERSION }}'
+          cache: 'npm'
+      
+      - name: 📦 Install Dependencies
+        run: npm install --workspaces
+      
+      - name: 🏗️ Build Production Assets
+        run: |
+          npm run build:frontend
+          npm run build:backend
+          
+      - name: 🐳 Deploy to UAT Environment
+        run: |
+          echo "🚀 Deploying to UAT Environment (Port 6500)..."
+          
+          # Stop existing UAT containers if running
+          docker compose -f docker-compose.yml down 2>/dev/null || true
+          
+          # Pull latest images and rebuild
+          docker compose -f docker-compose.yml build --no-cache
+          
+          # Start UAT environment
+          docker compose -f docker-compose.yml up -d
+          
+          # Wait for services to be ready
+          echo "⏳ Waiting for UAT services..."
+          timeout 120s bash -c 'until curl -s http://localhost:6500 > /dev/null; do echo "Waiting for UAT frontend..."; sleep 5; done'
+          timeout 120s bash -c 'until curl -s http://localhost:6501/health > /dev/null; do echo "Waiting for UAT backend..."; sleep 5; done'
+          
+          echo "✅ UAT Environment deployed successfully!"
+          echo "🌐 UAT Frontend: http://localhost:6500"
+          echo "🔧 UAT Backend: http://localhost:6501"
+          
+      - name: 🧪 UAT Smoke Tests
+        run: |
+          echo "🧪 Running UAT smoke tests..."
+          
+          # Test frontend accessibility
+          FRONTEND_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:6500)
+          if [ "$FRONTEND_STATUS" = "200" ]; then
+            echo "✅ UAT Frontend: Healthy (HTTP $FRONTEND_STATUS)"
+          else
+            echo "❌ UAT Frontend: Failed (HTTP $FRONTEND_STATUS)"
+            exit 1
+          fi
+          
+          # Test backend health
+          BACKEND_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:6501/health)
+          if [ "$BACKEND_STATUS" = "200" ]; then
+            echo "✅ UAT Backend: Healthy (HTTP $BACKEND_STATUS)"
+          else
+            echo "❌ UAT Backend: Failed (HTTP $BACKEND_STATUS)"
+            exit 1
+          fi
+          
+          echo "🎉 UAT Environment is fully operational!"
+
   # 🎉 SUCCESS NOTIFICATION
   notify-success:
     name: 🎉 Success Notification
     runs-on: ubuntu-latest
-    needs: [deploy-staging, deploy-production]
+    needs: [deploy-staging, deploy-production, deploy-uat]
     if: success() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     
     steps:
