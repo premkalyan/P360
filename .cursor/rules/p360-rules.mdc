@@ -11,15 +11,17 @@ alwaysApply: true
 ⚠️  **CRITICAL**: NEVER close JIRA stories until ALL steps are complete!
 
 ### **📋 Complete SDLC Cycle (NO SHORTCUTS)**
-1. **📝 Story → In Progress** (JIRA transition)
+1. **📝 Story → In Progress** (JIRA transition + regular JIRA updates)
 2. **💻 Implementation** (Development work)
 3. **🧪 Testing** (Unit + Integration + E2E tests)
-4. **📤 PR Creation** (Agent creates PR using git/GitHub CLI commands)
-5. **🔍 MCP-Assisted Review** (Complete 5-phase review workflow with P360-specific context)
-6. **🔄 Feedback Incorporation** (Address review comments)
-7. **✅ Git Actions Success** (All CI/CD checks pass)
-8. **🔀 Branch Merge** (HUMAN ONLY - AI agents NEVER merge PRs)
-9. **🎯 Story → Done** (ONLY after merge complete)
+4. **📋 Kiwi-TCMS** (Create and execute test cases)
+5. **📤 PR Creation** (Agent creates PR using git/GitHub CLI commands)
+6. **🔍 MCP-Assisted Review** (3-phase review: describe → review → improve)
+7. **🔄 Feedback Incorporation** (Address review comments)
+8. **✅ Git Actions Success** (All CI/CD checks pass)
+9. **🔀 Branch Merge** (HUMAN ONLY - AI agents NEVER merge PRs)
+10. **📚 Confluence Documentation** (Update technical documentation)
+11. **🎯 Story → Done** (ONLY after merge complete)
 
 ### **❌ NEVER DO THIS:**
 - Close JIRA stories after development only
@@ -27,14 +29,18 @@ alwaysApply: true
 - Merge without PR review
 - Transition to Done before branch merge
 - **AI agents NEVER merge PRs - HUMAN ONLY ACTION**
-- Skip any phase of the 5-phase MCP review workflow
+- Skip any phase of the 3-phase MCP review workflow
+- Skip Kiwi-TCMS test case creation
+- Skip Confluence documentation updates
 
 ### **✅ ALWAYS DO THIS:**
 - **NEVER start coding without a JIRA story**
 - Use MCP tools for JIRA, Confluence, Kiwi-TCMS integration
 - Update story status throughout ENTIRE development cycle
 - Keep stories open until merge is complete
-- **Complete ALL 5 phases of MCP review process**
+- **Complete ALL 3 phases of MCP review process**
+- **Create test cases in Kiwi-TCMS for all features**
+- **Update Confluence documentation with technical details**
 - **Act as developer with highest standards**: quality, maintainability, security, performance, extensibility
 
 ## 📊 ENVIRONMENT ARCHITECTURE (3-Tier)
@@ -89,28 +95,30 @@ mcp_jira-orengrinker_add_comment          // Progress updates (plain text)
 // PR Management (Agent-Driven) - COMPLETE PROCESS REQUIRED
 gh pr create --title "..." --body "..." --base main  // Create PR via CLI
 
-// OPTION 1: Complete 5-Phase Workflow (Single Tool)
+// OPTION 1: Complete 3-Phase Workflow (Single Tool)
 mcp_pr-agent-mcp_pr_complete_workflow({
   pr_url: "...",
   quality_threshold: 7,                   // P360 quality gate (7/10 minimum)
   extended_analysis: true,                // Thorough technical analysis
   extra_instructions: "P360 Enterprise SDLC Review: Focus on Prisma schema design, database performance, Next.js/React best practices, TypeScript type safety, security (authentication, data protection), Docker deployment readiness, test coverage (unit/integration/E2E), Figma design system compliance, campaign feature extensibility, and multi-tenant architecture. Verify compliance with P360 port allocation (6600/6601, 6500/6501, 6700/6701) and environment separation.",
-  workflow_steps: ["describe", "review", "analyze", "improve"]
+  workflow_steps: ["describe", "review", "improve"]
 })
 
-// OPTION 2: Manual 5-Phase Process (Individual Tools)
+// OPTION 2: Manual 3-Phase Process (Individual Tools)
 // PHASE 1: mcp_pr-agent-mcp_pr_describe              // Documentation
 // PHASE 2: mcp_pr-agent-mcp_pr_review                // Quality assessment  
-// PHASE 3: mcp_pr-agent-mcp_pr_analyze               // Technical analysis
-// PHASE 4: mcp_pr-agent-mcp_pr_improve               // Improvements
-// PHASE 5: mcp_pr-agent-mcp_pr_ask                   // Clarification
+// PHASE 3: mcp_pr-agent-mcp_pr_improve               // Improvements
 
 // ⚠️ CRITICAL: Fix ALL issues from ALL phases BEFORE Git Actions
 // 🚫 AI AGENTS NEVER MERGE - HUMAN ONLY ACTION
 
-## 🔄 INTERACTIVE 5-PHASE MCP WORKFLOW EXAMPLES
+## 🔄 INTERACTIVE 3-PHASE MCP WORKFLOW EXAMPLES
 ```typescript
-// Example P360-specific questions for Phase 5 (pr_ask):
+// PHASE 1 (describe): Document what the change does
+// PHASE 2 (review): Assess quality, security, performance, maintainability  
+// PHASE 3 (improve): Provide actionable improvement recommendations
+
+// Example P360-specific review focus areas:
 "How does this Prisma schema change affect existing campaign data migration?"
 "Why was this specific database indexing strategy chosen for multi-tenant performance?"
 "How does this component integrate with the existing Figma design system tokens?"
@@ -156,15 +164,17 @@ npm run docker:test
 - **Documentation**: Confluence for features (HTML format required), comprehensive inline documentation
 
 ## 📋 DEFINITION OF DONE (Excellence Standards)
-- [ ] JIRA story → In Progress → Done with PR link
+- [ ] JIRA story → In Progress with regular status updates
 - [ ] All acceptance criteria implemented & tested
-- [ ] **5-Phase MCP Review COMPLETE**: describe → review → analyze → improve → ask
-- [ ] **ALL review feedback addressed**: Security, performance, maintainability issues fixed
 - [ ] Unit, integration, E2E tests passing (>90% coverage)
+- [ ] **Kiwi-TCMS test cases created and executed**
+- [ ] PR created with comprehensive description
+- [ ] **3-Phase MCP Review COMPLETE**: describe → review → improve
+- [ ] **ALL review feedback addressed**: Security, performance, maintainability issues fixed
 - [ ] **CI/CD ALL GREEN**: 100% successful checks before merge
-- [ ] Kiwi-TCMS test cases executed and documented
-- [ ] Confluence documentation updated with technical details (HTML format required)
 - [ ] **HUMAN-APPROVED MERGE**: AI agents prepare, humans execute merge
+- [ ] **Confluence documentation updated** with technical details (HTML format required)
+- [ ] **JIRA story → Done** (ONLY after merge complete)
 - [ ] Production deployment verified
 
 ---

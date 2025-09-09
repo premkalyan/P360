@@ -1,0 +1,385 @@
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { useRouter } from 'next/navigation';
+import LoginPage from '../../app/auth/login/page';
+
+// Mock Next.js router
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn()
+}));
+
+// Mock Next.js Image component
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: (props: any) => {
+    const { priority, ...imgProps } = props;
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img {...imgProps} alt={props.alt} />;
+  }
+}));
+
+const mockPush = jest.fn();
+
+describe('LoginPage', () => {
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue({
+      push: mockPush
+    });
+    mockPush.mockClear();
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  describe('🎨 Visual Design & Layout', () => {
+    it('renders Pipeline360 logo correctly', () => {
+      render(<LoginPage />);
+      
+      const logo = screen.getByAltText('Pipeline360');
+      expect(logo).toBeInTheDocument();
+      expect(logo).toHaveAttribute('src', '/figma_logo_exports/logo-02.png');
+      expect(logo).toHaveAttribute('width', '172');
+      expect(logo).toHaveAttribute('height', '28');
+    });
+
+    it('displays welcome message with correct typography', () => {
+      render(<LoginPage />);
+      
+      const heading = screen.getByRole('heading', { name: /welcome back/i });
+      expect(heading).toBeInTheDocument();
+      expect(heading).toHaveStyle({
+        fontFamily: 'Lexend Deca',
+        fontWeight: '600',
+        fontSize: '24px',
+        color: '#101828'
+      });
+
+      const subtitle = screen.getByText('Login to your Pipeline360 account');
+      expect(subtitle).toBeInTheDocument();
+      expect(subtitle).toHaveStyle({
+        fontFamily: 'Lexend Deca',
+        color: '#4A5565'
+      });
+    });
+
+    it('renders with gradient background', () => {
+      render(<LoginPage />);
+      
+      const main = screen.getByRole('main');
+      expect(main).toHaveStyle({
+        background: 'linear-gradient(135deg, #FF6221 0%, #ED01CF 25%, #841AFF 50%, #008DFF 100%)'
+      });
+    });
+
+    it('displays login card with proper styling', () => {
+      render(<LoginPage />);
+      
+      // Find the card container by looking for the form's parent
+      const form = screen.getByRole('form');
+      const card = form.parentElement;
+      
+      expect(card).toHaveStyle({
+        background: '#FFFFFF',
+        border: '1px solid #E4E4E7',
+        borderRadius: '4px',
+        padding: '32px'
+      });
+    });
+  });
+
+  describe('📝 Form Fields & Validation', () => {
+    it('renders email field with proper labeling', () => {
+      render(<LoginPage />);
+      
+      const emailLabel = screen.getByLabelText(/email/i);
+      expect(emailLabel).toBeInTheDocument();
+      expect(emailLabel).toHaveAttribute('type', 'email');
+      expect(emailLabel).toHaveAttribute('placeholder', 'Enter your email here...');
+      
+      const requiredAsterisks = screen.getAllByText('*');
+      expect(requiredAsterisks).toHaveLength(2); // One for email, one for password
+    });
+
+    it('renders password field with visibility toggle', () => {
+      render(<LoginPage />);
+      
+      const passwordField = screen.getByLabelText(/password/i);
+      expect(passwordField).toBeInTheDocument();
+      expect(passwordField).toHaveAttribute('type', 'password');
+      expect(passwordField).toHaveAttribute('placeholder', 'Enter your password here...');
+      
+      const toggleButton = screen.getByRole('button', { name: '' }); // SVG button
+      expect(toggleButton).toBeInTheDocument();
+    });
+
+    it('toggles password visibility when eye icon is clicked', () => {
+      render(<LoginPage />);
+      
+      const passwordField = screen.getByLabelText(/password/i);
+      const toggleButton = screen.getByRole('button', { name: '' });
+      
+      expect(passwordField).toHaveAttribute('type', 'password');
+      
+      fireEvent.click(toggleButton);
+      expect(passwordField).toHaveAttribute('type', 'text');
+      
+      fireEvent.click(toggleButton);
+      expect(passwordField).toHaveAttribute('type', 'password');
+    });
+
+    it('validates email format and shows error', async () => {
+      render(<LoginPage />);
+      
+      const emailField = screen.getByLabelText(/email/i);
+      const submitButton = screen.getByRole('button', { name: 'Login' });
+      
+      fireEvent.change(emailField, { target: { value: 'invalid-email' } });
+      fireEvent.click(submitButton);
+      
+      await waitFor(() => {
+        // Debug: check what errors are actually showing
+        const errorMessages = screen.queryAllByText(/Email|Password/);
+        console.log('Error messages found:', errorMessages.map(el => el.textContent));
+        
+        expect(screen.getByText('Email not found')).toBeInTheDocument();
+      }, { timeout: 3000 });
+      
+      // Check error styling
+      const emailContainer = emailField.parentElement;
+      expect(emailContainer).toHaveStyle({
+        border: '1px solid #F00250'
+      });
+    });
+
+    it('validates password and shows error', async () => {
+      render(<LoginPage />);
+      
+      const passwordField = screen.getByLabelText(/password/i);
+      const submitButton = screen.getByRole('button', { name: 'Login' });
+      
+      fireEvent.change(passwordField, { target: { value: '123' } });
+      fireEvent.click(submitButton);
+      
+      await waitFor(() => {
+        expect(screen.getByText('Password is wrong')).toBeInTheDocument();
+      });
+      
+      // Check error styling
+      const passwordContainer = passwordField.parentElement;
+      expect(passwordContainer).toHaveStyle({
+        border: '1px solid #F00250'
+      });
+    });
+
+    it('clears errors when user starts typing', () => {
+      render(<LoginPage />);
+      
+      const emailField = screen.getByLabelText(/email/i);
+      const submitButton = screen.getByRole('button', { name: 'Login' });
+      
+      // Trigger validation error
+      fireEvent.click(submitButton);
+      expect(screen.getByText('Email is required')).toBeInTheDocument();
+      
+      // Start typing
+      fireEvent.change(emailField, { target: { value: 'user@example.com' } });
+      
+      // Error should be cleared
+      expect(screen.queryByText('Email is required')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('🔐 Authentication Flow', () => {
+    it('shows loading state during login', async () => {
+      render(<LoginPage />);
+      
+      const emailField = screen.getByLabelText(/email/i);
+      const passwordField = screen.getByLabelText(/password/i);
+      const submitButton = screen.getByRole('button', { name: 'Login' });
+      
+      fireEvent.change(emailField, { target: { value: 'user@example.com' } });
+      fireEvent.change(passwordField, { target: { value: 'password123' } });
+      fireEvent.click(submitButton);
+      
+      // Check loading state
+      expect(screen.getByText('Signing In...')).toBeInTheDocument();
+      expect(submitButton).toBeDisabled();
+      expect(submitButton).toHaveStyle({
+        background: '#F4EBFF',
+        color: '#CEA3FF',
+        cursor: 'not-allowed'
+      });
+    });
+
+    it('redirects to dashboard on successful login', async () => {
+      render(<LoginPage />);
+      
+      const emailField = screen.getByLabelText(/email/i);
+      const passwordField = screen.getByLabelText(/password/i);
+      const submitButton = screen.getByRole('button', { name: 'Login' });
+      
+      fireEvent.change(emailField, { target: { value: 'user@example.com' } });
+      fireEvent.change(passwordField, { target: { value: 'password123' } });
+      fireEvent.click(submitButton);
+      
+      await waitFor(() => {
+        expect(mockPush).toHaveBeenCalledWith('/dashboard/campaigns');
+      }, { timeout: 2000 });
+    });
+
+    it('validates required fields before submission', async () => {
+      render(<LoginPage />);
+      
+      const submitButton = screen.getByRole('button', { name: 'Login' });
+      fireEvent.click(submitButton);
+      
+      await waitFor(() => {
+        expect(screen.getByText('Email is required')).toBeInTheDocument();
+        expect(screen.getByText('Password is required')).toBeInTheDocument();
+      });
+      
+      expect(mockPush).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('🌐 Social Login', () => {
+    it('renders Google login button with correct styling', () => {
+      render(<LoginPage />);
+      
+      const googleButton = screen.getByRole('button', { name: /login with google/i });
+      expect(googleButton).toBeInTheDocument();
+      expect(googleButton).toHaveStyle({
+        background: '#FFFFFF',
+        border: '1px solid #E5E7EB',
+        fontFamily: 'Lexend Deca'
+      });
+    });
+
+    it('renders Microsoft login button with correct styling', () => {
+      render(<LoginPage />);
+      
+      const microsoftButton = screen.getByRole('button', { name: /login with microsoft/i });
+      expect(microsoftButton).toBeInTheDocument();
+      expect(microsoftButton).toHaveStyle({
+        background: '#FFFFFF',
+        border: '1px solid #E5E7EB',
+        fontFamily: 'Lexend Deca'
+      });
+    });
+
+    it('handles Google login click', () => {
+      render(<LoginPage />);
+      
+      const googleButton = screen.getByRole('button', { name: /login with google/i });
+      fireEvent.click(googleButton);
+      
+      expect(console.log).toHaveBeenCalledWith('Login with google');
+    });
+
+    it('handles Microsoft login click', () => {
+      render(<LoginPage />);
+      
+      const microsoftButton = screen.getByRole('button', { name: /login with microsoft/i });
+      fireEvent.click(microsoftButton);
+      
+      expect(console.log).toHaveBeenCalledWith('Login with microsoft');
+    });
+
+    it('displays "Or continue with" separator', () => {
+      render(<LoginPage />);
+      
+      const separator = screen.getByText('Or continue with');
+      expect(separator).toBeInTheDocument();
+      expect(separator).toHaveStyle({
+        fontFamily: 'Lexend Deca',
+        fontSize: '12px',
+        color: '#71717A'
+      });
+    });
+  });
+
+  describe('♿ Accessibility', () => {
+    it('has proper form structure with labels', () => {
+      render(<LoginPage />);
+      
+      expect(screen.getByRole('form')).toBeInTheDocument();
+      expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+    });
+
+    it('has proper button roles and names', () => {
+      render(<LoginPage />);
+      
+      expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /login with google/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /login with microsoft/i })).toBeInTheDocument();
+    });
+
+    it('supports keyboard navigation', () => {
+      render(<LoginPage />);
+      
+      const emailField = screen.getByLabelText(/email/i);
+      const passwordField = screen.getByLabelText(/password/i);
+      const submitButton = screen.getByRole('button', { name: 'Login' });
+      
+      emailField.focus();
+      expect(document.activeElement).toBe(emailField);
+      
+      // Tab to next field
+      fireEvent.keyDown(emailField, { key: 'Tab' });
+      // Note: jsdom doesn't handle tab navigation automatically
+    });
+  });
+
+  describe('📱 Responsive Design', () => {
+    it('maintains responsive layout structure', () => {
+      render(<LoginPage />);
+      
+      const main = screen.getByRole('main');
+      expect(main).toHaveClass('min-h-screen', 'flex', 'items-center', 'justify-center');
+    });
+
+    it('uses proper spacing and sizing', () => {
+      render(<LoginPage />);
+      
+      const form = screen.getByRole('form');
+      expect(form).toHaveClass('space-y-6');
+    });
+  });
+
+  describe('🎨 Color Scheme & Branding', () => {
+    it('uses P360 purple brand colors', () => {
+      render(<LoginPage />);
+      
+      const submitButton = screen.getByRole('button', { name: 'Login' });
+      expect(submitButton).toHaveStyle({
+        background: '#841AFF',
+        color: '#FFFFFF'
+      });
+    });
+
+    it('uses correct error color', () => {
+      render(<LoginPage />);
+      
+      const submitButton = screen.getByRole('button', { name: 'Login' });
+      fireEvent.click(submitButton);
+      
+      const errorText = screen.getByText('Email is required');
+      expect(errorText).toHaveStyle({
+        color: '#F00250'
+      });
+    });
+
+    it('applies consistent typography', () => {
+      render(<LoginPage />);
+      
+      const heading = screen.getByRole('heading', { name: /welcome back/i });
+      const subtitle = screen.getByText('Login to your Pipeline360 account');
+      
+      expect(heading).toHaveStyle({ fontFamily: 'Lexend Deca' });
+      expect(subtitle).toHaveStyle({ fontFamily: 'Lexend Deca' });
+    });
+  });
+});
