@@ -15,10 +15,10 @@ alwaysApply: true
 2. **💻 Implementation** (Development work)
 3. **🧪 Testing** (Unit + Integration + E2E tests)
 4. **📤 PR Creation** (Agent creates PR using git/GitHub CLI commands)
-5. **🔍 MCP-Assisted Review** (PR review using MCP tools: pr_review + pr_improve + fix ALL issues)
+5. **🔍 MCP-Assisted Review** (Complete 5-phase review workflow with P360-specific context)
 6. **🔄 Feedback Incorporation** (Address review comments)
 7. **✅ Git Actions Success** (All CI/CD checks pass)
-8. **🔀 Branch Merge** (Merge to main branch)
+8. **🔀 Branch Merge** (HUMAN ONLY - AI agents NEVER merge PRs)
 9. **🎯 Story → Done** (ONLY after merge complete)
 
 ### **❌ NEVER DO THIS:**
@@ -26,12 +26,16 @@ alwaysApply: true
 - Skip testing phases
 - Merge without PR review
 - Transition to Done before branch merge
+- **AI agents NEVER merge PRs - HUMAN ONLY ACTION**
+- Skip any phase of the 5-phase MCP review workflow
 
 ### **✅ ALWAYS DO THIS:**
 - **NEVER start coding without a JIRA story**
 - Use MCP tools for JIRA, Confluence, Kiwi-TCMS integration
 - Update story status throughout ENTIRE development cycle
 - Keep stories open until merge is complete
+- **Complete ALL 5 phases of MCP review process**
+- **Act as developer with highest standards**: quality, maintainability, security, performance, extensibility
 
 ## 📊 ENVIRONMENT ARCHITECTURE (3-Tier)
 ```bash
@@ -81,11 +85,40 @@ mcp_jira-orengrinker_get_issue_details     // Get requirements
 mcp_jira-orengrinker_transition_issue      // Update status
 mcp_jira-orengrinker_add_comment          // Progress updates
 
-// PR Management (Agent-Driven) - COMPLETE PROCESS REQUIRED
+// PR Management (Agent-Driven) - 5-PHASE COMPREHENSIVE REVIEW
 gh pr create --title "..." --body "..." --base main  // Create PR via CLI
-mcp_pr-agent-mcp_pr_review                 // AI-assisted PR review (MUST check success)
-mcp_pr-agent-mcp_pr_improve               // Code improvement suggestions (MUST check success)
-// Fix ALL review comments and improvements BEFORE triggering Git Actions
+
+// PHASE 1: Documentation & Setup
+mcp_pr-agent-mcp_pr_describe              // Auto-generate proper PR documentation
+
+// PHASE 2: P360-Specific Quality Assessment
+mcp_pr-agent-mcp_pr_review({
+  pr_url: "...",
+  extra_instructions: "P360 Enterprise SDLC Review: Focus on Prisma schema design, database performance, Next.js/React best practices, TypeScript type safety, security (authentication, data protection), Docker deployment readiness, test coverage (unit/integration/E2E), Figma design system compliance, campaign feature extensibility, and multi-tenant architecture. Verify compliance with P360 port allocation (6600/6601, 6500/6501, 6700/6701) and environment separation."
+})
+
+// PHASE 3: Deep Technical Analysis (for complex PRs)
+mcp_pr-agent-mcp_pr_analyze               // Component-level architectural analysis
+
+// PHASE 4: Actionable Improvements
+mcp_pr-agent-mcp_pr_improve({ extended: true })  // Committable code suggestions
+
+// PHASE 5: Interactive Clarification
+mcp_pr-agent-mcp_pr_ask                   // Ask specific P360 context questions
+
+// ⚠️ CRITICAL: Fix ALL issues from ALL phases BEFORE Git Actions
+// 🚫 AI AGENTS NEVER MERGE - HUMAN ONLY ACTION
+
+## 🔄 INTERACTIVE 5-PHASE MCP WORKFLOW EXAMPLES
+```typescript
+// Example P360-specific questions for Phase 5 (pr_ask):
+"How does this Prisma schema change affect existing campaign data migration?"
+"Why was this specific database indexing strategy chosen for multi-tenant performance?"
+"How does this component integrate with the existing Figma design system tokens?"
+"What is the performance impact of this change on large campaign datasets?"
+"How does this authentication change maintain backward compatibility?"
+"What testing strategy covers the multi-environment deployment (dev/UAT/QA)?"
+```
 
 // Design Integration  
 mcp_figma-mcp_get_figma_data               // Get Figma specs
@@ -112,21 +145,27 @@ npm run docker:uat
 npm run docker:test
 ```
 
-## ✅ QUALITY STANDARDS
-- **Performance**: <2s page loads, optimized bundles
-- **Accessibility**: WCAG 2.1 AA compliance  
-- **Security**: Input validation, XSS/CSRF protection
-- **Testing**: >90% coverage, E2E for critical paths
-- **Documentation**: Confluence for features, ADRs
+## ✅ QUALITY STANDARDS (Developer Excellence)
+- **Performance**: <2s page loads, optimized bundles, database query optimization
+- **Security**: Authentication, data protection, XSS/CSRF protection, sensitive field protection (@hide)
+- **Maintainability**: Clean code, modular architecture, TypeScript type safety
+- **Extensibility**: Multi-tenant architecture, campaign feature extensibility
+- **Testing**: >90% coverage, unit/integration/E2E, Kiwi-TCMS integration
+- **Architecture**: Prisma best practices, Docker deployment readiness, port compliance
+- **Design**: Figma design system compliance, responsive design patterns
+- **Documentation**: Confluence for features, comprehensive inline documentation
 
-## 📋 DEFINITION OF DONE
+## 📋 DEFINITION OF DONE (Excellence Standards)
 - [ ] JIRA story → In Progress → Done with PR link
 - [ ] All acceptance criteria implemented & tested
-- [ ] Unit, integration, E2E tests passing
-- [ ] Code review approved  
-- [ ] Kiwi-TCMS test cases executed
-- [ ] Documentation updated
-- [ ] Deployment verified
+- [ ] **5-Phase MCP Review COMPLETE**: describe → review → analyze → improve → ask
+- [ ] **ALL review feedback addressed**: Security, performance, maintainability issues fixed
+- [ ] Unit, integration, E2E tests passing (>90% coverage)
+- [ ] **CI/CD ALL GREEN**: 100% successful checks before merge
+- [ ] Kiwi-TCMS test cases executed and documented
+- [ ] Confluence documentation updated with technical details
+- [ ] **HUMAN-APPROVED MERGE**: AI agents prepare, humans execute merge
+- [ ] Production deployment verified
 
 ---
 **P360 Enterprise SDLC ensures quality, security, and maintainability with full MCP integration.**
