@@ -76,6 +76,10 @@ jobs:
     - name: Install dependencies
       run: npm install --workspaces
 
+    - name: Generate Prisma Client
+      working-directory: ./backend
+      run: npx prisma generate
+
     - name: Type check
       working-directory: ./backend
       run: npm run type-check
@@ -86,7 +90,7 @@ jobs:
 
     - name: Run tests
       working-directory: ./backend
-      run: npm run test -- --passWithNoTests
+      run: npm run test:ci
       env:
         DATABASE_URL: postgresql://postgres:postgres@localhost:6503/p360_test
         JWT_SECRET: test-secret-key
@@ -133,6 +137,10 @@ jobs:
 
     - name: Install dependencies
       run: npm install --workspaces
+
+    - name: Generate Prisma Client
+      working-directory: ./backend
+      run: npx prisma generate
 
     - name: Build applications
       run: |
