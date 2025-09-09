@@ -49,9 +49,9 @@ jobs:
           name: ${{ matrix.workspace }}-coverage
 
   integration-tests:
-    name: 🔗 Integration Tests
+    name: 🔗 Integration Tests (PR Merges to Main Only)
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
+    if: github.event.pull_request.merged == true && github.base_ref == 'main'
     needs: [unit-tests]
     
     services:
@@ -101,12 +101,33 @@ jobs:
           REDIS_URL: redis://localhost:6379
           NODE_ENV: test
       
+      - name: 🐳 Start Test Environment Services
+        run: |
+          echo "🚀 Starting CI Test Environment (Port 6700 range)..."
+          echo "JWT_SECRET=test-secret-key" > .env.test
+          docker compose -f docker-compose.yml -f docker-compose.test.yml up -d --build
+        env:
+          NODE_ENV: test
+      
+      - name: ⏳ Wait for Test Environment Services
+        run: |
+          echo "🔍 Waiting for CI Test Environment services..."
+          timeout 120s bash -c 'until curl -s http://localhost:6700 > /dev/null; do echo "Waiting for frontend (6700)..."; sleep 5; done'
+          timeout 120s bash -c 'until curl -s http://localhost:6701/health > /dev/null; do echo "Waiting for backend (6701)..."; sleep 5; done'
+          echo "✅ Test environment is ready!"
+          
       - name: 🧪 Run Integration Tests
         run: npm run test:integration
         env:
           DATABASE_URL: postgresql://test_user:test_password@localhost:5432/p360_test
           REDIS_URL: redis://localhost:6379
+          BASE_URL: http://localhost:6700
+          API_URL: http://localhost:6701
           NODE_ENV: test
+      
+      - name: 🛑 Stop Test Environment Services
+        if: always()
+        run: docker compose -f docker-compose.yml -f docker-compose.test.yml down
 
   e2e-tests:
     name: 🎭 End-to-End Tests (PR Merges to Main Only)
@@ -136,16 +157,18 @@ jobs:
         env:
           NODE_ENV: test
       
-      - name: ⏳ Wait for Services
+      - name: ⏳ Wait for Test Environment Services
         run: |
-          timeout 60s bash -c 'until curl -s http://localhost:6600 > /dev/null; do sleep 1; done'
-          timeout 60s bash -c 'until curl -s http://localhost:6601 > /dev/null; do sleep 1; done'
+          echo "🔍 Waiting for CI Test Environment (Port 6700 range)..."
+          timeout 120s bash -c 'until curl -s http://localhost:6700 > /dev/null; do echo "Waiting for frontend (6700)..."; sleep 5; done'
+          timeout 120s bash -c 'until curl -s http://localhost:6701/health > /dev/null; do echo "Waiting for backend (6701)..."; sleep 5; done'
+          echo "✅ Test environment is ready!"
       
       - name: 🧪 Run E2E Tests
         run: npm run test:e2e
         env:
-          BASE_URL: http://localhost:6600
-          API_URL: http://localhost:6601
+          BASE_URL: http://localhost:6700
+          API_URL: http://localhost:6701
       
       - name: 📸 Upload Screenshots
         uses: actions/upload-artifact@v4

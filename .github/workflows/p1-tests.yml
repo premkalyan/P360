@@ -1,4 +1,4 @@
-name: 🔥 P1 Critical Tests - Unit & Integration (No E2E)
+name: 🔥 P1 Critical Tests - Unit Tests Only (Fast CI)
 
 on:
   push:
@@ -14,7 +14,7 @@ env:
 
 jobs:
   p1-tests:
-    name: 🚀 P1 Critical Path Tests
+    name: 🚀 P1 Unit Tests (Fast Feedback)
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -60,9 +60,10 @@ jobs:
       run: npm run test:unit:p1
       timeout-minutes: 3
 
-    - name: 🔗 Run P1 Integration Tests (Core User Flows)
-      run: npm run test:integration:p1
-      timeout-minutes: 5
+    # Integration tests moved to PR merge workflow - excluding from regular commits
+    # - name: 🔗 Run P1 Integration Tests (Core User Flows)
+    #   run: npm run test:integration:p1
+    #   timeout-minutes: 5
 
     # E2E tests moved to PR merge workflow - excluding from regular commits
     # - name: 🎭 Install Playwright browsers

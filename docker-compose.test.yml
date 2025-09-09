@@ -16,7 +16,7 @@ services:
     ports:
       - "6602:6379"
 
-  # Test Backend
+  # Test Backend (CI Environment - Port 6700 range)
   backend-test:
     build:
       context: ./backend
@@ -27,21 +27,21 @@ services:
       - NODE_ENV=test
       - DATABASE_URL=postgresql://test_user:test_password@postgres:5432/p360_test
       - REDIS_URL=redis://redis:6379
-      - PORT=6601
+      - PORT=6701
       - JWT_SECRET=test-secret-key-for-testing
     volumes:
       - ./backend:/app
       - /app/node_modules
-    command: sh -c "npm install && npm run build && npm start"
+    command: sh -c "npm ci && npm run build && npm start"
     ports:
-      - "6601:6601"
+      - "6701:6701"
     depends_on:
       - postgres
       - redis
     networks:
       - p360-network
 
-  # Test Frontend
+  # Test Frontend (CI Environment - Port 6700 range)
   frontend-test:
     build:
       context: ./frontend
@@ -50,14 +50,14 @@ services:
     container_name: p360-frontend-test
     environment:
       - NODE_ENV=test
-      - PORT=6600
-      - NEXT_PUBLIC_BACKEND_URL=http://backend-test:6601
+      - PORT=6700
+      - NEXT_PUBLIC_BACKEND_URL=http://backend-test:6701
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    command: sh -c "npm install && npm run build && npm start"
+    command: sh -c "npm ci && npm run build && npm start"
     ports:
-      - "6600:6600"
+      - "6700:6700"
     depends_on:
       - backend-test
     networks:

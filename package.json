@@ -33,6 +33,8 @@
     "test:watch": "npm run test:frontend -- --watch",
     "docker:dev": "JWT_SECRET=dev-secret-key docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d",
     "docker:test": "JWT_SECRET=test-secret-key docker-compose -f docker-compose.yml -f docker-compose.test.yml up -d",
+    "test:env:setup": "bash scripts/test-environment-setup.sh",
+    "test:env:stop": "docker-compose -f docker-compose.yml -f docker-compose.test.yml down",
     "docker:prod": "docker-compose -f docker-compose.yml up -d",
     "docker:build": "docker-compose -f docker-compose.yml build",
     "docker:down": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml down",

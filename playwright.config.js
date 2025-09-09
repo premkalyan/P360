@@ -23,7 +23,7 @@ module.exports = defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: process.env.BASE_URL || 'http://localhost:6600',
+    baseURL: process.env.BASE_URL || (process.env.CI ? 'http://localhost:6700' : 'http://localhost:6600'),
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     /* Take screenshot on failure */
@@ -71,7 +71,7 @@ module.exports = defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: process.env.CI ? undefined : {
     command: 'npm run docker:test',
-    url: 'http://127.0.0.1:6600',
+    url: 'http://127.0.0.1:6700',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },
