@@ -38,7 +38,7 @@ export const CampaignPagination: React.FC<CampaignPaginationProps> = ({
         <select
           value={currentPage}
           onChange={(e) => onPageChange(Number(e.target.value))}
-          className="appearance-none bg-white border border-gray-300 rounded px-3 py-1 p360-text-body text-gray-700 focus:outline-none focus:ring-2 focus:ring-p360-purple focus:border-p360-purple pr-8"
+          className="appearance-none bg-white border border-gray-300 rounded px-3 py-1 p360-text-button text-gray-700 focus:outline-none focus:ring-2 focus:ring-p360-purple focus:border-p360-purple pr-8"
         >
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <option key={page} value={page}>
