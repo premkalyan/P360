@@ -22,13 +22,13 @@ services:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://dev_user:dev_password@postgres:5432/p360_dev
       - REDIS_URL=redis://redis:6379
-      - PORT=6501
+      - PORT=6601
     volumes:
       - ./backend:/app
       - /app/node_modules
     command: sh -c "npm install && npm run dev"
     ports:
-      - "6501:6501"
+      - "6601:6601"
     depends_on:
       - postgres
       - redis
@@ -44,14 +44,15 @@ services:
     container_name: p360-frontend-dev
     environment:
       - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost:6501
+      - PORT=6600
+      - NEXT_PUBLIC_API_URL=http://localhost:6601
     volumes:
       - ./frontend:/app
       - /app/node_modules
       - /app/.next
     command: npm run dev
     ports:
-      - "6500:6500"
+      - "6600:6600"
     depends_on:
       - backend-dev
     networks:

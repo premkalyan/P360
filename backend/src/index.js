@@ -2,7 +2,23 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const PORT = process.env.PORT || 6501;
+
+// Environment-based port configuration
+const getDefaultPort = () => {
+  const env = process.env.NODE_ENV || 'development';
+  switch (env) {
+    case 'development':
+      return 6601; // Local dev backend port
+    case 'production':
+      return 6501; // UAT backend port
+    case 'test':
+      return 6701; // QA/CI backend port
+    default:
+      return 6601; // Default to local dev
+  }
+};
+
+const PORT = process.env.PORT || getDefaultPort();
 
 // Middleware
 app.use(cors());
