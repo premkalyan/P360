@@ -80,11 +80,11 @@ export default ComponentName;
 
 ## 🚀 MCP TOOLS (Essential Commands)
 ```typescript
-// JIRA Management
+// JIRA Management (Use JIRA Wiki Markup: h1., h2., *bold*, * bullets)
 mcp_jira-orengrinker_search_issues         // Find stories
 mcp_jira-orengrinker_get_issue_details     // Get requirements  
 mcp_jira-orengrinker_transition_issue      // Update status
-mcp_jira-orengrinker_add_comment          // Progress updates
+mcp_jira-orengrinker_add_comment          // Progress updates (Wiki markup)
 
 // PR Management (Agent-Driven) - COMPLETE PROCESS REQUIRED
 gh pr create --title "..." --body "..." --base main  // Create PR via CLI
@@ -169,9 +169,25 @@ npm run docker:test
 
 ---
 
-## 📝 CONFLUENCE FORMATTING REQUIREMENTS
+## 📝 PLATFORM FORMATTING REQUIREMENTS
 
-### **⚠️ CRITICAL: Confluence uses HTML, NOT Markdown**
+### **⚠️ CRITICAL: Different platforms use different formatting**
+
+### **🔹 JIRA Comments - Use JIRA Wiki Markup:**
+```
+h1. Main Title
+h2. Section Header  
+h3. Subsection
+h4. Sub-subsection
+*Bold Text*
+_Italic Text_
+* Bullet point
+* Another point
+# Numbered item
+# Next item
+```
+
+### **🔹 Confluence Pages - Use HTML:**
 
 #### **✅ Correct Confluence HTML Syntax:**
 ```html
@@ -192,7 +208,7 @@ npm run docker:test
 <pre><code>Code block content</code></pre>
 ```
 
-#### **❌ Wrong (Markdown will display literally):**
+#### **❌ Wrong (Markdown displays literally in both platforms):**
 ```markdown
 # Title          → displays as: # Title
 ## Header        → displays as: ## Header  
@@ -200,7 +216,15 @@ npm run docker:test
 - List item      → displays as: - List item
 ```
 
-#### **✅ Correct (HTML renders properly):**
+#### **✅ JIRA Comments (Wiki Markup):**
+```
+h1. Title        → renders as large title
+h2. Header       → renders as section header
+*Bold*           → renders as Bold
+* List item      → renders as • List item
+```
+
+#### **✅ Confluence Pages (HTML):**
 ```html
 <h1>Title</h1>           → renders as large title
 <h2>Header</h2>          → renders as section header
