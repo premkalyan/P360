@@ -1,0 +1,291 @@
+// P360 Database Schema - Prisma Migration System
+// ==============================================
+// Converted from init-db.sql for P360 Enterprise SDLC
+// Supports multi-tenant architecture with RLS
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum UserRole {
+  admin
+  manager
+  analyst
+  viewer
+}
+
+enum CampaignStatus {
+  draft
+  active
+  paused
+  completed
+  archived
+}
+
+enum TenantStatus {
+  active
+  suspended
+  trial
+}
+
+// Core Tables
+// ============
+
+model Tenant {
+  id        String       @id @default(uuid()) @db.Uuid
+  name      String       @db.VarChar(255)
+  slug      String       @unique @db.VarChar(100)
+  status    TenantStatus @default(trial)
+  settings  Json         @default("{}")
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime     @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Relations
+  users             User[]
+  campaigns         Campaign[]
+  campaignTemplates CampaignTemplate[]
+
+  @@map("tenants")
+}
+
+model User {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @map("tenant_id") @db.Uuid
+  email        String    @unique @db.VarChar(255)
+  passwordHash String    @map("password_hash") @db.VarChar(255)
+  firstName    String?   @map("first_name") @db.VarChar(100)
+  lastName     String?   @map("last_name") @db.VarChar(100)
+  role         UserRole  @default(viewer)
+  isActive     Boolean   @default(true) @map("is_active")
+  lastLoginAt  DateTime? @map("last_login_at") @db.Timestamptz
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Relations
+  tenant            Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  campaigns         Campaign[]
+  userSessions      UserSession[]
+  completedWorkflows CampaignWorkflow[] @relation("WorkflowCompletedBy")
+
+  @@index([tenantId])
+  @@index([email])
+  @@map("users")
+}
+
+model UserSession {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  token     String   @unique @db.VarChar(255)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_sessions")
+}
+
+// Campaign Tables
+// ===============
+
+model Campaign {
+  id             String         @id @default(uuid()) @db.Uuid
+  tenantId       String         @map("tenant_id") @db.Uuid
+  userId         String         @map("user_id") @db.Uuid
+  name           String         @db.VarChar(255)
+  description    String?
+  status         CampaignStatus @default(draft)
+  budget         Decimal?       @db.Decimal(15, 2)
+  dailyBudget    Decimal?       @map("daily_budget") @db.Decimal(15, 2)
+  startDate      DateTime?      @map("start_date") @db.Date
+  endDate        DateTime?      @map("end_date") @db.Date
+  targetAudience Json           @default("{}") @map("target_audience")
+  settings       Json           @default("{}")
+  createdAt      DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime       @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Relations
+  tenant              Tenant                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user                User                  @relation(fields: [userId], references: [id])
+  template            CampaignTemplate?     @relation("CampaignFromTemplate", fields: [templateId], references: [id])
+  templateId          String?               @map("template_id") @db.Uuid
+  
+  // Enhanced campaign relations for P360-107, 108, 109
+  campaignPerformance CampaignPerformance[]
+  campaignAssets      CampaignAsset[]
+  campaignTargeting   CampaignTargeting?
+  campaignAnalytics   CampaignAnalytics?
+  campaignWorkflows   CampaignWorkflow[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@index([templateId])
+  @@map("campaigns")
+}
+
+model CampaignPerformance {
+  id          String   @id @default(uuid()) @db.Uuid
+  campaignId  String   @map("campaign_id") @db.Uuid
+  date        DateTime @db.Date
+  impressions Int      @default(0)
+  clicks      Int      @default(0)
+  spend       Decimal  @default(0) @db.Decimal(15, 4)
+  conversions Int      @default(0)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  // Relations
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, date])
+  @@index([campaignId])
+  @@index([date])
+  @@map("campaign_performance")
+}
+
+// Enhanced Campaign Tables for P360-107, 108, 109
+// ================================================
+
+// Campaign Templates for P360-108 (Multi-Step Wizard)
+model CampaignTemplate {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @map("tenant_id") @db.Uuid
+  name        String   @db.VarChar(255)
+  description String?
+  category    String   @db.VarChar(100) // e.g., "brand-awareness", "product-launch", "seasonal"
+  config      Json     @default("{}")   // Template configuration
+  steps       Json     @default("[]")   // Multi-step wizard configuration
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Relations
+  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  campaigns Campaign[] @relation("CampaignFromTemplate")
+
+  @@index([tenantId])
+  @@index([category])
+  @@map("campaign_templates")
+}
+
+// Campaign Assets (for P360-108 creation flow)
+model CampaignAsset {
+  id         String              @id @default(uuid()) @db.Uuid
+  campaignId String              @map("campaign_id") @db.Uuid
+  assetType  CampaignAssetType   @map("asset_type")
+  fileName   String              @map("file_name") @db.VarChar(255)
+  filePath   String              @map("file_path") @db.VarChar(500)
+  fileSize   Int                 @map("file_size") // in bytes
+  mimeType   String              @map("mime_type") @db.VarChar(100)
+  metadata   Json                @default("{}")
+  status     CampaignAssetStatus @default(active)
+  createdAt  DateTime            @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime            @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Relations
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([campaignId])
+  @@index([assetType])
+  @@map("campaign_assets")
+}
+
+// Campaign Targeting for enhanced audience management
+model CampaignTargeting {
+  id               String   @id @default(uuid()) @db.Uuid
+  campaignId       String   @unique @map("campaign_id") @db.Uuid
+  demographics     Json     @default("{}")     // Age, gender, income, etc.
+  geographics      Json     @default("{}")     // Location targeting
+  interests        Json     @default("[]")     // Interest categories
+  behaviors        Json     @default("[]")     // Behavioral targeting
+  customAudiences  Json     @default("[]")     // Custom audience segments
+  lookalikes       Json     @default("[]")     // Lookalike audiences
+  exclusions       Json     @default("[]")     // Exclusion criteria
+  estimatedReach   Int?     @map("estimated_reach")
+  targetingScore   Decimal? @map("targeting_score") @db.Decimal(3, 2) // 0.00-1.00
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Relations
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@map("campaign_targeting")
+}
+
+// Campaign Analytics Summary for P360-109 Dashboard
+model CampaignAnalytics {
+  id                String   @id @default(uuid()) @db.Uuid
+  campaignId        String   @unique @map("campaign_id") @db.Uuid
+  totalImpressions  BigInt   @default(0) @map("total_impressions")
+  totalClicks       BigInt   @default(0) @map("total_clicks")
+  totalSpend        Decimal  @default(0) @map("total_spend") @db.Decimal(15, 4)
+  totalConversions  BigInt   @default(0) @map("total_conversions")
+  ctr               Decimal  @default(0) @db.Decimal(8, 4) // Click-through rate
+  cpm               Decimal  @default(0) @db.Decimal(8, 4) // Cost per mille
+  cpc               Decimal  @default(0) @db.Decimal(8, 4) // Cost per click
+  cpa               Decimal  @default(0) @db.Decimal(8, 4) // Cost per acquisition
+  roas              Decimal  @default(0) @db.Decimal(8, 4) // Return on ad spend
+  qualityScore      Decimal? @map("quality_score") @db.Decimal(3, 2)
+  lastCalculatedAt  DateTime @map("last_calculated_at") @db.Timestamptz
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Relations
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@map("campaign_analytics")
+}
+
+// Campaign Workflow for P360-108 Multi-Step Creation
+model CampaignWorkflow {
+  id           String                   @id @default(uuid()) @db.Uuid
+  campaignId   String                   @map("campaign_id") @db.Uuid
+  stepName     String                   @map("step_name") @db.VarChar(100)
+  stepOrder    Int                      @map("step_order")
+  status       CampaignWorkflowStatus
+  data         Json                     @default("{}")
+  completedAt  DateTime?                @map("completed_at") @db.Timestamptz
+  completedBy  String?                  @map("completed_by") @db.Uuid
+  validationErrors Json?                @map("validation_errors") @default("[]")
+  createdAt    DateTime                 @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime                 @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Relations
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  completedByUser User? @relation("WorkflowCompletedBy", fields: [completedBy], references: [id])
+
+  @@unique([campaignId, stepName])
+  @@index([campaignId, stepOrder])
+  @@map("campaign_workflows")
+}
+
+// Additional Enums for enhanced campaign features
+enum CampaignAssetType {
+  banner
+  video
+  image
+  audio
+  document
+  creative
+}
+
+enum CampaignAssetStatus {
+  active
+  inactive
+  processing
+  failed
+}
+
+enum CampaignWorkflowStatus {
+  pending
+  in_progress
+  completed
+  failed
+  skipped
+}
