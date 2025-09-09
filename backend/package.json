@@ -7,7 +7,7 @@
     "dev": "NODE_ENV=development node src/index.js",
     "build": "mkdir -p dist && cp src/index.js dist/index.js",
     "start": "node dist/index.js",
-    "test": "jest",
+    "test": "CI=true jest src/index.test.ts",
     "test:watch": "jest --watch",
     "test:unit": "jest tests/database/unit --verbose",
     "test:integration": "jest tests/database/integration --verbose",
