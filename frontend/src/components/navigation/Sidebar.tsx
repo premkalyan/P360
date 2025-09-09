@@ -28,8 +28,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
       <div className="flex flex-col items-start gap-3 w-full">
         <Link href="/dashboard/create" className="w-full">
           <button className="flex items-center justify-center px-4 py-2 w-full border border-p360-purple rounded bg-white hover:bg-p360-purple/5 transition-colors">
-            <svg className="w-4 h-4 mr-2" stroke="#841AFF" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-              <path d="M12 5v14m-7-7h14"/>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
+              <path d="M6 9H12M9 6V12M16.5 9C16.5 13.1421 13.1421 16.5 9 16.5C4.85786 16.5 1.5 13.1421 1.5 9C1.5 4.85786 4.85786 1.5 9 1.5C13.1421 1.5 16.5 4.85786 16.5 9Z" stroke="#841AFF" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             <span className="text-p360-purple font-medium text-sm">Create</span>
           </button>
@@ -45,9 +45,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
                 ? 'bg-p360-purple/10 text-p360-purple' 
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
             }`}>
-              <svg className="w-4 h-4" stroke="currentColor" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9,22 9,12 15,12 15,22"/>
+              <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-4 h-4">
+                <path d="M5.75 16.5V9H10.25V16.5M1.25 6.75L8 1.5L14.75 6.75V15C14.75 15.3978 14.592 15.7794 14.3107 16.0607C14.0294 16.342 13.6478 16.5 13.25 16.5H2.75C2.35218 16.5 1.97064 16.342 1.68934 16.0607C1.40804 15.7794 1.25 15.3978 1.25 15V6.75Z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               Home
             </div>
@@ -62,8 +61,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
                   ? 'bg-p360-purple/10 text-p360-purple' 
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
               }`}>
-                <svg className="w-4 h-4" stroke="currentColor" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M4.5 16.5c-1.5 1.5-1.5 4.5 0 6l6 6c1.5 1.5 4.5 1.5 6 0l6-6c1.5-1.5 1.5-4.5 0-6l-6-6c-1.5-1.5-4.5-1.5-6 0z"/>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-4 h-4">
+                  <g clipPath="url(#clip0_3184_1485)">
+                    <path d="M3 7.5C2.175 7.5 1.5 6.825 1.5 6V3C1.5 2.175 2.175 1.5 3 1.5H6C6.825 1.5 7.5 2.175 7.5 3M7.5 12C6.675 12 6 11.325 6 10.5V7.5C6 6.675 6.675 6 7.5 6H10.5C11.325 6 12 6.675 12 7.5M12 10.5H15C15.8284 10.5 16.5 11.1716 16.5 12V15C16.5 15.8284 15.8284 16.5 15 16.5H12C11.1716 16.5 10.5 15.8284 10.5 15V12C10.5 11.1716 11.1716 10.5 12 10.5Z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_3184_1485">
+                      <rect width="18" height="18" fill="white"/>
+                    </clipPath>
+                  </defs>
                 </svg>
                 Programs
               </div>

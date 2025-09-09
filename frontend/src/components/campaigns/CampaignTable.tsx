@@ -147,7 +147,7 @@ export const CampaignTable: React.FC<CampaignTableProps> = ({
 
           {/* Table Body */}
           <tbody>
-            {campaigns.map((campaign, index) => {
+            {campaigns.map((campaign) => {
               const pacing = calculatePacing(campaign);
               const cpm = campaign.impressions > 0 ? (campaign.spent / campaign.impressions) * 1000 : 0;
               
