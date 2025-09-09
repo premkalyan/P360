@@ -195,12 +195,142 @@ describe('CampaignsPage', () => {
   });
 
   describe('Pagination', () => {
-    it('does not show pagination with few campaigns', () => {
+    beforeEach(() => {
       render(<CampaignsPage />);
       fireEvent.click(screen.getByText('📭 Empty State')); // Switch to data state
+    });
+
+    it('shows pagination dropdown with correct format', () => {
+      // Check for dropdown with "Page X/Y" format
+      const dropdown = screen.getByDisplayValue(/Page \d+\/\d+/);
+      expect(dropdown).toBeInTheDocument();
+      expect(dropdown.tagName).toBe('SELECT');
+    });
+
+    it('shows navigation buttons with correct styling', () => {
+      // Check for previous and next buttons
+      const buttons = screen.getAllByRole('button').filter(btn => 
+        btn.innerHTML.includes('M10 4L6 8L10 12') || btn.innerHTML.includes('M6 4L10 8L6 12')
+      );
+      expect(buttons).toHaveLength(2);
       
-      // With only 3 campaigns, pagination should show "Page 1/1"
-      expect(screen.getByText(/Page \d+\/\d+/)).toBeInTheDocument();
+      // Verify they have Figma styling
+      buttons.forEach(button => {
+        expect(button).toHaveStyle({
+          width: '40px',
+          height: '40px',
+          background: '#FFFFFF',
+          border: '1px solid #E5E7EB',
+          borderRadius: '4px'
+        });
+      });
+    });
+
+    it('handles page selection via dropdown', () => {
+      const dropdown = screen.getByDisplayValue(/Page \d+\/\d+/);
+      
+      // Initially should be page 1
+      expect(dropdown).toHaveValue('1');
+      
+      // Since we only have 3 campaigns and 10 per page, should only have 1 page
+      const options = screen.getAllByRole('option');
+      expect(options).toHaveLength(1);
+      expect(options[0]).toHaveTextContent('Page 1/1');
+    });
+
+    it('disables previous button on first page', () => {
+      const prevButton = screen.getAllByRole('button').find(btn => 
+        btn.innerHTML.includes('M10 4L6 8L10 12')
+      );
+      
+      expect(prevButton).toHaveStyle({ opacity: '0.5' });
+      expect(prevButton).toHaveAttribute('disabled');
+    });
+
+    it('disables next button on last page', () => {
+      const nextButton = screen.getAllByRole('button').find(btn => 
+        btn.innerHTML.includes('M6 4L10 8L6 12')
+      );
+      
+      expect(nextButton).toHaveStyle({ opacity: '0.5' });
+      expect(nextButton).toHaveAttribute('disabled');
+    });
+
+    it('aligns navigation buttons to the right', () => {
+      const paginationContainer = screen.getByDisplayValue(/Page \d+\/\d+/).closest('div');
+      const parentContainer = paginationContainer?.parentElement;
+      
+      expect(parentContainer).toHaveClass('justify-between');
+    });
+  });
+
+  describe('Campaign Selection', () => {
+    beforeEach(() => {
+      render(<CampaignsPage />);
+      fireEvent.click(screen.getByText('📭 Empty State')); // Switch to data state
+    });
+
+    it('shows select all checkbox in campaign name header', () => {
+      const headerCheckbox = screen.getAllByRole('checkbox')[0];
+      expect(headerCheckbox).toBeInTheDocument();
+      
+      // Should be in the campaign name header
+      const campaignNameHeader = screen.getByText('Campaign name').closest('th');
+      expect(campaignNameHeader).toContainElement(headerCheckbox);
+    });
+
+    it('shows individual checkboxes for each campaign', () => {
+      const checkboxes = screen.getAllByRole('checkbox');
+      
+      // Should have 1 header checkbox + 3 campaign checkboxes = 4 total
+      expect(checkboxes).toHaveLength(4);
+      
+      // Verify they have P360 styling
+      checkboxes.forEach(checkbox => {
+        expect(checkbox).toHaveClass('text-p360-purple');
+      });
+    });
+
+    it('handles select all functionality', () => {
+      const selectAllCheckbox = screen.getAllByRole('checkbox')[0];
+      const campaignCheckboxes = screen.getAllByRole('checkbox').slice(1);
+      
+      // Initially none selected
+      expect(selectAllCheckbox).not.toBeChecked();
+      campaignCheckboxes.forEach(checkbox => {
+        expect(checkbox).not.toBeChecked();
+      });
+      
+      // Click select all
+      fireEvent.click(selectAllCheckbox);
+      
+      // All should be selected
+      expect(selectAllCheckbox).toBeChecked();
+      campaignCheckboxes.forEach(checkbox => {
+        expect(checkbox).toBeChecked();
+      });
+    });
+
+    it('handles individual campaign selection', () => {
+      const selectAllCheckbox = screen.getAllByRole('checkbox')[0];
+      const firstCampaignCheckbox = screen.getAllByRole('checkbox')[1];
+      
+      // Select first campaign
+      fireEvent.click(firstCampaignCheckbox);
+      
+      expect(firstCampaignCheckbox).toBeChecked();
+      expect(selectAllCheckbox).not.toBeChecked(); // Should not auto-select all
+    });
+
+    it('prevents row click when clicking checkbox', () => {
+      const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+      const firstCampaignCheckbox = screen.getAllByRole('checkbox')[1];
+      
+      // Click checkbox (should not trigger row click)
+      fireEvent.click(firstCampaignCheckbox);
+      
+      expect(consoleSpy).not.toHaveBeenCalledWith(expect.stringContaining('Campaign clicked'));
+      consoleSpy.mockRestore();
     });
   });
 
