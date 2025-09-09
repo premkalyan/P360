@@ -45,7 +45,22 @@ export const TopBar: React.FC<TopBarProps> = ({ className = '' }) => {
         {/* Org Selector - Exact Figma Implementation */}
         <div className="flex items-center gap-2 px-2">
           <div className="flex items-center gap-2">
-            <span className="p360-text-body text-gray-900 font-medium">
+            <span 
+              className="font-medium"
+              style={{
+                width: '43px',
+                height: '20px',
+                fontFamily: 'Lexend Deca',
+                fontStyle: 'normal',
+                fontWeight: 500,
+                fontSize: '14px',
+                lineHeight: '20px',
+                color: '#101828',
+                flex: 'none',
+                order: 0,
+                flexGrow: 0
+              }}
+            >
               Vercel
             </span>
             <div className="px-1.5 py-0.5 rounded p360-text-small bg-gray-100 text-gray-600">
