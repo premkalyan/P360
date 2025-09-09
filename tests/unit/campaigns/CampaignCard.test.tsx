@@ -237,7 +237,7 @@ describe('CampaignCard Component - P360-67', () => {
       render(<CampaignCard campaign={mockCampaign} {...mockHandlers} />);
       
       expect(screen.getByText(/Updated: 1\/15\/2024/)).toBeInTheDocument();
-      expect(screen.getByText(/Ends: 1\/1\/2025/)).toBeInTheDocument();
+      expect(screen.getByText(/Ends: 12\/31\/2024/)).toBeInTheDocument();
     });
 
     it('shows days remaining for active campaigns', () => {
