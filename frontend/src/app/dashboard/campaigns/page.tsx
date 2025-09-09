@@ -14,6 +14,7 @@ export default function CampaignsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [showEmptyState, setShowEmptyState] = useState(false); // Toggle for testing empty vs populated
+  const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
   
   // Pagination settings
   const itemsPerPage = 10;
@@ -114,8 +115,25 @@ export default function CampaignsPage() {
     setCurrentPage(page);
   }, []);
 
+  // Selection handlers
+  const handleSelectAll = useCallback((selected: boolean) => {
+    if (selected) {
+      setSelectedCampaigns(paginatedCampaigns.map(campaign => campaign.id));
+    } else {
+      setSelectedCampaigns([]);
+    }
+  }, [paginatedCampaigns]);
+
+  const handleSelectCampaign = useCallback((campaignId: string, selected: boolean) => {
+    if (selected) {
+      setSelectedCampaigns(prev => [...prev, campaignId]);
+    } else {
+      setSelectedCampaigns(prev => prev.filter(id => id !== campaignId));
+    }
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Debug Toggle - Top Right Corner */}
       <div className="fixed top-20 right-4 z-50">
         <button
@@ -166,22 +184,23 @@ export default function CampaignsPage() {
             <CampaignTable
               campaigns={paginatedCampaigns}
               onCampaignClick={handleCampaignClick}
+              onSelectAll={handleSelectAll}
+              selectedCampaigns={selectedCampaigns}
+              onSelectCampaign={handleSelectCampaign}
             />
           </div>
 
           {/* Pagination - Bottom positioning */}
           <div className="flex justify-between items-center pt-6 border-t border-gray-200">
             <div className="p360-text-body text-gray-600">
-              Page {currentPage}/{totalPages}
+              {/* Results summary can go here if needed */}
             </div>
             
-            {totalPages > 1 && (
-              <CampaignPagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            )}
+            <CampaignPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
       )}

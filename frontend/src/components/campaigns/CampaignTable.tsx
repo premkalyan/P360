@@ -13,12 +13,18 @@ import '@/styles/typography.css';
 export interface CampaignTableProps {
   campaigns: Campaign[];
   onCampaignClick?: (id: string) => void;
+  onSelectAll?: (selected: boolean) => void;
+  selectedCampaigns?: string[];
+  onSelectCampaign?: (id: string, selected: boolean) => void;
   className?: string;
 }
 
 export const CampaignTable: React.FC<CampaignTableProps> = ({
   campaigns,
   onCampaignClick,
+  onSelectAll,
+  selectedCampaigns = [],
+  onSelectCampaign,
   className = '',
 }) => {
   // Helper functions
@@ -96,15 +102,43 @@ export const CampaignTable: React.FC<CampaignTableProps> = ({
     }
   };
 
+  // Selection logic
+  const allSelected = campaigns.length > 0 && campaigns.every(campaign => selectedCampaigns.includes(campaign.id));
+  const someSelected = selectedCampaigns.length > 0 && !allSelected;
+
+  const handleSelectAll = () => {
+    if (onSelectAll) {
+      onSelectAll(!allSelected);
+    }
+  };
+
+  const handleSelectCampaign = (campaignId: string) => {
+    if (onSelectCampaign) {
+      const isSelected = selectedCampaigns.includes(campaignId);
+      onSelectCampaign(campaignId, !isSelected);
+    }
+  };
+
   return (
-    <div className={`bg-white rounded-lg border border-gray-200 overflow-hidden ${className}`}>
+    <div className={`overflow-hidden ${className}`}>
       <div className="overflow-x-auto">
         <table className="w-full">
           {/* Table Header */}
           <thead style={{ backgroundColor: '#F9FAFB' }}>
             <tr style={{ borderBottom: '1px solid #E5E7EB' }}>
               <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '320px', minWidth: '320px' }}>
-                Campaign name
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={allSelected}
+                    ref={(el) => {
+                      if (el) el.indeterminate = someSelected;
+                    }}
+                    onChange={handleSelectAll}
+                    className="w-4 h-4 text-p360-purple bg-white border-gray-300 rounded focus:ring-p360-purple focus:ring-2"
+                  />
+                  Campaign name
+                </div>
               </th>
               <th className="text-left py-3 px-4 p360-text-table-header text-gray-700" style={{ width: '200px', minWidth: '200px' }}>
                 Program
@@ -161,7 +195,15 @@ export const CampaignTable: React.FC<CampaignTableProps> = ({
                   {/* Campaign Name */}
                   <td className="py-4 px-4" style={{ width: '320px', minWidth: '320px' }}>
                     <div className="flex items-center">
-                      <div className="w-4 h-4 border border-gray-300 rounded-sm mr-4 flex-shrink-0"></div>
+                      <input
+                        type="checkbox"
+                        checked={selectedCampaigns.includes(campaign.id)}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          handleSelectCampaign(campaign.id);
+                        }}
+                        className="w-4 h-4 text-p360-purple bg-white border-gray-300 rounded mr-4 flex-shrink-0 focus:ring-p360-purple focus:ring-2"
+                      />
                       <div className="min-w-0 flex-1">
                         <div className="p360-text-link p360-text-nowrap">
                           {campaign.name}
