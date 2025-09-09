@@ -39,10 +39,14 @@ jobs:
       
       - name: 🧪 Run Unit Tests
         working-directory: ./${{ matrix.workspace }}
-        run: npm run test -- --coverage --watchAll=false --passWithNoTests
+        run: npm run test:ci
+        env:
+          CI: true
+          NODE_ENV: test
       
       - name: 📊 Upload Coverage
         uses: codecov/codecov-action@v3
+        if: false  # Disabled for performance - enable only when needed
         with:
           file: ./${{ matrix.workspace }}/coverage/lcov.info
           flags: ${{ matrix.workspace }}
