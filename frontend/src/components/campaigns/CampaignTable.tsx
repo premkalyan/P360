@@ -50,21 +50,32 @@ export const CampaignTable: React.FC<CampaignTableProps> = ({
   };
 
   const formatDateTime = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    }) + ' ' + date.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'Invalid date';
+      
+      return date.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }) + ' ' + date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    } catch {
+      return 'Invalid date';
+    }
   };
 
   // Calculate pacing percentage based on budget utilization
   const calculatePacing = (campaign: Campaign): number => {
     const totalDays = Math.ceil((new Date(campaign.endDate).getTime() - new Date(campaign.startDate).getTime()) / (1000 * 60 * 60 * 24));
     const elapsedDays = Math.ceil((Date.now() - new Date(campaign.startDate).getTime()) / (1000 * 60 * 60 * 24));
+    
+    // Handle edge cases
+    if (totalDays <= 0) return 0; // Same start/end date
+    if (elapsedDays <= 0) return 0; // Campaign hasn't started yet
+    
     const expectedSpendPercentage = (elapsedDays / totalDays) * 100;
     const actualSpendPercentage = (campaign.spent / campaign.budget) * 100;
     
@@ -106,7 +117,8 @@ export const CampaignTable: React.FC<CampaignTableProps> = ({
   const allSelected = campaigns.length > 0 && campaigns.every(campaign => selectedCampaigns.includes(campaign.id));
   const someSelected = selectedCampaigns.length > 0 && !allSelected;
 
-  const handleSelectAll = () => {
+  const handleSelectAll = (event: React.MouseEvent) => {
+    event.stopPropagation();
     if (onSelectAll) {
       onSelectAll(!allSelected);
     }

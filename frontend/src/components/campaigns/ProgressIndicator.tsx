@@ -17,8 +17,8 @@ export const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
   size = 'md',
   className = '',
 }) => {
-  // Clamp percentage between 0 and 100
-  const clampedPercentage = Math.max(0, Math.min(100, percentage));
+  // Clamp percentage between 0 and 100, handle invalid values
+  const clampedPercentage = isNaN(percentage) ? 0 : Math.max(0, Math.min(100, percentage));
   
   // Get color based on percentage ranges (matches Figma design)
   const getProgressColor = () => {
