@@ -1,4 +1,4 @@
-name: 🔥 P1 Critical Tests - Run on Every Commit
+name: 🔥 P1 Critical Tests - Unit & Integration (No E2E)
 
 on:
   push:
@@ -64,14 +64,15 @@ jobs:
       run: npm run test:integration:p1
       timeout-minutes: 5
 
-    - name: 🎭 Install Playwright browsers
-      run: npx playwright install chromium
-      
-    - name: 🎭 Run P1 E2E Tests (Critical User Journeys)
-      run: npm run test:e2e:p1
-      timeout-minutes: 7
-      env:
-        BASE_URL: http://localhost:3000
+    # E2E tests moved to PR merge workflow - excluding from regular commits
+    # - name: 🎭 Install Playwright browsers
+    #   run: npx playwright install chromium
+    #   
+    # - name: 🎭 Run P1 E2E Tests (Critical User Journeys)
+    #   run: npm run test:e2e:p1
+    #   timeout-minutes: 7
+    #   env:
+    #     BASE_URL: http://localhost:6600
 
     - name: 📊 Upload P1 test results
       uses: actions/upload-artifact@v4
