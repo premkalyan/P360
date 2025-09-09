@@ -44,7 +44,7 @@ export default function LoginPage() {
     if (!formState.email) {
       errors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formState.email)) {
-      errors.email = 'Email not found';
+      errors.email = 'Please enter a valid email address';
     }
     
     if (!formState.password) {
@@ -70,11 +70,11 @@ export default function LoginPage() {
       
       // For demo purposes, always succeed
       // TODO: Replace with actual authentication API call
-      router.push('/dashboard/campaigns');
+      await router.push('/dashboard/campaigns');
     } catch (error) {
       setFormState(prev => ({
         ...prev,
-        errors: { email: 'Login failed. Please try again.' }
+        errors: { email: 'Navigation failed. Please try again.' }
       }));
     } finally {
       setFormState(prev => ({ ...prev, loading: false }));
@@ -82,7 +82,11 @@ export default function LoginPage() {
   };
 
   const handleSocialLogin = (provider: 'google' | 'microsoft') => {
-    // TODO: Implement social login
+    // TODO: SECURITY CRITICAL - Implement proper OAuth2 flow with:
+    // - State parameter for CSRF protection
+    // - PKCE for code exchange security
+    // - Secure token storage and validation
+    // - Proper redirect URI validation
     console.log(`Login with ${provider}`);
   };
 
@@ -276,7 +280,9 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setFormState(prev => ({ ...prev, showPassword: !prev.showPassword }))}
-                  className="ml-2 p-1 hover:bg-gray-100 rounded"
+                  className="ml-2 p-1 hover:bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  aria-label={formState.showPassword ? "Hide password" : "Show password"}
+                  aria-pressed={formState.showPassword}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path 

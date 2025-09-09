@@ -105,20 +105,20 @@ describe('LoginPage', () => {
     it('renders password field with visibility toggle', () => {
       render(<LoginPage />);
       
-      const passwordField = screen.getByLabelText(/password/i);
+      const passwordField = screen.getByLabelText('Password');
       expect(passwordField).toBeInTheDocument();
       expect(passwordField).toHaveAttribute('type', 'password');
       expect(passwordField).toHaveAttribute('placeholder', 'Enter your password here...');
       
-      const toggleButton = screen.getByRole('button', { name: '' }); // SVG button
+      const toggleButton = screen.getByRole('button', { name: 'Show password' }); // SVG button
       expect(toggleButton).toBeInTheDocument();
     });
 
     it('toggles password visibility when eye icon is clicked', () => {
       render(<LoginPage />);
       
-      const passwordField = screen.getByLabelText(/password/i);
-      const toggleButton = screen.getByRole('button', { name: '' });
+      const passwordField = screen.getByLabelText('Password');
+      const toggleButton = screen.getByRole('button', { name: 'Show password' });
       
       expect(passwordField).toHaveAttribute('type', 'password');
       
@@ -133,17 +133,13 @@ describe('LoginPage', () => {
       render(<LoginPage />);
       
       const emailField = screen.getByLabelText(/email/i);
-      const submitButton = screen.getByRole('button', { name: 'Login' });
+      const form = screen.getByRole('form');
       
       fireEvent.change(emailField, { target: { value: 'invalid-email' } });
-      fireEvent.click(submitButton);
+      fireEvent.submit(form);
       
-      await waitFor(() => {
-        // Debug: check what errors are actually showing
-        const errorMessages = screen.queryAllByText(/Email|Password/);
-        console.log('Error messages found:', errorMessages.map(el => el.textContent));
-        
-        expect(screen.getByText('Email not found')).toBeInTheDocument();
+      await waitFor(() => {        
+        expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
       }, { timeout: 3000 });
       
       // Check error styling
@@ -156,7 +152,7 @@ describe('LoginPage', () => {
     it('validates password and shows error', async () => {
       render(<LoginPage />);
       
-      const passwordField = screen.getByLabelText(/password/i);
+      const passwordField = screen.getByLabelText('Password');
       const submitButton = screen.getByRole('button', { name: 'Login' });
       
       fireEvent.change(passwordField, { target: { value: '123' } });
@@ -196,7 +192,7 @@ describe('LoginPage', () => {
       render(<LoginPage />);
       
       const emailField = screen.getByLabelText(/email/i);
-      const passwordField = screen.getByLabelText(/password/i);
+      const passwordField = screen.getByLabelText('Password');
       const submitButton = screen.getByRole('button', { name: 'Login' });
       
       fireEvent.change(emailField, { target: { value: 'user@example.com' } });
@@ -217,7 +213,7 @@ describe('LoginPage', () => {
       render(<LoginPage />);
       
       const emailField = screen.getByLabelText(/email/i);
-      const passwordField = screen.getByLabelText(/password/i);
+      const passwordField = screen.getByLabelText('Password');
       const submitButton = screen.getByRole('button', { name: 'Login' });
       
       fireEvent.change(emailField, { target: { value: 'user@example.com' } });
@@ -232,14 +228,14 @@ describe('LoginPage', () => {
     it('validates required fields before submission', async () => {
       render(<LoginPage />);
       
-      const submitButton = screen.getByRole('button', { name: 'Login' });
-      fireEvent.click(submitButton);
+      const form = screen.getByRole('form');
+      fireEvent.submit(form);
       
       await waitFor(() => {
         expect(screen.getByText('Email is required')).toBeInTheDocument();
         expect(screen.getByText('Password is required')).toBeInTheDocument();
       });
-      
+
       expect(mockPush).not.toHaveBeenCalled();
     });
   });
@@ -306,7 +302,7 @@ describe('LoginPage', () => {
       
       expect(screen.getByRole('form')).toBeInTheDocument();
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+      expect(screen.getByLabelText('Password')).toBeInTheDocument();
     });
 
     it('has proper button roles and names', () => {
@@ -321,7 +317,7 @@ describe('LoginPage', () => {
       render(<LoginPage />);
       
       const emailField = screen.getByLabelText(/email/i);
-      const passwordField = screen.getByLabelText(/password/i);
+      const passwordField = screen.getByLabelText('Password');
       const submitButton = screen.getByRole('button', { name: 'Login' });
       
       emailField.focus();
