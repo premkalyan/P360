@@ -1,0 +1,335 @@
+{
+  "colors": [
+    {
+      "name": "Logo",
+      "path": "Design System/Logo",
+      "rgb": "rgb(255, 255, 255)",
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    {
+      "name": "logo",
+      "path": "Design System/Logo/Content/logo",
+      "rgb": "rgb(230, 230, 230)",
+      "hex": "#e6e6e6",
+      "opacity": 1
+    },
+    {
+      "name": "Pipeline=Dark + Color",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color",
+      "rgb": "rgb(255, 255, 255)",
+      "hex": "#ffffff",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 7, 129)",
+      "hex": "#000781",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 7, 130)",
+      "hex": "#000782",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 7, 129)",
+      "hex": "#000781",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 7, 129)",
+      "hex": "#000781",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 7, 129)",
+      "hex": "#000781",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(229, 2, 208)",
+      "hex": "#e502d0",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 0, 0)",
+      "hex": "#000000",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 0, 0)",
+      "hex": "#000000",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 7, 130)",
+      "hex": "#000782",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 7, 129)",
+      "hex": "#000781",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 7, 129)",
+      "hex": "#000781",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 7, 129)",
+      "hex": "#000781",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 7, 129)",
+      "hex": "#000781",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 7, 130)",
+      "hex": "#000782",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 7, 129)",
+      "hex": "#000781",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 7, 130)",
+      "hex": "#000782",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(0, 140, 254)",
+      "hex": "#008cfe",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(133, 26, 254)",
+      "hex": "#851afe",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(141, 24, 251)",
+      "hex": "#8d18fb",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(173, 16, 236)",
+      "hex": "#ad10ec",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(184, 13, 231)",
+      "hex": "#b80de7",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(150, 22, 247)",
+      "hex": "#9616f7",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(195, 10, 226)",
+      "hex": "#c30ae2",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(164, 18, 240)",
+      "hex": "#a412f0",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(204, 8, 221)",
+      "hex": "#cc08dd",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(157, 20, 243)",
+      "hex": "#9d14f3",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(213, 6, 217)",
+      "hex": "#d506d9",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(69, 81, 253)",
+      "hex": "#4551fd",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(121, 34, 253)",
+      "hex": "#7922fd",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(221, 4, 213)",
+      "hex": "#dd04d5",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(38, 108, 255)",
+      "hex": "#266cff",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(57, 90, 254)",
+      "hex": "#395afe",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(27, 118, 255)",
+      "hex": "#1b76ff",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(109, 46, 254)",
+      "hex": "#6d2efe",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(79, 71, 253)",
+      "hex": "#4f47fd",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(99, 54, 255)",
+      "hex": "#6336ff",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(48, 99, 255)",
+      "hex": "#3063ff",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(90, 63, 255)",
+      "hex": "#5a3fff",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(17, 126, 254)",
+      "hex": "#117efe",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(7, 134, 253)",
+      "hex": "#0786fd",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(18, 66, 150)",
+      "hex": "#124296",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(18, 66, 150)",
+      "hex": "#124296",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(18, 66, 150)",
+      "hex": "#124296",
+      "opacity": 1
+    },
+    {
+      "name": "Vector",
+      "path": "Design System/Logo/Content/logo/Pipeline=Dark + Color/Vector",
+      "rgb": "rgb(79, 71, 253)",
+      "hex": "#4f47fd",
+      "opacity": 1
+    }
+  ],
+  "typography": [],
+  "logos": []
+}

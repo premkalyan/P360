@@ -5,39 +5,9 @@ import Link from 'next/link';
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-gray-50" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' }}>
-      {/* Simple Navigation */}
-      <nav style={{ backgroundColor: 'white', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', padding: '16px 0' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#1f2937', margin: 0 }}>P360 Dashboard</h1>
-          <div style={{ display: 'flex', gap: '16px' }}>
-            <Link href="/dashboard/campaigns" style={{
-              padding: '8px 16px',
-              backgroundColor: '#3b82f6',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '6px',
-              fontWeight: '500'
-            }}>
-              Campaigns
-            </Link>
-            <Link href="/" style={{
-              padding: '8px 16px',
-              backgroundColor: 'white',
-              color: '#374151',
-              textDecoration: 'none',
-              border: '1px solid #d1d5db',
-              borderRadius: '6px',
-              fontWeight: '500'
-            }}>
-              Home
-            </Link>
-          </div>
-        </div>
-      </nav>
-
+    <div className="p-6">
       {/* Main Content */}
-      <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '48px 24px' }}>
+      <main>
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <h1 style={{ fontSize: '36px', fontWeight: 'bold', color: '#1f2937', marginBottom: '16px' }}>
             Welcome to P360

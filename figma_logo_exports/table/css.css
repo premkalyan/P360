@@ -1,0 +1,13 @@
+/* table */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+
+position: relative;
+width: 2220px;
+height: 562px;
+
+background: #FFFFFF;

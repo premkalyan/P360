@@ -1,0 +1,138 @@
+name: 🔥 P1 Critical Tests - Unit Tests Only (Fast CI)
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  NODE_VERSION: '18'
+  POSTGRES_PASSWORD: test_password
+  POSTGRES_USER: test_user
+  POSTGRES_DB: p360_test
+
+jobs:
+  p1-tests:
+    name: 🚀 P1 Unit Tests (Fast Feedback)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: 🔧 Install dependencies
+      run: npm install --workspaces
+
+    - name: 🧪 Run P1 Unit Tests (Critical Components)
+      run: npm run test:unit:p1
+      timeout-minutes: 3
+
+    # Integration tests moved to PR merge workflow - excluding from regular commits
+    # - name: 🔗 Run P1 Integration Tests (Core User Flows)
+    #   run: npm run test:integration:p1
+    #   timeout-minutes: 5
+
+    # E2E tests moved to PR merge workflow - excluding from regular commits
+    # - name: 🎭 Install Playwright browsers
+    #   run: npx playwright install chromium
+    #   
+    # - name: 🎭 Run P1 E2E Tests (Critical User Journeys)
+    #   run: npm run test:e2e:p1
+    #   timeout-minutes: 7
+    #   env:
+    #     BASE_URL: http://localhost:6600
+
+    - name: 📊 Upload P1 test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: p1-test-results
+        path: |
+          test-results/
+          playwright-report/
+        retention-days: 7
+
+    - name: 💬 Comment PR with P1 Test Status
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '🔥 **P1 Critical Tests**: All essential tests passed! ✅ Ready for merge.'
+          })
+
+  # Optional: Full test suite on main branch
+  full-tests:
+    name: 🎯 Complete Test Suite (Main Branch Only)
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    needs: p1-tests
+    timeout-minutes: 30
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: 🔧 Install dependencies
+      run: npm install --workspaces
+
+    - name: 🧪 Run complete test suite
+      run: npm run test:all
+      timeout-minutes: 25
+
+    - name: 📊 Upload complete test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: complete-test-results
+        path: |
+          test-results/
+          playwright-report/
+          coverage/
+        retention-days: 30

@@ -3,7 +3,7 @@ version: '3.8'
 
 services:
   # Development Database
-  db:
+  postgres:
     ports:
       - "6503:5432"
     environment:
@@ -20,7 +20,7 @@ services:
     container_name: p360-backend-dev
     environment:
       - NODE_ENV=development
-      - DATABASE_URL=postgresql://dev_user:dev_password@db:5432/p360_dev
+      - DATABASE_URL=postgresql://dev_user:dev_password@postgres:5432/p360_dev
       - REDIS_URL=redis://redis:6379
       - PORT=6501
     volumes:
@@ -30,7 +30,7 @@ services:
     ports:
       - "6501:6501"
     depends_on:
-      - db
+      - postgres
       - redis
     networks:
       - p360-network
