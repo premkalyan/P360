@@ -14,7 +14,7 @@ alwaysApply: true
 1. **📝 Story → In Progress** (JIRA transition)
 2. **💻 Implementation** (Development work)
 3. **🧪 Testing** (Unit + Integration + E2E tests)
-4. **📤 PR Creation** (Pull Request with documentation)
+4. **📤 PR Creation** (Agent creates PR using git/GitHub CLI commands)
 5. **🔍 MCP-Assisted Review** (PR review using MCP tools)
 6. **🔄 Feedback Incorporation** (Address review comments)
 7. **✅ Git Actions Success** (All CI/CD checks pass)
@@ -80,6 +80,11 @@ mcp_jira-orengrinker_search_issues         // Find stories
 mcp_jira-orengrinker_get_issue_details     // Get requirements  
 mcp_jira-orengrinker_transition_issue      // Update status
 mcp_jira-orengrinker_add_comment          // Progress updates
+
+// PR Management (Agent-Driven)
+gh pr create --title "..." --body "..." --base main  // Create PR via CLI
+mcp_pr-agent-mcp_pr_review                 // AI-assisted PR review
+mcp_pr-agent-mcp_pr_improve               // Code improvement suggestions
 
 // Design Integration  
 mcp_figma-mcp_get_figma_data               // Get Figma specs
