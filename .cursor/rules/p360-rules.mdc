@@ -7,11 +7,31 @@ alwaysApply: true
 # P360 Development Rules - Enterprise SDLC
 # =======================================
 
-## 🎯 MANDATORY SDLC PROCESS
+## 🎯 MANDATORY SDLC PROCESS - COMPLETE CYCLE REQUIRED
+⚠️  **CRITICAL**: NEVER close JIRA stories until ALL steps are complete!
+
+### **📋 Complete SDLC Cycle (NO SHORTCUTS)**
+1. **📝 Story → In Progress** (JIRA transition)
+2. **💻 Implementation** (Development work)
+3. **🧪 Testing** (Unit + Integration + E2E tests)
+4. **📤 PR Creation** (Pull Request with documentation)
+5. **🔍 MCP-Assisted Review** (PR review using MCP tools)
+6. **🔄 Feedback Incorporation** (Address review comments)
+7. **✅ Git Actions Success** (All CI/CD checks pass)
+8. **🔀 Branch Merge** (Merge to main branch)
+9. **🎯 Story → Done** (ONLY after merge complete)
+
+### **❌ NEVER DO THIS:**
+- Close JIRA stories after development only
+- Skip testing phases
+- Merge without PR review
+- Transition to Done before branch merge
+
+### **✅ ALWAYS DO THIS:**
 - **NEVER start coding without a JIRA story**
-- Always follow: Story → Implementation → Tests → PR → Review → Merge
 - Use MCP tools for JIRA, Confluence, Kiwi-TCMS integration
-- Update story status throughout development
+- Update story status throughout ENTIRE development cycle
+- Keep stories open until merge is complete
 
 ## 📊 ENVIRONMENT ARCHITECTURE (3-Tier)
 ```bash
