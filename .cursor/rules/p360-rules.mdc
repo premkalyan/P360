@@ -16,18 +16,20 @@ alwaysApply: true
 3. **🔍 Manual Functionality Verification** (Manual testing of implemented features)
 4. **📋 Kiwi-TCMS** (Create test cases in test management system)
 5. **🧪 Test Case Implementation** (Generate and implement automated test cases)
-6. **📤 PR Creation** (Agent creates PR using git/GitHub CLI commands)
-7. **🔍 MCP-Assisted Review** (3-phase review: describe → review → improve)
-8. **🔄 Feedback Incorporation** (Address review comments)
-9. **✅ Git Actions Success** (All CI/CD checks pass)
-10. **🔀 Branch Merge** (HUMAN ONLY - AI agents NEVER merge PRs)
-11. **📚 Confluence Documentation** (Update technical documentation)
-12. **🎯 Story → Done** (ONLY after merge complete)
+6. **🧪 Local Test Execution** (Run all tests locally and ensure they pass before PR push)
+7. **📤 PR Creation** (Agent creates PR using git/GitHub CLI commands)
+8. **🔍 MCP-Assisted Review** (3-phase review: describe → review → improve)
+9. **🔄 Feedback Incorporation** (Address review comments)
+10. **✅ Git Actions Success** (All CI/CD checks pass)
+11. **🔀 Branch Merge** (HUMAN ONLY - AI agents NEVER merge PRs)
+12. **📚 Confluence Documentation** (Update technical documentation)
+13. **🎯 Story → Done** (ONLY after merge complete)
 
 ### **❌ NEVER DO THIS:**
 - Close JIRA stories after development only
 - Skip manual functionality verification after implementation
 - Skip testing phases (Kiwi-TCMS + automated test implementation)
+- **Push code or create PR without running ALL tests locally first**
 - Merge without PR review
 - Transition to Done before branch merge
 - **AI agents NEVER merge PRs - HUMAN ONLY ACTION**
@@ -45,6 +47,7 @@ alwaysApply: true
 - **Perform manual functionality verification immediately after implementation**
 - **Create test cases in Kiwi-TCMS after manual verification**
 - **Implement automated test cases after Kiwi-TCMS planning**
+- **Run ALL tests locally and ensure they pass before creating PR**
 - **Update Confluence documentation with technical details**
 - **Act as developer with highest standards**: quality, maintainability, security, performance, extensibility
 
@@ -174,6 +177,7 @@ npm run docker:test
 - [ ] **Manual functionality verification completed** (immediately after implementation)
 - [ ] **Kiwi-TCMS test cases created** (after manual verification)
 - [ ] **Automated test cases implemented** (Unit, integration, E2E with >90% coverage)
+- [ ] **ALL tests run locally and passing** before PR creation
 - [ ] PR created with comprehensive description
 - [ ] **3-Phase MCP Review COMPLETE**: describe → review → improve
 - [ ] **ALL review feedback addressed**: Security, performance, maintainability issues fixed
