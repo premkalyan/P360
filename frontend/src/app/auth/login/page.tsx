@@ -78,6 +78,20 @@ export default function LoginPage() {
   };
 
   return (
+    <>
+      {/* Custom CSS for proper placeholder styling */}
+      <style jsx>{`
+        input::placeholder {
+          color: #99A1AF !important;
+          font-family: 'Lexend Deca' !important;
+          font-size: 14px !important;
+          font-weight: 400 !important;
+        }
+        input:focus::placeholder {
+          color: #99A1AF !important;
+        }
+      `}</style>
+    
     <div style={{
       position: 'relative',
       width: '1440px',
@@ -368,9 +382,13 @@ export default function LoginPage() {
                     fontWeight: 400,
                     fontSize: '14px',
                     lineHeight: '20px',
-                    color: '#99A1AF',
+                    color: '#101828', // ✅ FIXED: Black text when typing (was #99A1AF)
                     outline: 'none',
                     boxSizing: 'border-box'
+                  }}
+                  // Add CSS for placeholder styling
+                  onFocus={(e) => {
+                    e.target.style.color = '#101828'; // Ensure black text when focused
                   }}
                 />
                 {formState.errors.email && (
@@ -478,9 +496,12 @@ export default function LoginPage() {
                       fontWeight: 400,
                       fontSize: '14px',
                       lineHeight: '20px',
-                      color: '#99A1AF',
+                      color: '#101828', // ✅ FIXED: Black text when typing (was #99A1AF)
                       outline: 'none',
                       boxSizing: 'border-box'
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.color = '#101828'; // Ensure black text when focused
                     }}
                   />
                   <button
@@ -525,7 +546,7 @@ export default function LoginPage() {
                   gap: '6px',
                   width: '320px',
                   height: '40px',
-                  background: '#F4EBFF',
+                  background: '#841AFF', // ✅ FIXED: Purple enabled state (was #F4EBFF)
                   borderRadius: '4px',
                   border: 'none',
                   cursor: formState.loading ? 'not-allowed' : 'pointer',
@@ -544,7 +565,7 @@ export default function LoginPage() {
                   fontWeight: 400,
                   fontSize: '14px',
                   lineHeight: '20px',
-                  color: '#CEA3FF',
+                  color: '#FFFFFF', // ✅ FIXED: White text (was #CEA3FF)
                   flex: 'none',
                   order: 0,
                   flexGrow: 0
@@ -808,5 +829,6 @@ export default function LoginPage() {
         />
       </div>
     </div>
+    </>
   );
 }
