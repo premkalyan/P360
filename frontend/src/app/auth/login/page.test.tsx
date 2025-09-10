@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import LoginPage from './page';
@@ -260,7 +260,6 @@ describe('LoginPage', () => {
       
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByTestId('login-button');
       
       // Tab through form elements
       await user.tab();
