@@ -28,7 +28,7 @@ global.alert = jest.fn();
 // Mock CSS imports
 jest.mock('@/styles/typography.css', () => ({}));
 
-const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
+const mockUseRouter = jest.mocked(useRouter);
 
 const mockRouter = {
   push: jest.fn(),

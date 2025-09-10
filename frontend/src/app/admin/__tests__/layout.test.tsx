@@ -4,7 +4,6 @@
  */
 
 import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { useRouter, usePathname } from 'next/navigation';
 import '@testing-library/jest-dom';
 import AdminLayout from '../layout';
@@ -18,8 +17,8 @@ jest.mock('next/navigation', () => ({
 // Mock CSS imports
 jest.mock('@/styles/typography.css', () => ({}));
 
-const mockUseRouter = useRouter as jest.MockedFunction<typeof useRouter>;
-const mockUsePathname = usePathname as jest.MockedFunction<typeof usePathname>;
+const mockUseRouter = jest.mocked(useRouter);
+const mockUsePathname = jest.mocked(usePathname);
 
 const mockRouter = {
   push: jest.fn(),

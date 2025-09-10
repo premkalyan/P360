@@ -23,28 +23,28 @@ export default function AdminLayout({
       label: 'Organization',
       icon: '🏢',
       path: '/admin/organizations',
-      active: pathname.startsWith('/admin/organizations'),
+      active: pathname?.startsWith('/admin/organizations') || false,
     },
     {
       id: 'users',
       label: 'User',
       icon: '👥',
       path: '/admin/users',
-      active: pathname.startsWith('/admin/users'),
+      active: pathname?.startsWith('/admin/users') || false,
     },
     {
       id: 'activity-log',
       label: 'Activity Log',
       icon: '📊',
       path: '/admin/activity-log',
-      active: pathname.startsWith('/admin/activity-log'),
+      active: pathname?.startsWith('/admin/activity-log') || false,
     },
     {
       id: 'settings',
       label: 'Settings',
       icon: '⚙️',
       path: '/admin/settings',
-      active: pathname.startsWith('/admin/settings'),
+      active: pathname?.startsWith('/admin/settings') || false,
     },
   ];
 
