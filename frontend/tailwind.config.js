@@ -41,8 +41,9 @@ module.exports = {
         }
       },
       fontFamily: {
+        // Primary font - Lexend Deca (from Figma design system)
         'p360': [
-          'Inter', 
+          'Lexend Deca', 
           '-apple-system', 
           'BlinkMacSystemFont', 
           'Segoe UI', 
@@ -51,9 +52,27 @@ module.exports = {
           'Arial', 
           'sans-serif'
         ],
+        // Secondary font - Plus Jakarta Sans (from Figma metadata)
+        'p360-secondary': [
+          'Plus Jakarta Sans',
+          '-apple-system', 
+          'BlinkMacSystemFont', 
+          'Segoe UI', 
+          'Roboto', 
+          'sans-serif'
+        ],
+        // Legacy compatibility
+        'sans': [
+          'Lexend Deca',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'Segoe UI',
+          'Roboto',
+          'sans-serif'
+        ],
       },
       fontSize: {
-        // P360 Typography Scale (based on Figma analysis)
+        // Standard Tailwind sizes
         'xs': ['0.75rem', { lineHeight: '1rem' }],
         'sm': ['0.875rem', { lineHeight: '1.25rem' }],
         'base': ['1rem', { lineHeight: '1.5rem' }],
@@ -62,14 +81,47 @@ module.exports = {
         '2xl': ['1.5rem', { lineHeight: '2rem' }],
         '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
         '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
-        // P360 specific sizes
+        
+        // P360 FIGMA DESIGN SYSTEM - EXACT TOKENS
+        // Titles (Display Typography)
+        'p360-title-1': ['3.5rem', { lineHeight: '4rem', letterSpacing: '-0.05em', fontWeight: '700' }], // 56px/64px
+        'p360-title-2': ['3rem', { lineHeight: '3.5rem', letterSpacing: '-0.05em', fontWeight: '700' }],   // 48px/56px
+        'p360-title-3': ['2.5rem', { lineHeight: '3rem', letterSpacing: '-0.05em', fontWeight: '700' }],   // 40px/48px
+        
+        // Headings (H1-H4)
+        'p360-h1': ['1.75rem', { lineHeight: '2rem', letterSpacing: '-0.025em', fontWeight: '600' }],      // 28px/32px
+        'p360-h2': ['1.5rem', { lineHeight: '1.875rem', letterSpacing: '-0.025em', fontWeight: '600' }],  // 24px/30px
+        'p360-h3': ['1.25rem', { lineHeight: '1.75rem', letterSpacing: '-0.025em', fontWeight: '600' }],  // 20px/28px
+        'p360-h4': ['1.125rem', { lineHeight: '1.5rem', letterSpacing: '-0.0125em', fontWeight: '600' }], // 18px/24px
+        
+        // Body Text
+        'p360-body-1': ['1rem', { lineHeight: '1.375rem', letterSpacing: '0', fontWeight: '400' }],       // 16px/22px
+        'p360-body-1-medium': ['1rem', { lineHeight: '1.375rem', letterSpacing: '0', fontWeight: '500' }], // 16px/22px
+        'p360-body-2': ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0', fontWeight: '400' }],   // 14px/20px
+        'p360-body-2-medium': ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0', fontWeight: '500' }], // 14px/20px
+        'p360-body-3': ['0.75rem', { lineHeight: '1rem', letterSpacing: '0', fontWeight: '400' }],        // 12px/16px
+        'p360-body-3-medium': ['0.75rem', { lineHeight: '1rem', letterSpacing: '0', fontWeight: '500' }], // 12px/16px
+        
+        // Component-specific sizes
+        'p360-button': ['0.875rem', { lineHeight: '1.25rem', fontWeight: '500' }],
+        'p360-label': ['0.875rem', { lineHeight: '1.25rem', fontWeight: '500' }],
         'p360-caption': ['0.75rem', { lineHeight: '1rem', fontWeight: '400' }],
-        'p360-body': ['0.875rem', { lineHeight: '1.25rem', fontWeight: '400' }],
-        'p360-body-medium': ['0.875rem', { lineHeight: '1.25rem', fontWeight: '500' }],
-        'p360-subtitle': ['1rem', { lineHeight: '1.5rem', fontWeight: '500' }],
-        'p360-title': ['1.125rem', { lineHeight: '1.75rem', fontWeight: '600' }],
-        'p360-heading': ['1.5rem', { lineHeight: '2rem', fontWeight: '700' }],
-        'p360-display': ['2.25rem', { lineHeight: '2.5rem', fontWeight: '700' }],
+      },
+      fontWeight: {
+        // Figma Design System font weights
+        'light': '300',
+        'normal': '400',
+        'medium': '500',
+        'semibold': '600',
+        'bold': '700',
+        'extrabold': '800',
+      },
+      letterSpacing: {
+        // P360 Design System letter spacing
+        'p360-tight': '-0.05em',    // Titles (-0.8px equivalent)
+        'p360-snug': '-0.025em',    // Headings (-0.4px equivalent)
+        'p360-normal': '0',         // Body text
+        'p360-wide': '0.025em',     // Optional wide spacing
       },
       spacing: {
         // P360 spacing system (8px base unit)

@@ -13,24 +13,29 @@ alwaysApply: true
 ### **📋 Complete SDLC Cycle (NO SHORTCUTS)**
 1. **📝 Story → In Progress** (JIRA transition + regular JIRA updates)
 2. **💻 Implementation** (Development work)
-3. **🧪 Testing** (Unit + Integration + E2E tests)
-4. **📋 Kiwi-TCMS** (Create and execute test cases)
-5. **📤 PR Creation** (Agent creates PR using git/GitHub CLI commands)
-6. **🔍 MCP-Assisted Review** (3-phase review: describe → review → improve)
-7. **🔄 Feedback Incorporation** (Address review comments)
-8. **✅ Git Actions Success** (All CI/CD checks pass)
-9. **🔀 Branch Merge** (HUMAN ONLY - AI agents NEVER merge PRs)
-10. **📚 Confluence Documentation** (Update technical documentation)
-11. **🎯 Story → Done** (ONLY after merge complete)
+3. **🔍 Manual Functionality Verification** (Manual testing of implemented features)
+4. **📋 Kiwi-TCMS** (Create test cases in test management system)
+5. **🧪 Test Case Implementation** (Generate and implement automated test cases)
+6. **🧪 Local Test Execution** (Run all tests locally and ensure they pass before PR push)
+7. **📤 PR Creation** (Agent creates PR using git/GitHub CLI commands)
+8. **🔍 MCP-Assisted Review** (3-phase review: describe → review → improve)
+9. **🔄 Feedback Incorporation** (Address review comments)
+10. **✅ Git Actions Success** (All CI/CD checks pass)
+11. **🔀 Branch Merge** (HUMAN ONLY - AI agents NEVER merge PRs)
+12. **📚 Confluence Documentation** (Update technical documentation)
+13. **🎯 Story → Done** (ONLY after merge complete)
 
 ### **❌ NEVER DO THIS:**
 - Close JIRA stories after development only
-- Skip testing phases
+- Skip manual functionality verification after implementation
+- Skip testing phases (Kiwi-TCMS + automated test implementation)
+- **Push code or create PR without running ALL tests locally first**
 - Merge without PR review
 - Transition to Done before branch merge
 - **AI agents NEVER merge PRs - HUMAN ONLY ACTION**
 - Skip any phase of the 3-phase MCP review workflow
 - Skip Kiwi-TCMS test case creation
+- Skip automated test case implementation
 - Skip Confluence documentation updates
 
 ### **✅ ALWAYS DO THIS:**
@@ -39,7 +44,10 @@ alwaysApply: true
 - Update story status throughout ENTIRE development cycle
 - Keep stories open until merge is complete
 - **Complete ALL 3 phases of MCP review process**
-- **Create test cases in Kiwi-TCMS for all features**
+- **Perform manual functionality verification immediately after implementation**
+- **Create test cases in Kiwi-TCMS after manual verification**
+- **Implement automated test cases after Kiwi-TCMS planning**
+- **Run ALL tests locally and ensure they pass before creating PR**
 - **Update Confluence documentation with technical details**
 - **Act as developer with highest standards**: quality, maintainability, security, performance, extensibility
 
@@ -165,9 +173,11 @@ npm run docker:test
 
 ## 📋 DEFINITION OF DONE (Excellence Standards)
 - [ ] JIRA story → In Progress with regular status updates
-- [ ] All acceptance criteria implemented & tested
-- [ ] Unit, integration, E2E tests passing (>90% coverage)
-- [ ] **Kiwi-TCMS test cases created and executed**
+- [ ] All acceptance criteria implemented
+- [ ] **Manual functionality verification completed** (immediately after implementation)
+- [ ] **Kiwi-TCMS test cases created** (after manual verification)
+- [ ] **Automated test cases implemented** (Unit, integration, E2E with >90% coverage)
+- [ ] **ALL tests run locally and passing** before PR creation
 - [ ] PR created with comprehensive description
 - [ ] **3-Phase MCP Review COMPLETE**: describe → review → improve
 - [ ] **ALL review feedback addressed**: Security, performance, maintainability issues fixed

@@ -1,863 +1,385 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { useState } from 'react';
 
-interface LoginFormState {
+// Import P360 Typography System
+import '@/styles/typography.css';
+
+interface LoginState {
   email: string;
   password: string;
-  showPassword: boolean;
-  loading: boolean;
   errors: {
     email?: string;
     password?: string;
-    general?: string;
   };
+  isLoading: boolean;
 }
 
+type FormDisplayState = 'empty' | 'filled' | 'error';
+
 export default function LoginPage() {
-  const router = useRouter();
-  const [formState, setFormState] = useState<LoginFormState>({
+  const [loginState, setLoginState] = useState<LoginState>({
     email: '',
     password: '',
-    showPassword: false,
-    loading: false,
-    errors: {}
+    errors: {},
+    isLoading: false,
   });
 
-  const validateForm = () => {
-    const errors: LoginFormState['errors'] = {};
-    
-    if (!formState.email) {
-      errors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formState.email)) {
-      errors.email = 'Please enter a valid email address';
+  // Determine display state for conditional styling
+  const getDisplayState = (): FormDisplayState => {
+    if (loginState.errors.email || loginState.errors.password) {
+      return 'error';
     }
-    
-    if (!formState.password) {
-      errors.password = 'Password is required';
-    } else if (formState.password.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
+    if (loginState.email || loginState.password) {
+      return 'filled';
     }
-    
-    return errors;
+    return 'empty';
   };
 
-  // Mock user authentication with role detection
-  const authenticateUser = async (email: string, password: string) => {
-    // TODO: SECURITY CRITICAL - Replace with actual authentication API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Strict whitelist of admin patterns
-    const ADMIN_PATTERNS = ['@p360admin.com', '@company-admin.com'];
-    const isAdmin = ADMIN_PATTERNS.some(pattern => email.toLowerCase().endsWith(pattern));
-    const userRole = isAdmin ? 'admin' : 'user';
-    
-    return {
-      user: {
-        id: '1',
-        email: email,
-        name: email.split('@')[0],
-        role: userRole,
-        tenantId: isAdmin ? null : 'tenant-1' // Admins can access all tenants
-      },
-      role: userRole
-    };
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    const errors = validateForm();
-    if (Object.keys(errors).length > 0) {
-      setFormState(prev => ({ ...prev, errors }));
-      return;
-    }
-
-    setFormState(prev => ({ ...prev, loading: true, errors: {} }));
-
-    try {
-      // Authenticate user and get role information
-      const authResult = await authenticateUser(formState.email, formState.password);
-      
-      // Store user session (in production, handle JWT tokens properly)
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('p360_user', JSON.stringify(authResult.user));
-        localStorage.setItem('p360_user_role', authResult.role);
+  const handleInputChange = (field: keyof Pick<LoginState, 'email' | 'password'>, value: string) => {
+    setLoginState(prev => ({
+      ...prev,
+      [field]: value,
+      errors: {
+        ...prev.errors,
+        [field]: undefined // Clear error when user starts typing
       }
-
-      // Role-based routing
-      if (authResult.role === 'admin') {
-        // Admin users go to organization management
-        router.push('/admin/organizations');
-      } else {
-        // Regular users go to standard dashboard
-        router.push('/dashboard');
-      }
-    } catch (error) {
-        console.error('Login error:', error);
-      setFormState(prev => ({ 
-        ...prev, 
-        errors: { general: 'Login failed. Please try again.' },
-        loading: false 
-      }));
-    } finally {
-      setFormState(prev => ({ ...prev, loading: false }));
-    }
-  };
-
-  const handleSocialLogin = (provider: 'google' | 'microsoft') => {
-    // TODO: SECURITY CRITICAL - Implement proper OAuth2 flow
-    setFormState(prev => ({ 
-      ...prev, 
-      errors: { general: 'Social login not yet implemented' }
     }));
   };
 
-  // Function to check if form is valid for button enable/disable
-  const isFormValid = () => {
-    const emailValid = formState.email && /\S+@\S+\.\S+/.test(formState.email);
-    const passwordValid = formState.password && formState.password.length > 0;
-    return !!(emailValid && passwordValid);
+  const handleLogin = async () => {
+    setLoginState(prev => ({ ...prev, isLoading: true, errors: {} }));
+
+    // Comprehensive validation
+    const errors: LoginState['errors'] = {};
+    
+    // Email validation
+    if (!loginState.email) {
+      errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginState.email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+    
+    // Password validation
+    if (!loginState.password) {
+      errors.password = 'Password is required';
+    } else if (loginState.password.length < 6) {
+      errors.password = 'Password must be at least 6 characters';
+    }
+    
+    if (Object.keys(errors).length > 0) {
+      setLoginState(prev => ({ ...prev, errors, isLoading: false }));
+      return;
+    }
+
+    // Simulate API call
+    setTimeout(() => {
+      // Check for valid credentials
+      const validCredentials = [
+        { email: 'admin@p360.com', password: 'admin123' },
+        { email: 'user@p360.com', password: 'user123' },
+        { email: 'demo@p360.com', password: 'demo123' },
+        { email: 'rico.oktanondat@gmail.com', password: 'password123' } // From Figma example
+      ];
+
+      const isValidLogin = validCredentials.some(
+        cred => cred.email === loginState.email && cred.password === loginState.password
+      );
+
+      if (isValidLogin) {
+        // Successful login - redirect to dashboard
+        console.log('Login successful! Redirecting to dashboard...');
+        alert('Login successful! 🎉\n\nRedirecting to dashboard...');
+        
+        // In a real app, you would:
+        // - Store auth token in localStorage/cookies
+        // - Set user context/state
+        // - Navigate to dashboard using router.push('/dashboard')
+        
+        // For now, just clear the form
+        setLoginState({
+          email: '',
+          password: '',
+          errors: {},
+          isLoading: false
+        });
+      } else {
+        // Invalid credentials - show error state
+        setLoginState(prev => ({
+          ...prev,
+          errors: {
+            email: 'Email not found',
+            password: 'Password is wrong'
+          },
+          isLoading: false
+        }));
+      }
+    }, 1000);
   };
 
+  const handleOAuthLogin = (provider: string) => {
+    console.log(`OAuth login with ${provider}`);
+    // Implement OAuth logic here
+  };
+
+  const displayState = getDisplayState();
+
+  // Dynamic styling based on form state
+  const getInputClasses = (field: keyof LoginState['errors']) => {
+    const baseClasses = "bg-white box-border w-full h-10 px-2.5 py-0 rounded-[4px] p360-input focus:outline-none";
+    
+    if (loginState.errors[field]) {
+      return `${baseClasses} border border-red-500 p360-text-primary`;
+    }
+    return `${baseClasses} border border-[#e5e7eb] p360-text-primary placeholder:text-[#99a1af]`;
+  };
+
+  // Check if form is valid for button state
+  const isFormValid = () => {
+    const emailValid = loginState.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginState.email);
+    const passwordValid = loginState.password && loginState.password.length >= 6;
+    return emailValid && passwordValid;
+  };
+
+  const getButtonStyling = () => {
+    if (loginState.isLoading) {
+      return { 
+        bg: 'bg-purple-400', 
+        text: 'text-white', 
+        cursor: 'cursor-not-allowed',
+        disabled: true 
+      };
+    }
+    if (isFormValid()) {
+      return { 
+        bg: 'bg-[#841aff] hover:bg-[#7a17e6]', 
+        text: 'text-white',
+        cursor: 'cursor-pointer',
+        disabled: false
+      };
+    }
+    return { 
+      bg: 'bg-[#f4ebff]', 
+      text: 'text-[#cea3ff]',
+      cursor: 'cursor-not-allowed',
+      disabled: true
+    };
+  };
+
+  const buttonStyling = getButtonStyling();
+
   return (
-    <div style={{
-      position: 'relative',
-      width: '1440px',
-      height: '960px',
-      left: '100px',
-      top: '100px',
-      background: '#FFFFFF'
-    }}>
-      {/* Color Info - Background Gradient */}
-      <div style={{
-        position: 'absolute',
-        width: '1440px',
-        height: '475.25px',
-        left: 'calc(50% - 1440px/2)',
-        bottom: '-60.25px',
-        transform: 'matrix(1, 0, 0, -1, 0, 0)'
-      }}>
-        {/* Frame 2147234854 - Gradient Rectangles */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          padding: '0px',
-          position: 'absolute',
-          width: '1413.01px',
-          height: '95.13px',
-          left: '-32.98px',
-          top: '447.69px',
-          transform: 'matrix(1, 0, 0, -1, 0, 0)'
-        }}>
-          {/* Rectangle 240664298 */}
-          <div style={{
-            width: '420.8px',
-            height: '95.13px',
-            background: '#FF6221',
-            filter: 'blur(64.9358px)',
-            flex: 'none',
-            order: 0,
-            alignSelf: 'stretch',
-            flexGrow: 1,
-            margin: '0px -90.0574px'
-          }} />
-          
-          {/* Rectangle 240664299 */}
-          <div style={{
-            width: '420.8px',
-            height: '95.13px',
-            background: '#ED01CF',
-            filter: 'blur(95.0537px)',
-            flex: 'none',
-            order: 1,
-            alignSelf: 'stretch',
-            flexGrow: 1,
-            margin: '0px -90.0574px'
-          }} />
-          
-          {/* Rectangle 240664300 */}
-          <div style={{
-            width: '420.8px',
-            height: '95.13px',
-            background: '#841AFF',
-            filter: 'blur(96.7956px)',
-            flex: 'none',
-            order: 2,
-            alignSelf: 'stretch',
-            flexGrow: 1,
-            margin: '0px -90.0574px'
-          }} />
-          
-          {/* Rectangle 240664301 */}
-          <div style={{
-            width: '420.8px',
-            height: '95.13px',
-            background: '#008DFF',
-            filter: 'blur(75.8385px)',
-            flex: 'none',
-            order: 3,
-            alignSelf: 'stretch',
-            flexGrow: 1
-          }} />
+    <div
+      className="bg-white relative min-h-screen w-full overflow-hidden font-p360"
+      data-name="login"
+    >
+      {/* Background Gradient - More visible at bottom */}
+      <div className="absolute bottom-[-60.25px] flex h-[475.252px] items-center justify-center left-1/2 translate-x-[-50%] w-[1440px]">
+        <div className="flex-none scale-y-[-100%]">
+          <div className="h-[475.252px] overflow-clip relative w-[1440px]">
+            <div className="absolute box-border content-stretch flex h-[95.131px] items-center justify-start left-[-32.98px] pl-0 pr-[90.057px] py-0 top-[-67.57px] w-[1413.01px]">
+              <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
+                <div className="flex-none scale-y-[-100%] size-full">
+                  <div className="bg-[#ff6221] blur-[64.936px] filter size-full opacity-60" />
+                </div>
+              </div>
+              <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
+                <div className="flex-none scale-y-[-100%] size-full">
+                  <div className="bg-[#ed01cf] blur-[95.054px] filter size-full opacity-60" />
+                </div>
+              </div>
+              <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
+                <div className="flex-none scale-y-[-100%] size-full">
+                  <div className="bg-[#841aff] blur-[96.796px] filter size-full opacity-60" />
+                </div>
+              </div>
+              <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
+                <div className="flex-none scale-y-[-100%] size-full">
+                  <div className="bg-[#008dff] blur-[75.839px] filter size-full opacity-60" />
+                </div>
+              </div>
+            </div>
+            {/* Noise overlay */}
+            <div className="absolute flex h-[476.002px] items-center justify-center left-1/2 mix-blend-overlay translate-x-[-50%] translate-y-[-50%] w-[1320.06px] opacity-20" style={{ top: "calc(50% - 0.375px)" }}>
+              <div className="flex-none rotate-[180deg]">
+                <div className="bg-gradient-to-r from-orange-200 via-pink-200 via-purple-200 to-blue-200 h-[476.002px] w-[1320.06px] opacity-40" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Main Flex Container */}
-      <div style={{
-        boxSizing: 'border-box',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '0px',
-        position: 'absolute',
-        width: '768px',
-        maxWidth: '768px',
-        height: '528px',
-        left: 'calc(50% - 768px/2 + 1px)',
-        top: 'calc(50% - 528px/2 - 17px)',
-        border: '1px solid #E4E4E7',
-        filter: 'drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.1)) drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.06))',
-        borderRadius: '4px'
-      }}>
-        {/* Left Side - Login Form */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          padding: '32px',
-          gap: '16px',
-          width: '384px',
-          height: '528px',
-          background: '#FFFFFF',
-          flex: 'none',
-          order: 0,
-          flexGrow: 1
-        }}>
-          {/* Form Container */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '0px',
-            gap: '24px',
-            width: '320px',
-            height: '464px',
-            borderRadius: '8px',
-            flex: 'none',
-            order: 0,
-            alignSelf: 'stretch',
-            flexGrow: 0
-          }}>
-            {/* Header */}
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              padding: '0px',
-              gap: '8px',
-              width: '320px',
-              height: '58px',
-              flex: 'none',
-              order: 0,
-              alignSelf: 'stretch',
-              flexGrow: 0
-            }}>
-              {/* Title Text */}
-              <h1 style={{
-                width: '320px',
-                height: '30px',
-                fontFamily: 'Lexend Deca',
-                fontStyle: 'normal',
-                fontWeight: 600,
-                fontSize: '24px',
-                lineHeight: '30px',
-                letterSpacing: '-0.4px',
-                color: '#101828',
-                flex: 'none',
-                order: 0,
-                alignSelf: 'stretch',
-                flexGrow: 0,
-                margin: 0
-              }}>
-                Welcome back
-              </h1>
+      {/* Pipeline360 Logo */}
+      <div 
+        className="absolute h-7 overflow-clip top-[72px] w-[171.818px] z-10" 
+        style={{ left: "calc(50% - 0.273px)", transform: "translateX(-50%)" }}
+      >
+        <img 
+          src="/pipeline360-logo.svg" 
+          alt="Pipeline360" 
+          className="h-7 w-auto block max-w-none"
+          style={{ width: "171.818px", height: "28px" }}
+        />
+      </div>
+
+      {/* Main Content Container */}
+      <div 
+        className="absolute left-1/2 max-w-[768px] rounded-[4px] translate-x-[-50%] translate-y-[-50%] w-[768px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.06)]" 
+        style={{ top: "calc(50% - 16px)" }}
+      >
+        <div className="flex items-center justify-between overflow-clip relative w-[768px] bg-white rounded-[4px] border border-[#e4e4e7]">
+          
+          {/* Left Panel - Login Form */}
+          <div className="basis-0 bg-white box-border flex flex-col gap-4 grow items-start justify-start min-h-px min-w-px p-[32px] relative shrink-0">
+            <div className="flex flex-col gap-6 items-center justify-center relative rounded-[8px] shrink-0 w-full" data-testid="login">
               
-              {/* This is a card description. */}
-              <p style={{
-                width: '320px',
-                height: '20px',
-                fontFamily: 'Lexend Deca',
-                fontStyle: 'normal',
-                fontWeight: 400,
-                fontSize: '14px',
-                lineHeight: '20px',
-                color: '#4A5565',
-                flex: 'none',
-                order: 1,
-                alignSelf: 'stretch',
-                flexGrow: 0,
-                margin: 0
-              }}>
-                Login to your Pipeline360 account
-              </p>
+              {/* Header */}
+              <div className="flex flex-col gap-2 items-start justify-start leading-[0] relative shrink-0 w-full">
+                <div className="font-['Lexend_Deca'] font-semibold relative shrink-0 text-[#101828] text-[24px] tracking-[-0.4px] w-full">
+                  <p className="leading-[30px]">Welcome back</p>
+                </div>
+                <div className="font-['Lexend_Deca'] font-normal relative shrink-0 text-[#4a5565] text-[14px] w-full">
+                  <p className="leading-[20px]">Login to your Pipeline360 account</p>
+                </div>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              padding: '0px',
-              gap: '24px',
-              width: '320px',
-              height: '382px',
-              flex: 'none',
-              order: 1,
-              alignSelf: 'stretch',
-              flexGrow: 0
-            }}>
+              <div className="flex flex-col gap-6 items-start justify-start relative shrink-0 w-full">
+                
               {/* Email Field */}
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                padding: '0px',
-                gap: '8px',
-                width: '320px',
-                height: '68px',
-                flex: 'none',
-                order: 0,
-                flexGrow: 0
-              }}>
-                {/* Email Label */}
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'flex-start',
-                  padding: '0px',
-                  gap: '4px',
-                  width: '320px',
-                  height: '20px',
-                  flex: 'none',
-                  order: 0,
-                  alignSelf: 'stretch',
-                  flexGrow: 0
-                }}>
-                  {/* Email */}
-                  <span style={{
-                    width: '38px',
-                    height: '20px',
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#4A5565',
-                    flex: 'none',
-                    order: 0,
-                    flexGrow: 0
-                  }}>
-                    Email
-                  </span>
-                  {/* * */}
-                  <span style={{
-                    width: '6px',
-                    height: '20px',
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#F00250',
-                    flex: 'none',
-                    order: 1,
-                    flexGrow: 0
-                  }}>
-                    *
-                  </span>
+                <div className="flex flex-col gap-2 items-start justify-start relative shrink-0 w-80">
+                  <label htmlFor="email" className="flex font-['Lexend_Deca'] font-normal gap-1 items-start justify-start leading-[0] relative shrink-0 text-[14px] w-full">
+                    <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#4a5565]">
+                      <p className="leading-[20px] overflow-ellipsis overflow-hidden whitespace-pre">Email</p>
+                    </div>
+                    <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#f00250]">
+                      <p className="leading-[20px] overflow-ellipsis overflow-hidden text-[14px] whitespace-pre">*</p>
         </div>
-        
-                {/* Button 2 (Email Input) */}
+                  </label>
               <input
+                    id="email"
                 type="email"
-                  value={formState.email}
-                  onChange={(e) => setFormState(prev => ({ 
-                    ...prev, 
-                    email: e.target.value,
-                    errors: { ...prev.errors, email: undefined }
-                  }))}
-                  placeholder="Enter your email here..."
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    padding: '0px 10px',
-                    gap: '2px',
-                    width: '320px',
-                    height: '40px',
-                    background: '#FFFFFF',
-                    border: '1px solid #E5E7EB',
-                    borderRadius: '4px',
-                    flex: 'none',
-                    order: 1,
-                    alignSelf: 'stretch',
-                    flexGrow: 0,
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#101828', // Black text when typing
-                    outline: 'none',
-                    boxSizing: 'border-box'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.color = '#101828'; // Ensure black text when focused
-                  }}
-                />
-                {formState.errors.email && (
-                  <span style={{
-                    fontFamily: 'Lexend Deca',
-                    fontSize: '12px',
-                    color: '#F00250'
-                  }}>
-                    {formState.errors.email}
-                  </span>
+                    value={loginState.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    placeholder={displayState === 'empty' ? 'Enter your email here...' : ''}
+                    className={getInputClasses('email')}
+                    aria-label="Email"
+                    aria-required="true"
+                    aria-invalid={!!loginState.errors.email}
+                    aria-describedby={loginState.errors.email ? "email-error" : undefined}
+                  />
+                  {loginState.errors.email && (
+                    <p id="email-error" className="font-['Lexend_Deca'] font-normal text-[#f00250] text-[12px] leading-[16px]">
+                      {loginState.errors.email}
+                    </p>
                 )}
             </div>
 
               {/* Password Field */}
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                padding: '0px',
-                gap: '8px',
-                width: '320px',
-                height: '68px',
-                flex: 'none',
-                order: 1,
-                flexGrow: 0
-              }}>
-                {/* Password Label */}
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'flex-start',
-                  padding: '0px',
-                  gap: '4px',
-                  width: '320px',
-                  height: '20px',
-                  flex: 'none',
-                  order: 0,
-                  alignSelf: 'stretch',
-                  flexGrow: 0
-                }}>
-                  {/* Password */}
-                  <span style={{
-                    width: '65px',
-                    height: '20px',
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#4A5565',
-                    flex: 'none',
-                    order: 0,
-                    flexGrow: 0
-                  }}>
-                Password
-                  </span>
-                  {/* * */}
-                  <span style={{
-                    width: '6px',
-                    height: '20px',
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#F00250',
-                    flex: 'none',
-                    order: 1,
-                    flexGrow: 0
-                  }}>
-                    *
-                  </span>
+                <div className="flex flex-col gap-2 items-start justify-start relative shrink-0 w-80">
+                  <label htmlFor="password" className="flex font-['Lexend_Deca'] font-normal gap-1 items-start justify-start leading-[0] relative shrink-0 text-[14px] w-full">
+                    <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#4a5565]">
+                      <p className="leading-[20px] overflow-ellipsis overflow-hidden whitespace-pre">Password</p>
+                    </div>
+                    <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#f00250]">
+                      <p className="leading-[20px] overflow-ellipsis overflow-hidden text-[14px] whitespace-pre">*</p>
                 </div>
-                
-                {/* Password Input Container */}
-                <div style={{ position: 'relative', width: '100%' }}>
-                  {/* Button 2 (Password Input) */}
+                  </label>
               <input
-                    type={formState.showPassword ? 'text' : 'password'}
-                    value={formState.password}
-                    onChange={(e) => setFormState(prev => ({ 
-                      ...prev, 
-                      password: e.target.value,
-                      errors: { ...prev.errors, password: undefined }
-                    }))}
-                    placeholder="Enter your password here..."
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      padding: '0px 10px',
-                      paddingRight: '40px',
-                      gap: '2px',
-                      width: '320px',
-                      height: '40px',
-                      background: '#FFFFFF',
-                      border: '1px solid #E5E7EB',
-                      borderRadius: '4px',
-                      flex: 'none',
-                      order: 1,
-                      alignSelf: 'stretch',
-                      flexGrow: 0,
-                      fontFamily: 'Lexend Deca',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      fontSize: '14px',
-                      lineHeight: '20px',
-                      color: '#101828', // Black text when typing
-                      outline: 'none',
-                      boxSizing: 'border-box'
-                    }}
-                    onFocus={(e) => {
-                      e.target.style.color = '#101828'; // Ensure black text when focused
-                    }}
+                    id="password"
+                    type="password"
+                    value={loginState.password}
+                    onChange={(e) => handleInputChange('password', e.target.value)}
+                    placeholder={displayState === 'empty' ? 'Enter your password here...' : ''}
+                    className={getInputClasses('password')}
+                    aria-label="Password"
+                    aria-required="true"
+                    aria-invalid={!!loginState.errors.password}
+                    aria-describedby={loginState.errors.password ? "password-error" : undefined}
                   />
-                  <button
-                    type="button"
-                    onClick={() => setFormState(prev => ({ ...prev, showPassword: !prev.showPassword }))}
-                    style={{
-                      position: 'absolute',
-                      right: '12px',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      fontSize: '16px'
-                    }}
-                    aria-label={formState.showPassword ? 'Hide password' : 'Show password'}
-                  >
-                    {formState.showPassword ? '👁️' : '👁️‍🗨️'}
-                  </button>
-            </div>
-                {formState.errors.password && (
-                  <span style={{
-                    fontFamily: 'Lexend Deca',
-                    fontSize: '12px',
-                    color: '#F00250'
-                  }}>
-                    {formState.errors.password}
-                  </span>
+                  {loginState.errors.password && (
+                    <p id="password-error" className="font-['Lexend_Deca'] font-normal text-[#f00250] text-[12px] leading-[16px]">
+                      {loginState.errors.password}
+                    </p>
                 )}
           </div>
 
               {/* Login Button */}
             <button
-              type="submit"
-                disabled={formState.loading || !isFormValid()} // ✅ Disable until valid email & password
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  padding: '4px 12px',
-                  gap: '6px',
-                  width: '320px',
-                  height: '40px',
-                  background: (formState.loading || !isFormValid()) ? '#F4EBFF' : '#841AFF', // Disabled vs enabled state
-                  borderRadius: '4px',
-                  border: 'none',
-                  cursor: (formState.loading || !isFormValid()) ? 'not-allowed' : 'pointer',
-                  flex: 'none',
-                  order: 2,
-                  alignSelf: 'stretch',
-                  flexGrow: 0
-                }}
-              >
-                {/* Login */}
-                <span style={{
-                  width: '39px',
-                  height: '20px',
-                  fontFamily: 'Lexend Deca',
-                  fontStyle: 'normal',
-                  fontWeight: 400,
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                  color: (formState.loading || !isFormValid()) ? '#CEA3FF' : '#FFFFFF', // Disabled vs enabled text color
-                  flex: 'none',
-                  order: 0,
-                  flexGrow: 0
-                }}>
-                  {formState.loading ? 'Logging in...' : 'Login'}
-                </span>
+                  data-testid="login-button"
+                  type="button"
+                  onClick={handleLogin}
+                  disabled={buttonStyling.disabled}
+                  className={`box-border flex gap-1.5 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-full p360-button-text transition-colors ${buttonStyling.bg} ${buttonStyling.text} ${buttonStyling.cursor || ''}`}
+                  aria-label={loginState.isLoading ? 'Logging in...' : 'Login to your account'}
+                >
+                  {loginState.isLoading ? 'Logging in...' : 'Login'}
             </button>
 
-              {/* General Error */}
-              {formState.errors.general && (
-                <div style={{
-                  fontFamily: 'Lexend Deca',
-                  fontSize: '12px',
-                  color: '#F00250',
-                  textAlign: 'center',
-                  width: '100%'
-                }}>
-                  {formState.errors.general}
+                {/* Separator */}
+                <div className="box-border flex flex-col gap-2.5 items-start justify-start px-0 py-2.5 relative shrink-0 w-full">
+                  <div className="flex flex-col gap-2.5 items-start justify-start relative shrink-0 w-full">
+                    <div className="h-0 relative shrink-0 w-full">
+                      <div className="absolute bottom-0 left-0 right-0 top-[-1px] border-t border-[#e5e7eb]"></div>
+                    </div>
+                  </div>
+                  <div className="absolute bg-white box-border flex items-center justify-center px-2 py-0 top-1/2 translate-x-[-50%] translate-y-[-50%]" style={{ left: "calc(50% - 0.5px)" }}>
+                    <div className="font-['Lexend_Deca'] font-normal leading-[0] relative shrink-0 text-[12px] text-[#71717a]">
+                      <p className="leading-[16px] whitespace-pre">Or continue with</p>
                 </div>
-              )}
-
-              {/* Separator */}
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                padding: '10px 0px',
-                gap: '10px',
-                isolation: 'isolate',
-                width: '320px',
-                height: '20px',
-                flex: 'none',
-                order: 3,
-                alignSelf: 'stretch',
-                flexGrow: 0,
-                position: 'relative'
-              }}>
-                {/* Separator Line */}
-                <div style={{
-                  width: '320px',
-                  height: '0px',
-                  border: '1px solid #E5E7EB',
-                  flex: 'none',
-                  order: 0,
-                  alignSelf: 'stretch',
-                  flexGrow: 0
-                }} />
-                
-                {/* Or continue with */}
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  padding: '0px 8px',
-                  position: 'absolute',
-                  width: '112px',
-                  height: '16px',
-                  left: 'calc(50% - 112px/2 - 0.5px)',
-                  top: 'calc(50% - 16px/2)',
-                  background: '#FFFFFF',
-                  flex: 'none',
-                  order: 1,
-                  flexGrow: 0
-                }}>
-                  {/* Or continue with */}
-                  <span style={{
-                    width: '96px',
-                    height: '16px',
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '12px',
-                    lineHeight: '16px',
-                    color: '#71717A',
-                    flex: 'none',
-                    order: 0,
-                    flexGrow: 0
-                  }}>
-                    Or continue with
-                  </span>
                 </div>
           </div>
 
-              {/* Social Login Buttons */}
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                padding: '0px',
-                gap: '10px',
-                width: '320px',
-                height: '90px',
-                flex: 'none',
-                order: 4,
-                alignSelf: 'stretch',
-                flexGrow: 0
-              }}>
-                {/* Google Button */}
+                {/* OAuth Buttons */}
+                <div className="flex flex-col gap-2.5 items-center justify-start relative shrink-0 w-full">
                 <button
-                  type="button"
-                  onClick={() => handleSocialLogin('google')}
-                  style={{
-                    boxSizing: 'border-box',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    padding: '4px 12px',
-                    gap: '8px',
-                    width: '320px',
-                    height: '40px',
-                    background: '#FFFFFF',
-                    border: '1px solid #E5E7EB',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    flex: 'none',
-                    order: 0,
-                    flexGrow: 0
-                  }}
-                >
-                  {/* Google Icon */}
-                  <div style={{ width: '20px', height: '20px', position: 'relative' }}>
-                    <svg viewBox="0 0 20 20" style={{ width: '100%', height: '100%' }}>
-                      <path d="M18.75 8.23H10.18V11.7H15.23C14.85 13.33 13.42 14.58 11.67 15.05V17.58H15.32C17.55 15.53 18.75 12.59 18.75 8.23Z" fill="#4285F4"/>
-                      <path d="M10.18 20C13.42 20 16.11 18.92 17.85 17.08L14.2 14.55C13.13 15.33 11.77 15.8 10.18 15.8C7.05 15.8 4.4 13.73 3.42 10.92H-0.38V13.53C1.35 16.98 5.48 20 10.18 20Z" fill="#34A853"/>
-                      <path d="M3.42 10.92C3.15 10.14 3 9.3 3 8.43C3 7.56 3.15 6.72 3.42 5.94V3.33H-0.38C-1.38 5.33 -2 6.83 -2 8.43C-2 10.03 -1.38 11.53 -0.38 13.53L3.42 10.92Z" fill="#FBBC05"/>
-                      <path d="M10.18 3.25C11.95 3.25 13.54 3.92 14.77 5.1L17.93 1.94C16.1 0.19 13.41 -0.75 10.18 -0.75C5.48 -0.75 1.35 2.27 -0.38 5.72L3.42 8.33C4.4 5.52 7.05 3.25 10.18 3.25Z" fill="#EA4335"/>
+                    onClick={() => handleOAuthLogin('Google')}
+                    className="bg-white box-border flex gap-2 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-80 border border-[#e5e7eb] hover:bg-gray-50 transition-colors"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                     </svg>
+                    <div className="font-['Lexend_Deca'] font-normal leading-[0] relative shrink-0 text-[#101828] text-[14px]">
+                      <p className="leading-[20px] whitespace-pre">Login with Google</p>
                   </div>
-                  {/* Login with Google */}
-                  <span style={{
-                    width: '124px',
-                    height: '20px',
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#101828',
-                    flex: 'none',
-                    order: 1,
-                    flexGrow: 0
-                  }}>
-                    Login with Google
-                  </span>
                 </button>
 
-                {/* Microsoft Button */}
                 <button
-                  type="button"
-                  onClick={() => handleSocialLogin('microsoft')}
-                  style={{
-                    boxSizing: 'border-box',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    padding: '4px 12px',
-                    gap: '8px',
-                    width: '320px',
-                    height: '40px',
-                    background: '#FFFFFF',
-                    border: '1px solid #E5E7EB',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    flex: 'none',
-                    order: 1,
-                    flexGrow: 0
-                  }}
-                >
-                  {/* Microsoft Icon */}
-                  <div style={{ width: '20px', height: '20px', position: 'relative' }}>
-                    <svg viewBox="0 0 20 20" style={{ width: '100%', height: '100%' }}>
-                      <rect x="2.5" y="2.5" width="7.14" height="7.14" fill="#F35325"/>
-                      <rect x="10.36" y="2.5" width="7.14" height="7.14" fill="#81BC06"/>
-                      <rect x="2.5" y="10.36" width="7.14" height="7.14" fill="#05A6F0"/>
-                      <rect x="10.36" y="10.36" width="7.14" height="7.14" fill="#FFBA08"/>
+                    onClick={() => handleOAuthLogin('Microsoft')}
+                    className="bg-white box-border flex gap-2 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-80 border border-[#e5e7eb] hover:bg-gray-50 transition-colors"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24">
+                      <path fill="#F25022" d="M1 1h10v10H1z"/>
+                      <path fill="#00A4EF" d="M13 1h10v10H13z"/>
+                      <path fill="#7FBA00" d="M1 13h10v10H1z"/>
+                      <path fill="#FFB900" d="M13 13h10v10H13z"/>
                     </svg>
+                    <div className="font-['Lexend_Deca'] font-normal leading-[0] relative shrink-0 text-[#101828] text-[14px]">
+                      <p className="leading-[20px] whitespace-pre">Login with Microsoft</p>
                   </div>
-                  {/* Login with Microsoft */}
-                  <span style={{
-                    width: '139px',
-                    height: '20px',
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#101828',
-                    flex: 'none',
-                    order: 1,
-                    flexGrow: 0
-                  }}>
-                    Login with Microsoft
-                  </span>
                 </button>
+                </div>
+
               </div>
-            </form>
           </div>
         </div>
 
-        {/* Right Side - Content Area */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          padding: '0px',
-          width: '384px',
-          height: '528px',
-          background: '#CACACA',
-          flex: 'none',
-          order: 1,
-          alignSelf: 'stretch',
-          flexGrow: 1,
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-          <div style={{ textAlign: 'center' }}>
-            <p style={{
-              fontFamily: 'Lexend Deca',
-              fontWeight: 400,
-              fontSize: '18px',
-              lineHeight: '1.4em',
-              color: '#4A5565',
-              marginBottom: '16px'
-            }}>
-              Future Content Area
-            </p>
-            <p style={{
-              fontFamily: 'Lexend Deca',
-              fontWeight: 400,
-              fontSize: '14px',
-              lineHeight: '1.4285714285714286em',
-              color: '#99A1AF'
-            }}>
-              This space reserved for marketing content,<br />
-              onboarding graphics, or promotional material.
-            </p>
+          {/* Right Panel - Figma Image */}
+          <div className="basis-0 flex flex-row grow items-center self-stretch shrink-0">
+            <div 
+              className="basis-0 bg-center bg-cover bg-no-repeat grow h-full min-h-px min-w-px shrink-0" 
+              style={{ 
+                backgroundImage: `url('/figma-placeholder-1.png'), url('/figma-placeholder-2.png')` 
+              }}
+            />
           </div>
+
         </div>
       </div>
 
-      {/* Logo */}
-      <div style={{
-        position: 'absolute',
-        width: '171.82px',
-        height: '28px',
-        left: 'calc(50% - 171.82px/2 - 0.27px)',
-        top: '72px'
-      }}>
-        <Image
-          src="/logo-02.png"
-          alt="Pipeline360"
-          width={172}
-          height={28}
-          priority
-          style={{
-            width: '100%',
-            height: '100%'
-          }}
-        />
-      </div>
     </div>
   );
 }
