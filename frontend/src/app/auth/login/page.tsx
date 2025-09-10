@@ -93,7 +93,7 @@ export default function LoginPage() {
       {/* Pipeline360 Logo */}
       <div className="absolute top-[72px] left-1/2 transform -translate-x-1/2">
         <Image
-          src="/figma_logo_exports/logo-02.png"
+          src="/logo-02.png"
           alt="Pipeline360"
           width={172}
           height={28}
