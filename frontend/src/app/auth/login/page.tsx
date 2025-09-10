@@ -58,7 +58,6 @@ export default function LoginPage() {
     try {
       // TODO: SECURITY CRITICAL - Replace with actual authentication API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Login attempt:', { email: formState.email });
       router.push('/dashboard');
     } catch (error) {
         console.error('Login error:', error);
@@ -74,7 +73,10 @@ export default function LoginPage() {
 
   const handleSocialLogin = (provider: 'google' | 'microsoft') => {
     // TODO: SECURITY CRITICAL - Implement proper OAuth2 flow
-    console.log(`Login with ${provider}`);
+    setFormState(prev => ({ 
+      ...prev, 
+      errors: { general: 'Social login not yet implemented' }
+    }));
   };
 
   // Function to check if form is valid for button enable/disable
