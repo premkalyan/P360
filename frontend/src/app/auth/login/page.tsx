@@ -44,6 +44,28 @@ export default function LoginPage() {
     return errors;
   };
 
+  // Mock user authentication with role detection
+  const authenticateUser = async (email: string, password: string) => {
+    // TODO: SECURITY CRITICAL - Replace with actual authentication API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Mock role detection based on email domain/pattern
+    // In production, this would come from your authentication API/JWT
+    const isAdmin = email.includes('admin') || email.endsWith('@p360admin.com');
+    const userRole = isAdmin ? 'admin' : 'user';
+    
+    return {
+      user: {
+        id: '1',
+        email: email,
+        name: email.split('@')[0],
+        role: userRole,
+        tenantId: isAdmin ? null : 'tenant-1' // Admins can access all tenants
+      },
+      role: userRole
+    };
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -56,9 +78,23 @@ export default function LoginPage() {
     setFormState(prev => ({ ...prev, loading: true, errors: {} }));
 
     try {
-      // TODO: SECURITY CRITICAL - Replace with actual authentication API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      router.push('/dashboard');
+      // Authenticate user and get role information
+      const authResult = await authenticateUser(formState.email, formState.password);
+      
+      // Store user session (in production, handle JWT tokens properly)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('p360_user', JSON.stringify(authResult.user));
+        localStorage.setItem('p360_user_role', authResult.role);
+      }
+
+      // Role-based routing
+      if (authResult.role === 'admin') {
+        // Admin users go to organization management
+        router.push('/admin/organizations');
+      } else {
+        // Regular users go to standard dashboard
+        router.push('/dashboard');
+      }
     } catch (error) {
         console.error('Login error:', error);
       setFormState(prev => ({ 
