@@ -90,22 +90,25 @@ export default function LoginPage() {
         // Successful login - check user type and redirect accordingly
         console.log('Login successful! Redirecting...');
         
-        // Check if user is admin (for demo, admin@p360.com is admin)
-        const isAdmin = loginState.email === 'admin@p360.com';
-        
-        if (isAdmin) {
-          alert('Welcome Admin! 🎉\n\nRedirecting to Organization Management...');
-          // Redirect admin users to organizations tab
-          setTimeout(() => {
-            window.location.href = '/admin/organizations';
-          }, 1000);
-        } else {
-          alert('Login successful! 🎉\n\nRedirecting to dashboard...');
-          // Redirect regular users to dashboard
-          // setTimeout(() => {
-          //   window.location.href = '/dashboard';
-          // }, 1000);
-        }
+              // TODO: P360-133 - Replace with secure backend authentication
+              // For MVP demo, simulate admin check (will be replaced with proper role-based auth)
+              const isAdminDemo = loginState.email === 'admin@p360.com';
+
+              if (isAdminDemo) {
+                alert('Welcome Admin! 🎉\n\nRedirecting to Organization Management...');
+                // Redirect admin users to organizations tab
+                setTimeout(() => {
+                  // TODO: P360-133 - Replace with Next.js router.push() for SPA navigation
+                  window.location.href = '/admin/organizations';
+                }, 1000);
+              } else {
+                alert('Login successful! 🎉\n\nRedirecting to dashboard...');
+                // Redirect regular users to dashboard
+                // TODO: P360-133 - Implement user dashboard routing
+                // setTimeout(() => {
+                //   router.push('/dashboard');
+                // }, 1000);
+              }
         
         // For now, just clear the form for non-admin users
         setLoginState({
