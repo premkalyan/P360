@@ -174,176 +174,20 @@ export default function LoginPage() {
   const buttonStyling = getButtonStyling();
 
   return (
-    <div className="bg-white relative min-h-screen w-full overflow-hidden" data-name="login">
-      {/* Background gradient */}
-      <div className="absolute bottom-[-60.25px] flex h-[475.252px] items-center justify-center left-1/2 translate-x-[-50%] w-[1440px]">
-        <div className="flex-none scale-y-[-100%]">
-          <div className="h-[475.252px] overflow-clip relative w-[1440px]" data-name="Color Info">
-            <div className="absolute box-border content-stretch flex h-[95.131px] items-center justify-start left-[-32.98px] pl-0 pr-[90.057px] py-0 top-[-67.57px] w-[1413.01px]">
-              <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
-                <div className="flex-none scale-y-[-100%] size-full">
-                  <div className="bg-[#ff6221] blur-[64.936px] filter size-full" />
-                </div>
-              </div>
-              <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
-                <div className="flex-none scale-y-[-100%] size-full">
-                  <div className="bg-[#ed01cf] blur-[95.054px] filter size-full" />
-                </div>
-              </div>
-              <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
-                <div className="flex-none scale-y-[-100%] size-full">
-                  <div className="bg-[#841aff] blur-[96.796px] filter size-full" />
-                </div>
-              </div>
-              <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
-                <div className="flex-none scale-y-[-100%] size-full">
-                  <div className="bg-[#008dff] blur-[75.839px] filter size-full" />
-                </div>
-              </div>
-            </div>
-            <div className="absolute flex h-[476.002px] items-center justify-center left-1/2 mix-blend-overlay translate-x-[-50%] translate-y-[-50%] w-[1320.06px]" style={{ top: "calc(50% - 0.375px)" }}>
-              <div className="flex-none rotate-[180deg]">
-                <div className="bg-center bg-cover bg-no-repeat h-[476.002px] opacity-90 w-[1320.06px]" data-name="noise 3" style={{ backgroundImage: `url('${imgNoise3}')` }} />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="relative min-h-screen w-full overflow-hidden" data-name="login"
+      style={{
+        background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 30%, #e2e8f0 50%, #ff6221 70%, #ed01cf 80%, #841aff 90%, #008dff 100%)"
+      }}
+    >
 
       {/* Pipeline360 Logo */}
-      <div className="absolute h-7 overflow-clip top-[72px] translate-x-[-50%] w-[171.818px] z-10" style={{ left: "calc(50% - 0.273px)" }}>
-        <div className="absolute inset-[21.95%_63.33%_-0.15%_27.89%]">
-          <img alt="" className="block max-w-none size-full" src={img9} />
-        </div>
-        <div className="absolute inset-[22.44%_-0.02%_22.36%_91.02%]">
-          <img alt="" className="block max-w-none size-full" src={img10} />
-        </div>
-        <div className="absolute inset-[0.15%_49.85%_22.34%_48.37%]">
-          <img alt="" className="block max-w-none size-full" src={img11} />
-        </div>
-        <div className="absolute inset-[0.15%_74.1%_87.69%_23.93%]">
-          <img alt="" className="block max-w-none size-full" src={img12} />
-        </div>
-        <div className="absolute inset-[0.15%_45.81%_87.72%_52.23%]">
-          <img alt="" className="block max-w-none size-full" src={img13} />
-        </div>
-        <div className="absolute inset-[2.01%_99.05%_78.46%_0.02%]">
-          <img alt="" className="block max-w-none size-full" src={img14} />
-        </div>
-        <div className="absolute inset-[9.62%_99.97%_90.26%_0.02%]">
-          <img alt="" className="block max-w-none size-full" src={img15} />
-        </div>
-        <div className="absolute inset-[13.81%_99.97%_86.07%_0.02%]">
-          <img alt="" className="block max-w-none size-full" src={img16} />
-        </div>
-        <div className="absolute inset-[0.4%_77.96%_22.11%_13.5%]">
-          <img alt="" className="block max-w-none size-full" src={img17} />
-        </div>
-        <div className="absolute inset-[22.52%_25.85%_22.27%_65.83%]">
-          <img alt="" className="block max-w-none size-full" src={img18} />
-        </div>
-        <div className="absolute inset-[22.54%_53.52%_22.4%_38.18%]">
-          <img alt="" className="block max-w-none size-full" src={img19} />
-        </div>
-        <div className="absolute inset-[22.47%_36.01%_22.33%_56.35%]">
-          <img alt="" className="block max-w-none size-full" src={img20} />
-        </div>
-        <div className="absolute inset-[22.48%_17.85%_22.31%_75.87%]">
-          <img alt="" className="block max-w-none size-full" src={img21} />
-        </div>
-        <div className="absolute inset-[22.46%_10.05%_22.43%_83.39%]">
-          <img alt="" className="block max-w-none size-full" src={img22} />
-        </div>
-        <div className="absolute inset-[22.48%_45.83%_22.33%_52.39%]">
-          <img alt="" className="block max-w-none size-full" src={img23} />
-        </div>
-        <div className="absolute inset-[22.55%_74.16%_22.32%_24.07%]">
-          <img alt="" className="block max-w-none size-full" src={img24} />
-        </div>
-        <div className="absolute inset-[55.2%_87.3%_22.21%_9.03%]">
-          <img alt="" className="block max-w-none size-full" src={img25} />
-        </div>
-        <div className="absolute inset-[0.46%_87.31%_76.99%_10.11%]">
-          <img alt="" className="block max-w-none size-full" src={img26} />
-        </div>
-        <div className="absolute inset-[0.44%_89.87%_76.97%_8.89%]">
-          <img alt="" className="block max-w-none size-full" src={img27} />
-        </div>
-        <div className="absolute inset-[0.44%_93.68%_76.95%_5.18%]">
-          <img alt="" className="block max-w-none size-full" src={img28} />
-        </div>
-        <div className="absolute inset-[0.43%_94.78%_76.96%_4.1%]">
-          <img alt="" className="block max-w-none size-full" src={img29} />
-        </div>
-        <div className="absolute inset-[0.44%_91.08%_76.96%_7.88%]">
-          <img alt="" className="block max-w-none size-full" src={img30} />
-        </div>
-        <div className="absolute inset-[0.43%_95.83%_76.96%_3.2%]">
-          <img alt="" className="block max-w-none size-full" src={img31} />
-        </div>
-        <div className="absolute inset-[0.45%_92.84%_76.94%_6.25%]">
-          <img alt="" className="block max-w-none size-full" src={img32} />
-        </div>
-        <div className="absolute inset-[0.44%_96.73%_76.96%_2.39%]">
-          <img alt="" className="block max-w-none size-full" src={img33} />
-        </div>
-        <div className="absolute inset-[0.44%_92.02%_76.95%_7.08%]">
-          <img alt="" className="block max-w-none size-full" src={img34} />
-        </div>
-        <div className="absolute inset-[0.41%_97.56%_77%_1.66%]">
-          <img alt="" className="block max-w-none size-full" src={img35} />
-        </div>
-        <div className="absolute inset-[27.77%_91.28%_49.72%_8.03%]">
-          <img alt="" className="block max-w-none size-full" src={img36} />
-        </div>
-        <div className="absolute inset-[28.97%_94.46%_50.85%_4.5%]">
-          <img alt="" className="block max-w-none size-full" src={img37} />
-        </div>
-        <div className="absolute inset-[0.58%_98.32%_77.15%_0.93%]">
-          <img alt="" className="block max-w-none size-full" src={img38} />
-        </div>
-        <div className="absolute inset-[27.86%_89.38%_49.72%_9.96%]">
-          <img alt="" className="block max-w-none size-full" src={img39} />
-        </div>
-        <div className="absolute inset-[27.88%_90.63%_49.71%_8.72%]">
-          <img alt="" className="block max-w-none size-full" src={img40} />
-        </div>
-        <div className="absolute inset-[27.75%_88.72%_49.67%_10.62%]">
-          <img alt="" className="block max-w-none size-full" src={img41} />
-        </div>
-        <div className="absolute inset-[27.71%_93.78%_49.72%_5.54%]">
-          <img alt="" className="block max-w-none size-full" src={img42} />
-        </div>
-        <div className="absolute inset-[27.74%_91.97%_49.73%_7.4%]">
-          <img alt="" className="block max-w-none size-full" src={img43} />
-        </div>
-        <div className="absolute inset-[27.77%_93.19%_49.71%_6.2%]">
-          <img alt="" className="block max-w-none size-full" src={img44} />
-        </div>
-        <div className="absolute inset-[27.87%_90.04%_49.71%_9.38%]">
-          <img alt="" className="block max-w-none size-full" src={img45} />
-        </div>
-        <div className="absolute inset-[27.86%_92.6%_49.71%_6.82%]">
-          <img alt="" className="block max-w-none size-full" src={img46} />
-        </div>
-        <div className="absolute inset-[28.11%_88.11%_50%_11.28%]">
-          <img alt="" className="block max-w-none size-full" src={img47} />
-        </div>
-        <div className="absolute inset-[29.8%_87.32%_51.53%_11.85%]">
-          <img alt="" className="block max-w-none size-full" src={img48} />
-        </div>
-        <div className="absolute inset-[27.65%_89.06%_72.14%_8.57%]">
-          <img alt="" className="block max-w-none size-full" src={img49} />
-        </div>
-        <div className="absolute inset-[27.71%_92.56%_72.15%_6.27%]">
-          <img alt="" className="block max-w-none size-full" src={img50} />
-        </div>
-        <div className="absolute inset-[27.76%_88.96%_72.19%_11.01%]">
-          <img alt="" className="block max-w-none size-full" src={img51} />
-        </div>
-        <div className="absolute inset-[27.71%_93.82%_72.28%_6.18%]">
-          <img alt="" className="block max-w-none size-full" src={img52} />
-        </div>
+      <div className="absolute top-[72px] left-1/2 transform -translate-x-1/2 z-10">
+        <img 
+          src="/pipeline360-logo.png" 
+          alt="Pipeline360" 
+          className="h-7 w-auto"
+          style={{ width: "171.818px", height: "28px" }}
+        />
       </div>
 
       {/* Main Content */}
