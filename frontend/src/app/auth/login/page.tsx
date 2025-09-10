@@ -88,7 +88,7 @@ export default function LoginPage() {
 
       if (isValidLogin) {
         // Successful login - check user type and redirect accordingly
-        console.log('Login successful! Redirecting...');
+        // Login successful - redirecting user
         
               // TODO: P360-133 - Replace with secure backend authentication
               // For MVP demo, simulate admin check (will be replaced with proper role-based auth)
@@ -131,8 +131,8 @@ export default function LoginPage() {
     }, 1000);
   };
 
-  const handleOAuthLogin = (provider: string) => {
-    console.log(`OAuth login with ${provider}`);
+  const handleOAuthLogin = (_provider: string) => {
+    // TODO: P360-133 - Implement OAuth logic
     // Implement OAuth logic here
   };
 

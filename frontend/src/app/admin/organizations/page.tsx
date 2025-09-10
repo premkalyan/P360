@@ -51,7 +51,7 @@ export default function OrganizationsPage() {
           </div>
           <div className="flex flex-col items-start gap-2 text-center w-full">
             <h2 className="font-p360 font-semibold text-[#101828] text-[20px] leading-7 tracking-[-0.4px] w-full">
-              There's no Organization yet
+              There&apos;s no Organization yet
             </h2>
             <p className="font-p360 font-normal text-[#71717b] text-[14px] leading-5 w-full">
               Something cool here
