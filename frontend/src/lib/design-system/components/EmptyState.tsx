@@ -206,3 +206,12 @@ export const EmptyData = (props: Partial<EmptyStateProps>) => (
     {...props}
   />
 );
+
+export const EmptyOrganizations = (props: Partial<EmptyStateProps>) => (
+  <EmptyState
+    title="There's no Organization yet"
+    description="Something cool here"
+    illustration="/organization-illustration.png"
+    {...props}
+  />
+);

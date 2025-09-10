@@ -41,6 +41,7 @@ export type { ButtonProps } from './components/Button';
 export {
   EmptyState,
   EmptyCampaigns,
+  EmptyOrganizations,
   EmptyResults,
   EmptyData,
 } from './components/EmptyState';

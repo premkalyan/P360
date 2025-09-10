@@ -39,7 +39,7 @@ describe('LoginPage', () => {
       
       const logo = screen.getByAltText('Pipeline360');
       expect(logo).toBeInTheDocument();
-      expect(logo).toHaveAttribute('src', '/figma_logo_exports/logo-02.png');
+      expect(logo).toHaveAttribute('src', '/logo-02.png');
       expect(logo).toHaveAttribute('width', '172');
       expect(logo).toHaveAttribute('height', '28');
     });
