@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import '../../styles/typography.css';
 
 interface LoginFormState {
   email: string;
