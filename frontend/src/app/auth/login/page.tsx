@@ -87,16 +87,27 @@ export default function LoginPage() {
       );
 
       if (isValidLogin) {
-        // Successful login - redirect to dashboard
-        console.log('Login successful! Redirecting to dashboard...');
-        alert('Login successful! 🎉\n\nRedirecting to dashboard...');
+        // Successful login - check user type and redirect accordingly
+        console.log('Login successful! Redirecting...');
         
-        // In a real app, you would:
-        // - Store auth token in localStorage/cookies
-        // - Set user context/state
-        // - Navigate to dashboard using router.push('/dashboard')
+        // Check if user is admin (for demo, admin@p360.com is admin)
+        const isAdmin = loginState.email === 'admin@p360.com';
         
-        // For now, just clear the form
+        if (isAdmin) {
+          alert('Welcome Admin! 🎉\n\nRedirecting to Organization Management...');
+          // Redirect admin users to organizations tab
+          setTimeout(() => {
+            window.location.href = '/admin/organizations';
+          }, 1000);
+        } else {
+          alert('Login successful! 🎉\n\nRedirecting to dashboard...');
+          // Redirect regular users to dashboard
+          // setTimeout(() => {
+          //   window.location.href = '/dashboard';
+          // }, 1000);
+        }
+        
+        // For now, just clear the form for non-admin users
         setLoginState({
           email: '',
           password: '',

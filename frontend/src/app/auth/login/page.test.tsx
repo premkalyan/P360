@@ -158,7 +158,7 @@ describe('LoginPage', () => {
       
       await waitFor(() => {
         expect(alertSpy).toHaveBeenCalledWith(
-          expect.stringContaining('Login successful!')
+          expect.stringContaining('Welcome Admin!')
         );
       });
       
@@ -340,7 +340,7 @@ describe('LoginPage Integration', () => {
     // Should show success message
     await waitFor(() => {
       expect(alertSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Login successful!')
+        expect.stringContaining('Welcome Admin!')
       );
     });
     
