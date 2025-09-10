@@ -19,8 +19,6 @@
     "jsx": "preserve",
     "incremental": true,
     "types": [
-      "react",
-      "react-dom",
       "node"
     ],
     "typeRoots": [

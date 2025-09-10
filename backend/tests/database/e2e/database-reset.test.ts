@@ -15,7 +15,7 @@
  * @story P360-8
  */
 
-import { PrismaClient } from '../../../src/generated/prisma';
+import { PrismaClient } from '@prisma/client';
 import { execSync } from 'child_process';
 import path from 'path';
 
