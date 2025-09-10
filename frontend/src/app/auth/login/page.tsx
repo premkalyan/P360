@@ -87,16 +87,30 @@ export default function LoginPage() {
       );
 
       if (isValidLogin) {
-        // Successful login - redirect to dashboard
-        console.log('Login successful! Redirecting to dashboard...');
-        alert('Login successful! 🎉\n\nRedirecting to dashboard...');
+        // Successful login - check user type and redirect accordingly
+        // Login successful - redirecting user
         
-        // In a real app, you would:
-        // - Store auth token in localStorage/cookies
-        // - Set user context/state
-        // - Navigate to dashboard using router.push('/dashboard')
+              // TODO: P360-133 - Replace with secure backend authentication
+              // For MVP demo, simulate admin check (will be replaced with proper role-based auth)
+              const isAdminDemo = loginState.email === 'admin@p360.com';
+
+              if (isAdminDemo) {
+                alert('Welcome Admin! 🎉\n\nRedirecting to Organization Management...');
+                // Redirect admin users to organizations tab
+                setTimeout(() => {
+                  // TODO: P360-133 - Replace with Next.js router.push() for SPA navigation
+                  window.location.href = '/admin/organizations';
+                }, 1000);
+              } else {
+                alert('Login successful! 🎉\n\nRedirecting to dashboard...');
+                // Redirect regular users to dashboard
+                // TODO: P360-133 - Implement user dashboard routing
+                // setTimeout(() => {
+                //   router.push('/dashboard');
+                // }, 1000);
+              }
         
-        // For now, just clear the form
+        // For now, just clear the form for non-admin users
         setLoginState({
           email: '',
           password: '',
@@ -117,8 +131,8 @@ export default function LoginPage() {
     }, 1000);
   };
 
-  const handleOAuthLogin = (provider: string) => {
-    console.log(`OAuth login with ${provider}`);
+  const handleOAuthLogin = (_provider: string) => {
+    // TODO: P360-133 - Implement OAuth logic
     // Implement OAuth logic here
   };
 
