@@ -61,7 +61,7 @@ export default function LoginPage() {
       console.log('Login attempt:', { email: formState.email });
       router.push('/dashboard');
     } catch (error) {
-      console.error('Login error:', error);
+        console.error('Login error:', error);
       setFormState(prev => ({ 
         ...prev, 
         errors: { general: 'Login failed. Please try again.' },
@@ -223,7 +223,7 @@ export default function LoginPage() {
               alignSelf: 'stretch',
               flexGrow: 0
             }}>
-              {/* Title */}
+              {/* Title Text */}
               <h1 style={{
                 width: '320px',
                 height: '30px',
@@ -243,7 +243,7 @@ export default function LoginPage() {
                 Welcome back
               </h1>
               
-              {/* Subtitle */}
+              {/* This is a card description. */}
               <p style={{
                 width: '320px',
                 height: '20px',
@@ -304,6 +304,7 @@ export default function LoginPage() {
                   alignSelf: 'stretch',
                   flexGrow: 0
                 }}>
+                  {/* Email */}
                   <span style={{
                     width: '38px',
                     height: '20px',
@@ -319,6 +320,7 @@ export default function LoginPage() {
                   }}>
                     Email
                   </span>
+                  {/* * */}
                   <span style={{
                     width: '6px',
                     height: '20px',
@@ -334,11 +336,11 @@ export default function LoginPage() {
                   }}>
                     *
                   </span>
-                </div>
-                
-                {/* Email Input */}
-                <input
-                  type="email"
+        </div>
+        
+                {/* Button 2 (Email Input) */}
+              <input
+                type="email"
                   value={formState.email}
                   onChange={(e) => setFormState(prev => ({ 
                     ...prev, 
@@ -367,7 +369,8 @@ export default function LoginPage() {
                     fontSize: '14px',
                     lineHeight: '20px',
                     color: '#99A1AF',
-                    outline: 'none'
+                    outline: 'none',
+                    boxSizing: 'border-box'
                   }}
                 />
                 {formState.errors.email && (
@@ -379,7 +382,7 @@ export default function LoginPage() {
                     {formState.errors.email}
                   </span>
                 )}
-              </div>
+            </div>
 
               {/* Password Field */}
               <div style={{
@@ -408,6 +411,7 @@ export default function LoginPage() {
                   alignSelf: 'stretch',
                   flexGrow: 0
                 }}>
+                  {/* Password */}
                   <span style={{
                     width: '65px',
                     height: '20px',
@@ -421,8 +425,9 @@ export default function LoginPage() {
                     order: 0,
                     flexGrow: 0
                   }}>
-                    Password
+                Password
                   </span>
+                  {/* * */}
                   <span style={{
                     width: '6px',
                     height: '20px',
@@ -442,7 +447,8 @@ export default function LoginPage() {
                 
                 {/* Password Input Container */}
                 <div style={{ position: 'relative', width: '100%' }}>
-                  <input
+                  {/* Button 2 (Password Input) */}
+              <input
                     type={formState.showPassword ? 'text' : 'password'}
                     value={formState.password}
                     onChange={(e) => setFormState(prev => ({ 
@@ -494,7 +500,7 @@ export default function LoginPage() {
                   >
                     {formState.showPassword ? '👁️' : '👁️‍🗨️'}
                   </button>
-                </div>
+            </div>
                 {formState.errors.password && (
                   <span style={{
                     fontFamily: 'Lexend Deca',
@@ -504,11 +510,11 @@ export default function LoginPage() {
                     {formState.errors.password}
                   </span>
                 )}
-              </div>
+          </div>
 
               {/* Login Button */}
-              <button
-                type="submit"
+            <button
+              type="submit"
                 disabled={formState.loading}
                 style={{
                   display: 'flex',
@@ -529,6 +535,7 @@ export default function LoginPage() {
                   flexGrow: 0
                 }}
               >
+                {/* Login */}
                 <span style={{
                   width: '39px',
                   height: '20px',
@@ -544,7 +551,7 @@ export default function LoginPage() {
                 }}>
                   {formState.loading ? 'Logging in...' : 'Login'}
                 </span>
-              </button>
+            </button>
 
               {/* General Error */}
               {formState.errors.general && (
@@ -603,6 +610,7 @@ export default function LoginPage() {
                   order: 1,
                   flexGrow: 0
                 }}>
+                  {/* Or continue with */}
                   <span style={{
                     width: '96px',
                     height: '16px',
@@ -619,7 +627,7 @@ export default function LoginPage() {
                     Or continue with
                   </span>
                 </div>
-              </div>
+          </div>
 
               {/* Social Login Buttons */}
               <div style={{
@@ -667,6 +675,7 @@ export default function LoginPage() {
                       <path d="M10.18 3.25C11.95 3.25 13.54 3.92 14.77 5.1L17.93 1.94C16.1 0.19 13.41 -0.75 10.18 -0.75C5.48 -0.75 1.35 2.27 -0.38 5.72L3.42 8.33C4.4 5.52 7.05 3.25 10.18 3.25Z" fill="#EA4335"/>
                     </svg>
                   </div>
+                  {/* Login with Google */}
                   <span style={{
                     width: '124px',
                     height: '20px',
@@ -716,6 +725,7 @@ export default function LoginPage() {
                       <rect x="10.36" y="10.36" width="7.14" height="7.14" fill="#FFBA08"/>
                     </svg>
                   </div>
+                  {/* Login with Microsoft */}
                   <span style={{
                     width: '139px',
                     height: '20px',
