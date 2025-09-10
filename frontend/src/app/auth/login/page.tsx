@@ -45,7 +45,7 @@ export default function LoginPage() {
   };
 
   // Mock user authentication with role detection
-  const authenticateUser = async (email: string, password: string) => {
+  const authenticateUser = async (email: string, _password: string) => {
     // TODO: SECURITY CRITICAL - Replace with actual authentication API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     
@@ -107,7 +107,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleSocialLogin = (provider: 'google' | 'microsoft') => {
+  const handleSocialLogin = (_provider: 'google' | 'microsoft') => {
     // TODO: SECURITY CRITICAL - Implement proper OAuth2 flow
     setFormState(prev => ({ 
       ...prev, 

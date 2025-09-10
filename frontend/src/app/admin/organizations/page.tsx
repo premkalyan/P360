@@ -40,11 +40,11 @@ export default function AdminOrganizationsPage() {
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <Link href="/admin/organizations/create" className="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow">
-            <div className="text-2xl mb-2">🏢</div>
-            <h3 className="font-semibold text-gray-900">Create Organization</h3>
-            <p className="text-sm text-gray-600 mt-1">Set up a new organization</p>
-          </Link>
+                  <Link href="/admin/organizations/create" className="bg-white p-6 rounded-lg shadow-sm border hover:shadow-md transition-shadow">
+                    <div className="text-2xl mb-2">🏢</div>
+                    <h3 className="font-semibold text-gray-900">Create Organization</h3>
+                    <p className="text-sm text-gray-600 mt-1">Multi-step wizard for new organization setup</p>
+                  </Link>
 
           <div className="bg-white p-6 rounded-lg shadow-sm border">
             <div className="text-2xl mb-2">👥</div>
