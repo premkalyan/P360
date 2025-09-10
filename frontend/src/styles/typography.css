@@ -1,0 +1,142 @@
+/* P360 Typography Styles - Lexend Deca Font Integration */
+
+/* Import Lexend Deca font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:opsz,wght@12..72,100..900&display=swap');
+
+/* Base typography styles */
+@layer base {
+  html {
+    font-family: 'Lexend Deca', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  body {
+    font-family: 'Lexend Deca', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Lexend Deca font weights mapping */
+.font-['Lexend_Deca:Regular'] {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.font-['Lexend_Deca:Medium'] {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.font-['Lexend_Deca:SemiBold'] {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.font-['Lexend_Deca:Bold'] {
+  font-family: 'Lexend Deca', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Fallback font styles for better compatibility */
+.font-sans {
+  font-family: 'Lexend Deca', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Text sizing classes for P360 components */
+.text-heading-h1 {
+  font-size: 2.25rem; /* 36px */
+  font-weight: 700;
+  line-height: 2.5rem; /* 40px */
+  letter-spacing: -0.025em;
+}
+
+.text-heading-h2 {
+  font-size: 1.875rem; /* 30px */
+  font-weight: 600;
+  line-height: 2.25rem; /* 36px */
+  letter-spacing: -0.4px;
+}
+
+.text-heading-h3 {
+  font-size: 1.25rem; /* 20px */
+  font-weight: 600;
+  line-height: 1.75rem; /* 28px */
+  letter-spacing: -0.4px;
+}
+
+.text-body-large {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 400;
+  line-height: 1.75rem; /* 28px */
+}
+
+.text-body-regular {
+  font-size: 1rem; /* 16px */
+  font-weight: 400;
+  line-height: 1.5rem; /* 24px */
+}
+
+.text-body-small {
+  font-size: 0.875rem; /* 14px */
+  font-weight: 400;
+  line-height: 1.25rem; /* 20px */
+}
+
+.text-caption {
+  font-size: 0.75rem; /* 12px */
+  font-weight: 400;
+  line-height: 1rem; /* 16px */
+}
+
+/* Color utilities for P360 design system */
+.text-p360-primary {
+  color: #841aff;
+}
+
+.text-p360-secondary {
+  color: #ed01cf;
+}
+
+.text-p360-accent {
+  color: #ff6221;
+}
+
+.text-p360-error {
+  color: #f00250;
+}
+
+.text-p360-success {
+  color: #10b981;
+}
+
+.text-p360-warning {
+  color: #f59e0b;
+}
+
+.bg-p360-primary {
+  background-color: #841aff;
+}
+
+.bg-p360-secondary {
+  background-color: #ed01cf;
+}
+
+.bg-p360-accent {
+  background-color: #ff6221;
+}
+
+/* Utility classes for common patterns */
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
