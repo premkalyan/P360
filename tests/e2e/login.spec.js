@@ -2,6 +2,17 @@ import { test, expect } from '@playwright/test';
 
 const LOGIN_URL = 'http://localhost:6600/auth/login';
 
+// Load test credentials securely
+let testCredentials;
+try {
+  testCredentials = require('../test-config.js').validCredentials;
+} catch (error) {
+  // Fallback for CI/CD environments without config file
+  testCredentials = [
+    { email: 'test@example.com', password: 'test123' }
+  ];
+}
+
 test.describe('P360 Login Page - E2E Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(LOGIN_URL);
@@ -123,6 +134,12 @@ test.describe('P360 Login Page - E2E Tests', () => {
       await emailInput.fill('admin@p360.com');
       await passwordInput.fill('admin123');
 
+      // Register dialog handler BEFORE login action
+      page.on('dialog', async dialog => {
+        expect(dialog.message()).toContain('Login successful!');
+        await dialog.accept();
+      });
+
       // Click login button
       await loginButton.click();
 
@@ -130,26 +147,13 @@ test.describe('P360 Login Page - E2E Tests', () => {
       await expect(loginButton).toHaveText(/logging in.../i);
       await expect(loginButton).toBeDisabled();
 
-      // Wait for success alert
-      page.on('dialog', async dialog => {
-        expect(dialog.message()).toContain('Login successful!');
-        await dialog.accept();
-      });
-
       // Wait for form to clear
       await expect(emailInput).toHaveValue('');
       await expect(passwordInput).toHaveValue('');
     });
 
     test('successful login with all valid credential combinations', async ({ page }) => {
-      const validCredentials = [
-        { email: 'admin@p360.com', password: 'admin123' },
-        { email: 'user@p360.com', password: 'user123' },
-        { email: 'demo@p360.com', password: 'demo123' },
-        { email: 'rico.oktanondat@gmail.com', password: 'password123' }
-      ];
-
-      for (const credentials of validCredentials) {
+      for (const credentials of testCredentials) {
         await page.reload();
         
         const emailInput = page.getByLabel(/email/i);

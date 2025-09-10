@@ -66,3 +66,6 @@ logs/
 # Database
 *.sqlite
 *.db
+
+# Test credentials (security)
+tests/test-config.js
