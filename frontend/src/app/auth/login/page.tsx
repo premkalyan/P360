@@ -1,10 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Inter } from 'next/font/google';
 
-// Load font properly with Next.js
-const inter = Inter({ subsets: ['latin'] });
+// Import P360 Typography System
+import '@/styles/typography.css';
 
 interface LoginState {
   email: string;
@@ -67,7 +66,7 @@ export default function LoginPage() {
     } else if (loginState.password.length < 6) {
       errors.password = 'Password must be at least 6 characters';
     }
-
+    
     if (Object.keys(errors).length > 0) {
       setLoginState(prev => ({ ...prev, errors, isLoading: false }));
       return;
@@ -127,12 +126,12 @@ export default function LoginPage() {
 
   // Dynamic styling based on form state
   const getInputClasses = (field: keyof LoginState['errors']) => {
-    const baseClasses = `bg-white box-border w-full h-10 px-2.5 py-0 rounded-[4px] ${inter.className} font-normal text-[14px] leading-[20px] focus:outline-none`;
+    const baseClasses = "bg-white box-border w-full h-10 px-2.5 py-0 rounded-[4px] p360-input focus:outline-none";
     
     if (loginState.errors[field]) {
-      return `${baseClasses} border border-red-500 text-[#101828]`;
+      return `${baseClasses} border border-red-500 p360-text-primary`;
     }
-    return `${baseClasses} border border-[#e5e7eb] text-[#101828] placeholder:text-[#99a1af]`;
+    return `${baseClasses} border border-[#e5e7eb] p360-text-primary placeholder:text-[#99a1af]`;
   };
 
   // Check if form is valid for button state
@@ -171,7 +170,7 @@ export default function LoginPage() {
 
   return (
     <div
-      className={`bg-white relative min-h-screen w-full overflow-hidden ${inter.className}`}
+      className="bg-white relative min-h-screen w-full overflow-hidden font-p360"
       data-name="login"
     >
       {/* Background Gradient - More visible at bottom */}
@@ -299,7 +298,7 @@ export default function LoginPage() {
             <button
                   onClick={handleLogin}
                   disabled={buttonStyling.disabled}
-                  className={`box-border flex gap-1.5 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-full ${inter.className} font-normal text-[14px] leading-[20px] transition-colors ${buttonStyling.bg} ${buttonStyling.text} ${buttonStyling.cursor || ''}`}
+                  className={`box-border flex gap-1.5 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-full p360-button-text transition-colors ${buttonStyling.bg} ${buttonStyling.text} ${buttonStyling.cursor || ''}`}
                 >
                   {loginState.isLoading ? 'Logging in...' : 'Login'}
             </button>
@@ -352,8 +351,8 @@ export default function LoginPage() {
                 </div>
 
               </div>
-            </div>
           </div>
+        </div>
 
           {/* Right Panel - Figma Image */}
           <div className="basis-0 flex flex-row grow items-center self-stretch shrink-0">
