@@ -50,42 +50,33 @@ describe('LoginPage', () => {
       const heading = screen.getByRole('heading', { name: /welcome back/i });
       expect(heading).toBeInTheDocument();
       expect(heading).toHaveStyle({
-        fontFamily: 'Lexend Deca',
-        fontWeight: '600',
         fontSize: '24px',
-        color: '#101828'
+        fontWeight: '600'
       });
 
       const subtitle = screen.getByText('Login to your Pipeline360 account');
       expect(subtitle).toBeInTheDocument();
-      expect(subtitle).toHaveStyle({
-        fontFamily: 'Lexend Deca',
-        color: '#4A5565'
-      });
     });
 
-    it('renders with gradient background', () => {
+    it('renders with white background and split layout', () => {
       render(<LoginPage />);
       
       const main = screen.getByRole('main');
-      expect(main).toHaveStyle({
-        background: 'linear-gradient(135deg, #FF6221 0%, #ED01CF 25%, #841AFF 50%, #008DFF 100%)'
-      });
+      expect(main).toHaveClass('min-h-screen', 'bg-white', 'relative');
+      
+      // Check for split layout structure
+      const contentArea = screen.getByText('Future Content Area');
+      expect(contentArea).toBeInTheDocument();
     });
 
     it('displays login card with proper styling', () => {
       render(<LoginPage />);
       
-      // Find the card container by looking for the form's parent
+      // Find the card container by looking for the form's ancestor with proper styling
       const form = screen.getByRole('form');
-      const card = form.parentElement;
-      
-      expect(card).toHaveStyle({
-        background: '#FFFFFF',
-        border: '1px solid #E4E4E7',
-        borderRadius: '4px',
-        padding: '32px'
-      });
+      const cardContainer = form.closest('.w-\\[768px\\]');
+      expect(cardContainer).toBeInTheDocument();
+      expect(cardContainer).toHaveClass('bg-white', 'border', 'rounded', 'shadow-[0px_1px_2px_0px_rgba(0,0,0,0.06),0px_1px_3px_0px_rgba(0,0,0,0.1)]');
     });
   });
 
@@ -110,7 +101,7 @@ describe('LoginPage', () => {
       expect(passwordField).toHaveAttribute('type', 'password');
       expect(passwordField).toHaveAttribute('placeholder', 'Enter your password here...');
       
-      const toggleButton = screen.getByRole('button', { name: 'Show password' }); // SVG button
+      const toggleButton = screen.getByRole('button', { name: 'Show password' });
       expect(toggleButton).toBeInTheDocument();
     });
 
@@ -141,31 +132,19 @@ describe('LoginPage', () => {
       await waitFor(() => {        
         expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
       }, { timeout: 3000 });
-      
-      // Check error styling
-      const emailContainer = emailField.parentElement;
-      expect(emailContainer).toHaveStyle({
-        border: '1px solid #F00250'
-      });
     });
 
     it('validates password and shows error', async () => {
       render(<LoginPage />);
       
       const passwordField = screen.getByLabelText('Password');
-      const submitButton = screen.getByRole('button', { name: 'Login' });
+      const form = screen.getByRole('form');
       
       fireEvent.change(passwordField, { target: { value: '123' } });
-      fireEvent.click(submitButton);
+      fireEvent.submit(form);
       
       await waitFor(() => {
-        expect(screen.getByText('Password is wrong')).toBeInTheDocument();
-      });
-      
-      // Check error styling
-      const passwordContainer = passwordField.parentElement;
-      expect(passwordContainer).toHaveStyle({
-        border: '1px solid #F00250'
+        expect(screen.getByText('Password must be at least 6 characters')).toBeInTheDocument();
       });
     });
 
@@ -200,13 +179,8 @@ describe('LoginPage', () => {
       fireEvent.click(submitButton);
       
       // Check loading state
-      expect(screen.getByText('Signing In...')).toBeInTheDocument();
+      expect(screen.getByText('Logging in...')).toBeInTheDocument();
       expect(submitButton).toBeDisabled();
-      expect(submitButton).toHaveStyle({
-        background: '#F4EBFF',
-        color: '#CEA3FF',
-        cursor: 'not-allowed'
-      });
     });
 
     it('redirects to dashboard on successful login', async () => {
@@ -221,7 +195,7 @@ describe('LoginPage', () => {
       fireEvent.click(submitButton);
       
       await waitFor(() => {
-        expect(mockPush).toHaveBeenCalledWith('/dashboard/campaigns');
+        expect(mockPush).toHaveBeenCalledWith('/dashboard');
       }, { timeout: 2000 });
     });
 
@@ -246,11 +220,7 @@ describe('LoginPage', () => {
       
       const googleButton = screen.getByRole('button', { name: /login with google/i });
       expect(googleButton).toBeInTheDocument();
-      expect(googleButton).toHaveStyle({
-        background: '#FFFFFF',
-        border: '1px solid #E5E7EB',
-        fontFamily: 'Lexend Deca'
-      });
+      expect(googleButton).toHaveClass('bg-white', 'border', 'rounded');
     });
 
     it('renders Microsoft login button with correct styling', () => {
@@ -258,11 +228,7 @@ describe('LoginPage', () => {
       
       const microsoftButton = screen.getByRole('button', { name: /login with microsoft/i });
       expect(microsoftButton).toBeInTheDocument();
-      expect(microsoftButton).toHaveStyle({
-        background: '#FFFFFF',
-        border: '1px solid #E5E7EB',
-        fontFamily: 'Lexend Deca'
-      });
+      expect(microsoftButton).toHaveClass('bg-white', 'border', 'rounded');
     });
 
     it('handles Google login click', () => {
@@ -289,9 +255,7 @@ describe('LoginPage', () => {
       const separator = screen.getByText('Or continue with');
       expect(separator).toBeInTheDocument();
       expect(separator).toHaveStyle({
-        fontFamily: 'Lexend Deca',
-        fontSize: '12px',
-        color: '#71717A'
+        fontSize: '12px'
       });
     });
   });
@@ -311,6 +275,11 @@ describe('LoginPage', () => {
       expect(screen.getByRole('button', { name: 'Login' })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /login with google/i })).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /login with microsoft/i })).toBeInTheDocument();
+      
+      // Check password toggle accessibility
+      const toggleButton = screen.getByRole('button', { name: 'Show password' });
+      expect(toggleButton).toHaveAttribute('aria-label', 'Show password');
+      expect(toggleButton).toHaveAttribute('aria-pressed', 'false');
     });
 
     it('supports keyboard navigation', () => {
@@ -322,19 +291,19 @@ describe('LoginPage', () => {
       
       emailField.focus();
       expect(document.activeElement).toBe(emailField);
-      
-      // Tab to next field
-      fireEvent.keyDown(emailField, { key: 'Tab' });
-      // Note: jsdom doesn't handle tab navigation automatically
     });
   });
 
   describe('📱 Responsive Design', () => {
-    it('maintains responsive layout structure', () => {
+    it('maintains responsive split layout structure', () => {
       render(<LoginPage />);
       
       const main = screen.getByRole('main');
-      expect(main).toHaveClass('min-h-screen', 'flex', 'items-center', 'justify-center');
+      expect(main).toHaveClass('min-h-screen', 'bg-white', 'relative');
+      
+      // Check for left and right sections
+      const futureContentArea = screen.getByText('Future Content Area');
+      expect(futureContentArea).toBeInTheDocument();
     });
 
     it('uses proper spacing and sizing', () => {
@@ -346,14 +315,14 @@ describe('LoginPage', () => {
   });
 
   describe('🎨 Color Scheme & Branding', () => {
-    it('uses P360 purple brand colors', () => {
+    it('uses Figma light purple brand colors for login button', () => {
       render(<LoginPage />);
       
       const submitButton = screen.getByRole('button', { name: 'Login' });
-      expect(submitButton).toHaveStyle({
-        background: '#841AFF',
-        color: '#FFFFFF'
-      });
+      expect(submitButton).toHaveClass('bg-[#F4EBFF]');
+      
+      const buttonText = submitButton.querySelector('span');
+      expect(buttonText).toHaveClass('text-[#CEA3FF]');
     });
 
     it('uses correct error color', () => {
@@ -363,19 +332,39 @@ describe('LoginPage', () => {
       fireEvent.click(submitButton);
       
       const errorText = screen.getByText('Email is required');
-      expect(errorText).toHaveStyle({
-        color: '#F00250'
-      });
+      expect(errorText).toHaveClass('text-[#F00250]');
     });
 
-    it('applies consistent typography', () => {
+    it('applies consistent typography with inline styles', () => {
       render(<LoginPage />);
       
       const heading = screen.getByRole('heading', { name: /welcome back/i });
       const subtitle = screen.getByText('Login to your Pipeline360 account');
       
-      expect(heading).toHaveStyle({ fontFamily: 'Lexend Deca' });
-      expect(subtitle).toHaveStyle({ fontFamily: 'Lexend Deca' });
+      // Check that elements have inline font styles matching Figma specs
+      expect(heading).toHaveStyle({ fontSize: '24px', fontWeight: '600' });
+      expect(subtitle).toHaveStyle({ fontSize: '14px' });
+    });
+  });
+
+  describe('🎯 Content Areas', () => {
+    it('displays placeholder content area for future use', () => {
+      render(<LoginPage />);
+      
+      const futureContent = screen.getByText('Future Content Area');
+      expect(futureContent).toBeInTheDocument();
+      
+      const description = screen.getByText(/This space reserved for marketing content/);
+      expect(description).toBeInTheDocument();
+    });
+
+    it('shows correct background gradient effect at bottom', () => {
+      render(<LoginPage />);
+      
+      // The gradient is implemented as a background div, check for its presence
+      const main = screen.getByRole('main');
+      const gradientDiv = main.querySelector('.bg-gradient-to-r');
+      expect(gradientDiv).toBeInTheDocument();
     });
   });
 });

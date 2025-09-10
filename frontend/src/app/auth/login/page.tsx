@@ -12,10 +12,12 @@ interface LoginFormState {
   errors: {
     email?: string;
     password?: string;
+    general?: string;
   };
 }
 
 export default function LoginPage() {
+  const router = useRouter();
   const [formState, setFormState] = useState<LoginFormState>({
     email: '',
     password: '',
@@ -23,21 +25,8 @@ export default function LoginPage() {
     loading: false,
     errors: {}
   });
-  
-  const router = useRouter();
 
-  const updateField = (field: keyof Pick<LoginFormState, 'email' | 'password'>, value: string) => {
-    setFormState(prev => ({
-      ...prev,
-      [field]: value,
-      errors: {
-        ...prev.errors,
-        [field]: undefined // Clear error when user starts typing
-      }
-    }));
-  };
-
-  const validateForm = (): boolean => {
+  const validateForm = () => {
     const errors: LoginFormState['errors'] = {};
     
     if (!formState.email) {
@@ -49,31 +38,41 @@ export default function LoginPage() {
     if (!formState.password) {
       errors.password = 'Password is required';
     } else if (formState.password.length < 6) {
-      errors.password = 'Password is wrong';
+      errors.password = 'Password must be at least 6 characters';
     }
     
-    setFormState(prev => ({ ...prev, errors }));
-    return Object.keys(errors).length === 0;
+    return errors;
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) return;
-    
-    setFormState(prev => ({ ...prev, loading: true }));
-    
+    const errors = validateForm();
+    if (Object.keys(errors).length > 0) {
+      setFormState(prev => ({ ...prev, errors }));
+      return;
+    }
+
+    setFormState(prev => ({ ...prev, loading: true, errors: {} }));
+
     try {
+      // TODO: SECURITY CRITICAL - Replace with actual authentication API call
+      // This should integrate with NextAuth.js or similar secure auth system
+      
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // For demo purposes, always succeed
-      // TODO: Replace with actual authentication API call
-      await router.push('/dashboard/campaigns');
+      // TODO: Implement proper login logic
+      console.log('Login attempt:', { email: formState.email });
+      
+      // Navigate to dashboard on successful login
+      router.push('/dashboard');
     } catch (error) {
-      setFormState(prev => ({
-        ...prev,
-        errors: { email: 'Navigation failed. Please try again.' }
+      console.error('Login error:', error);
+      setFormState(prev => ({ 
+        ...prev, 
+        errors: { general: 'Login failed. Please try again.' },
+        loading: false 
       }));
     } finally {
       setFormState(prev => ({ ...prev, loading: false }));
@@ -81,346 +80,318 @@ export default function LoginPage() {
   };
 
   const handleSocialLogin = (provider: 'google' | 'microsoft') => {
-    // TODO: SECURITY CRITICAL - Implement proper OAuth2 flow with:
-    // - State parameter for CSRF protection
-    // - PKCE for code exchange security
+    // TODO: SECURITY CRITICAL - Implement proper OAuth2 flow
+    // - Use NextAuth.js providers
+    // - Implement PKCE for security
     // - Secure token storage and validation
     // - Proper redirect URI validation
     console.log(`Login with ${provider}`);
   };
 
   return (
-    <main 
-      className="min-h-screen flex items-center justify-center"
-      style={{
-        background: 'linear-gradient(135deg, #FF6221 0%, #ED01CF 25%, #841AFF 50%, #008DFF 100%)',
-        position: 'relative'
-      }}
-    >
-      {/* Background blur effects */}
-      <div 
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(circle at 20% 80%, rgba(255, 98, 33, 0.3) 0%, transparent 60%),
-            radial-gradient(circle at 80% 20%, rgba(237, 1, 207, 0.3) 0%, transparent 60%),
-            radial-gradient(circle at 40% 40%, rgba(132, 26, 255, 0.3) 0%, transparent 60%)
-          `
-        }}
-      />
-      
+    <main className="min-h-screen bg-white relative">
       {/* Pipeline360 Logo */}
-      <div 
-        className="absolute"
-        style={{
-          top: '72px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 10
-        }}
-      >
+      <div className="absolute top-[72px] left-1/2 transform -translate-x-1/2">
         <Image
           src="/figma_logo_exports/logo-02.png"
           alt="Pipeline360"
           width={172}
           height={28}
           priority
+          className="h-7 w-auto"
         />
       </div>
 
-      {/* Login Card */}
-      <div 
-        className="relative"
-        style={{
-          width: '768px',
-          marginTop: '120px' // Account for logo space
-        }}
-      >
-        <div
-          style={{
-            background: '#FFFFFF',
-            border: '1px solid #E4E4E7',
-            borderRadius: '4px',
-            boxShadow: '0px 1px 2px 0px rgba(0, 0, 0, 0.06), 0px 1px 3px 0px rgba(0, 0, 0, 0.1)',
-            padding: '32px',
-            maxWidth: '400px',
-            margin: '0 auto'
-          }}
-        >
-          {/* Card Header */}
-          <div className="text-center mb-6">
-            <h1 
-              className="p360-text-h1 mb-2"
-              style={{ 
-                fontFamily: 'Lexend Deca',
-                fontWeight: 600,
-                fontSize: '24px',
-                lineHeight: '30px',
-                color: '#101828',
-                letterSpacing: '-0.4px'
+      {/* Main Container */}
+      <div className="flex min-h-screen">
+        {/* Left Side - Login Form */}
+        <div className="flex-1 flex items-center justify-center px-8 pt-[200px]">
+          <div className="w-[768px] bg-white border border-[#E4E4E7] rounded shadow-[0px_1px_2px_0px_rgba(0,0,0,0.06),0px_1px_3px_0px_rgba(0,0,0,0.1)]">
+            <div className="p-8">
+              <div className="max-w-[320px] mx-auto">
+                {/* Header */}
+                <div className="text-center mb-6">
+                  <h1 
+                    className="text-[#101828] mb-2"
+                    style={{
+                      fontFamily: 'Lexend Deca, sans-serif',
+                      fontWeight: 600,
+                      fontSize: '24px',
+                      lineHeight: '1.25em',
+                      letterSpacing: '-0.4px'
+                    }}
+                  >
+                    Welcome back
+                  </h1>
+                  <p 
+                    className="text-[#4A5565]"
+                    style={{
+                      fontFamily: 'Lexend Deca, sans-serif',
+                      fontWeight: 400,
+                      fontSize: '14px',
+                      lineHeight: '1.4285714285714286em'
+                    }}
+                  >
+                    Login to your Pipeline360 account
+                  </p>
+                </div>
+
+                {/* Form */}
+                <form onSubmit={handleSubmit} role="form" className="space-y-6">
+                  {/* Email Field */}
+                  <div>
+                    <div className="flex gap-1 mb-2">
+                      <label 
+                        htmlFor="email" 
+                        className="text-[#4A5565]"
+                        style={{
+                          fontFamily: 'Lexend Deca, sans-serif',
+                          fontWeight: 400,
+                          fontSize: '14px',
+                          lineHeight: '1.4285714285714286em'
+                        }}
+                      >
+                        Email
+                      </label>
+                      <span 
+                        className="text-[#F00250]"
+                        style={{
+                          fontFamily: 'Lexend Deca, sans-serif',
+                          fontWeight: 400,
+                          fontSize: '14px',
+                          lineHeight: '1.4285714285714286em'
+                        }}
+                      >
+                        *
+                      </span>
+                    </div>
+                    <input
+                      id="email"
+                      type="email"
+                      value={formState.email}
+                      onChange={(e) => setFormState(prev => ({ 
+                        ...prev, 
+                        email: e.target.value,
+                        errors: { ...prev.errors, email: undefined }
+                      }))}
+                      placeholder="Enter your email here..."
+                      className="w-full h-10 px-4 border border-[#E5E7EB] rounded bg-white text-[#101828] placeholder-[#99A1AF]"
+                      style={{
+                        fontFamily: 'Lexend Deca, sans-serif',
+                        fontWeight: 400,
+                        fontSize: '14px',
+                        lineHeight: '1.4285714285714286em'
+                      }}
+                    />
+                    {formState.errors.email && (
+                      <p className="text-[#F00250] text-sm mt-1" style={{ fontFamily: 'Lexend Deca, sans-serif' }}>
+                        {formState.errors.email}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Password Field */}
+                  <div>
+                    <div className="flex gap-1 mb-2">
+                      <label 
+                        htmlFor="password" 
+                        className="text-[#4A5565]"
+                        style={{
+                          fontFamily: 'Lexend Deca, sans-serif',
+                          fontWeight: 400,
+                          fontSize: '14px',
+                          lineHeight: '1.4285714285714286em'
+                        }}
+                      >
+                        Password
+                      </label>
+                      <span 
+                        className="text-[#F00250]"
+                        style={{
+                          fontFamily: 'Lexend Deca, sans-serif',
+                          fontWeight: 400,
+                          fontSize: '14px',
+                          lineHeight: '1.4285714285714286em'
+                        }}
+                      >
+                        *
+                      </span>
+                    </div>
+                    <div className="relative">
+                      <input
+                        id="password"
+                        type={formState.showPassword ? 'text' : 'password'}
+                        value={formState.password}
+                        onChange={(e) => setFormState(prev => ({ 
+                          ...prev, 
+                          password: e.target.value,
+                          errors: { ...prev.errors, password: undefined }
+                        }))}
+                        placeholder="Enter your password here..."
+                        className="w-full h-10 px-4 pr-10 border border-[#E5E7EB] rounded bg-white text-[#101828] placeholder-[#99A1AF]"
+                        style={{
+                          fontFamily: 'Lexend Deca, sans-serif',
+                          fontWeight: 400,
+                          fontSize: '14px',
+                          lineHeight: '1.4285714285714286em'
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setFormState(prev => ({ ...prev, showPassword: !prev.showPassword }))}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#99A1AF] hover:text-[#4A5565]"
+                        aria-label={formState.showPassword ? 'Hide password' : 'Show password'}
+                        aria-pressed={formState.showPassword}
+                      >
+                        {formState.showPassword ? '👁️' : '👁️‍🗨️'}
+                      </button>
+                    </div>
+                    {formState.errors.password && (
+                      <p className="text-[#F00250] text-sm mt-1" style={{ fontFamily: 'Lexend Deca, sans-serif' }}>
+                        {formState.errors.password}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Login Button */}
+                  <button
+                    type="submit"
+                    disabled={formState.loading}
+                    className="w-full h-10 bg-[#F4EBFF] rounded flex items-center justify-center gap-1.5 hover:bg-[#E9D5FF] disabled:opacity-50"
+                  >
+                    <span 
+                      className="text-[#CEA3FF]"
+                      style={{
+                        fontFamily: 'Lexend Deca, sans-serif',
+                        fontWeight: 400,
+                        fontSize: '14px',
+                        lineHeight: '1.4285714285714286em'
+                      }}
+                    >
+                      {formState.loading ? 'Logging in...' : 'Login'}
+                    </span>
+                  </button>
+
+                  {/* General Error */}
+                  {formState.errors.general && (
+                    <p className="text-[#F00250] text-sm text-center" style={{ fontFamily: 'Lexend Deca, sans-serif' }}>
+                      {formState.errors.general}
+                    </p>
+                  )}
+
+                  {/* Separator */}
+                  <div className="relative py-2.5">
+                    <hr className="border-[#E5E7EB]" />
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-2">
+                      <span 
+                        className="text-[#71717A]"
+                        style={{
+                          fontFamily: 'Lexend Deca, sans-serif',
+                          fontWeight: 400,
+                          fontSize: '12px',
+                          lineHeight: '1.3333333333333333em'
+                        }}
+                      >
+                        Or continue with
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Social Login Buttons */}
+                  <div className="space-y-2.5">
+                    <button
+                      type="button"
+                      onClick={() => handleSocialLogin('google')}
+                      className="w-full h-10 border border-[#E5E7EB] rounded bg-white hover:bg-gray-50 flex items-center justify-center gap-2"
+                    >
+                      <div className="w-5 h-5">
+                        {/* Google Icon */}
+                        <svg viewBox="0 0 20 20" className="w-full h-full">
+                          <path d="M18.75 8.23H10.18V11.7H15.23C14.85 13.33 13.42 14.58 11.67 15.05V17.58H15.32C17.55 15.53 18.75 12.59 18.75 8.23Z" fill="#4285F4"/>
+                          <path d="M10.18 20C13.42 20 16.11 18.92 17.85 17.08L14.2 14.55C13.13 15.33 11.77 15.8 10.18 15.8C7.05 15.8 4.4 13.73 3.42 10.92H-0.38V13.53C1.35 16.98 5.48 20 10.18 20Z" fill="#34A853"/>
+                          <path d="M3.42 10.92C3.15 10.14 3 9.3 3 8.43C3 7.56 3.15 6.72 3.42 5.94V3.33H-0.38C-1.38 5.33 -2 6.83 -2 8.43C-2 10.03 -1.38 11.53 -0.38 13.53L3.42 10.92Z" fill="#FBBC05"/>
+                          <path d="M10.18 3.25C11.95 3.25 13.54 3.92 14.77 5.1L17.93 1.94C16.1 0.19 13.41 -0.75 10.18 -0.75C5.48 -0.75 1.35 2.27 -0.38 5.72L3.42 8.33C4.4 5.52 7.05 3.25 10.18 3.25Z" fill="#EA4335"/>
+                        </svg>
+                      </div>
+                      <span 
+                        className="text-[#101828]"
+                        style={{
+                          fontFamily: 'Lexend Deca, sans-serif',
+                          fontWeight: 400,
+                          fontSize: '14px',
+                          lineHeight: '1.4285714285714286em'
+                        }}
+                      >
+                        Login with Google
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleSocialLogin('microsoft')}
+                      className="w-full h-10 border border-[#E5E7EB] rounded bg-white hover:bg-gray-50 flex items-center justify-center gap-2"
+                    >
+                      <div className="w-5 h-5">
+                        {/* Microsoft Icon */}
+                        <svg viewBox="0 0 20 20" className="w-full h-full">
+                          <rect x="2.5" y="2.5" width="7.14" height="7.14" fill="#F35325"/>
+                          <rect x="10.36" y="2.5" width="7.14" height="7.14" fill="#81BC06"/>
+                          <rect x="2.5" y="10.36" width="7.14" height="7.14" fill="#05A6F0"/>
+                          <rect x="10.36" y="10.36" width="7.14" height="7.14" fill="#FFBA08"/>
+                        </svg>
+                      </div>
+                      <span 
+                        className="text-[#101828]"
+                        style={{
+                          fontFamily: 'Lexend Deca, sans-serif',
+                          fontWeight: 400,
+                          fontSize: '14px',
+                          lineHeight: '1.4285714285714286em'
+                        }}
+                      >
+                        Login with Microsoft
+                      </span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side - Placeholder Content Area */}
+        <div className="flex-1 bg-[#CACACA] flex items-center justify-center">
+          <div className="text-center">
+            <p 
+              className="text-[#4A5565] mb-4"
+              style={{
+                fontFamily: 'Lexend Deca, sans-serif',
+                fontWeight: 400,
+                fontSize: '18px',
+                lineHeight: '1.4em'
               }}
             >
-              Welcome back
-            </h1>
+              Future Content Area
+            </p>
             <p 
-              className="p360-text-body"
+              className="text-[#99A1AF]"
               style={{
-                fontFamily: 'Lexend Deca',
+                fontFamily: 'Lexend Deca, sans-serif',
                 fontWeight: 400,
                 fontSize: '14px',
-                lineHeight: '20px',
-                color: '#4A5565'
+                lineHeight: '1.4285714285714286em'
               }}
             >
-              Login to your Pipeline360 account
+              This space reserved for marketing content,<br />
+              onboarding graphics, or promotional material.
             </p>
           </div>
-
-          {/* Login Form */}
-          <form onSubmit={handleLogin} className="space-y-6" role="form">
-            {/* Email Field */}
-            <div>
-              <div className="flex items-center gap-1 mb-2">
-                <label 
-                  htmlFor="email"
-                  style={{
-                    fontFamily: 'Lexend Deca',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#4A5565'
-                  }}
-                >
-                  Email
-                </label>
-                <span style={{ color: '#F00250' }}>*</span>
-              </div>
-              <div
-                style={{
-                  border: `1px solid ${formState.errors.email ? '#F00250' : '#E5E7EB'}`,
-                  borderRadius: '4px',
-                  height: '40px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '0 10px'
-                }}
-              >
-                <input
-                  id="email"
-                  type="email"
-                  value={formState.email}
-                  onChange={(e) => updateField('email', e.target.value)}
-                  placeholder="Enter your email here..."
-                  className="w-full border-none outline-none bg-transparent"
-                  style={{
-                    fontFamily: 'Lexend Deca',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: formState.email ? '#101828' : '#99A1AF'
-                  }}
-                />
-              </div>
-              {formState.errors.email && (
-                <p style={{ 
-                  fontFamily: 'Lexend Deca',
-                  fontSize: '12px',
-                  color: '#F00250',
-                  marginTop: '4px'
-                }}>
-                  {formState.errors.email}
-                </p>
-              )}
-            </div>
-
-            {/* Password Field */}
-            <div>
-              <div className="flex items-center gap-1 mb-2">
-                <label 
-                  htmlFor="password"
-                  style={{
-                    fontFamily: 'Lexend Deca',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#4A5565'
-                  }}
-                >
-                  Password
-                </label>
-                <span style={{ color: '#F00250' }}>*</span>
-              </div>
-              <div
-                style={{
-                  border: `1px solid ${formState.errors.password ? '#F00250' : '#E5E7EB'}`,
-                  borderRadius: '4px',
-                  height: '40px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '0 10px',
-                  justifyContent: 'space-between'
-                }}
-              >
-                <input
-                  id="password"
-                  type={formState.showPassword ? 'text' : 'password'}
-                  value={formState.password}
-                  onChange={(e) => updateField('password', e.target.value)}
-                  placeholder="Enter your password here..."
-                  className="flex-1 border-none outline-none bg-transparent"
-                  style={{
-                    fontFamily: 'Lexend Deca',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: formState.password ? '#101828' : '#99A1AF'
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setFormState(prev => ({ ...prev, showPassword: !prev.showPassword }))}
-                  className="ml-2 p-1 hover:bg-gray-100 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  aria-label={formState.showPassword ? "Hide password" : "Show password"}
-                  aria-pressed={formState.showPassword}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path 
-                      d="M1 8s3-5 7-5 7 5 7 5-3 5-7 5-7-5-7-5z" 
-                      stroke="#99A1AF" 
-                      strokeWidth="1.2" 
-                      fill="none"
-                    />
-                    <circle cx="8" cy="8" r="2" stroke="#99A1AF" strokeWidth="1.2" fill="none"/>
-                    {!formState.showPassword && (
-                      <line x1="1" y1="1" x2="15" y2="15" stroke="#99A1AF" strokeWidth="1.2"/>
-                    )}
-                  </svg>
-                </button>
-              </div>
-              {formState.errors.password && (
-                <p style={{ 
-                  fontFamily: 'Lexend Deca',
-                  fontSize: '12px',
-                  color: '#F00250',
-                  marginTop: '4px'
-                }}>
-                  {formState.errors.password}
-                </p>
-              )}
-            </div>
-
-            {/* Login Button */}
-            <button
-              type="submit"
-              disabled={formState.loading}
-              style={{
-                width: '100%',
-                height: '40px',
-                background: formState.loading ? '#F4EBFF' : '#841AFF',
-                borderRadius: '4px',
-                border: 'none',
-                fontFamily: 'Lexend Deca',
-                fontWeight: 400,
-                fontSize: '14px',
-                lineHeight: '20px',
-                color: formState.loading ? '#CEA3FF' : '#FFFFFF',
-                cursor: formState.loading ? 'not-allowed' : 'pointer',
-                opacity: formState.loading ? 0.7 : 1
-              }}
-            >
-              {formState.loading ? 'Signing In...' : 'Login'}
-            </button>
-
-            {/* Separator */}
-            <div className="relative py-2">
-              <hr style={{ border: '1px solid #E5E7EB', margin: 0 }} />
-              <div 
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  background: '#FFFFFF',
-                  padding: '0 8px',
-                  fontFamily: 'Lexend Deca',
-                  fontWeight: 400,
-                  fontSize: '12px',
-                  lineHeight: '16px',
-                  color: '#71717A'
-                }}
-              >
-                Or continue with
-              </div>
-            </div>
-
-            {/* Social Login Buttons */}
-            <div className="space-y-2">
-              {/* Google Login */}
-              <button
-                type="button"
-                onClick={() => handleSocialLogin('google')}
-                style={{
-                  width: '100%',
-                  height: '40px',
-                  background: '#FFFFFF',
-                  border: '1px solid #E5E7EB',
-                  borderRadius: '4px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  fontFamily: 'Lexend Deca',
-                  fontWeight: 400,
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                  color: '#101828',
-                  cursor: 'pointer'
-                }}
-              >
-                {/* Google Icon */}
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M10.18 8.41V12.16H15.75C15.54 13.16 14.95 14.06 14.05 14.65L17.27 17.15C18.87 15.67 19.77 13.41 19.77 10.67C19.77 9.98 19.71 9.32 19.61 8.68L10.18 8.41Z" fill="#4285F4"/>
-                  <path d="M4.07 11.67L3.23 12.33L0.46 14.48C2.04 17.61 5.78 19.77 10.18 19.77C12.68 19.77 14.77 18.97 16.27 17.58L13.05 15.08C12.15 15.67 10.98 16.08 10.18 16.08C7.78 16.08 5.74 14.6 4.98 12.57L4.07 11.67Z" fill="#34A853"/>
-                  <path d="M0.46 5.52C1.67 2.42 5.52 0.23 10.18 0.23C12.18 0.23 13.98 0.93 15.38 2.28L12.68 4.98C11.88 4.23 10.78 3.78 10.18 3.78C7.78 3.78 5.74 5.26 4.98 7.29C4.69 8.04 4.52 8.85 4.52 9.69C4.52 10.53 4.69 11.34 4.98 12.09L0.46 5.52Z" fill="#FBBC05"/>
-                  <path d="M10.18 3.78C11.81 3.78 13.26 4.35 14.38 5.42L16.77 3.03C14.97 1.34 12.68 0.23 10.18 0.23C6.99 0.23 4.25 1.91 2.67 4.45L4.98 7.29C5.74 5.26 7.78 3.78 10.18 3.78Z" fill="#EA4335"/>
-                </svg>
-                Login with Google
-              </button>
-
-              {/* Microsoft Login */}
-              <button
-                type="button"
-                onClick={() => handleSocialLogin('microsoft')}
-                style={{
-                  width: '100%',
-                  height: '40px',
-                  background: '#FFFFFF',
-                  border: '1px solid #E5E7EB',
-                  borderRadius: '4px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  fontFamily: 'Lexend Deca',
-                  fontWeight: 400,
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                  color: '#101828',
-                  cursor: 'pointer'
-                }}
-              >
-                {/* Microsoft Icon */}
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect x="2.5" y="2.5" width="7.14" height="7.14" fill="#F35325"/>
-                  <rect x="10.36" y="2.5" width="7.14" height="7.14" fill="#81BC06"/>
-                  <rect x="2.5" y="10.36" width="7.14" height="7.14" fill="#05A6F0"/>
-                  <rect x="10.36" y="10.36" width="7.14" height="7.14" fill="#FFBA08"/>
-                </svg>
-                Login with Microsoft
-              </button>
-            </div>
-          </form>
         </div>
+      </div>
+
+      {/* Background Gradient Effect (bottom) */}
+      <div className="fixed bottom-0 left-0 right-0 h-[475px] pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#FF6221] via-[#ED01CF] via-[#841AFF] to-[#008DFF] opacity-20 blur-[100px]" />
       </div>
     </main>
   );
