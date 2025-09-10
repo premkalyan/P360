@@ -50,6 +50,7 @@ model Tenant {
   users             User[]
   campaigns         Campaign[]
   campaignTemplates CampaignTemplate[]
+  organizations     Organization[]
 
   @@map("tenants")
 }
@@ -72,6 +73,7 @@ model User {
   campaigns         Campaign[]
   userSessions      UserSession[]
   completedWorkflows CampaignWorkflow[] @relation("WorkflowCompletedBy")
+  organizationUsers OrganizationUser[]
 
   @@index([tenantId])
   @@index([email])
@@ -98,6 +100,7 @@ model Campaign {
   id             String         @id @default(uuid()) @db.Uuid
   tenantId       String         @map("tenant_id") @db.Uuid
   userId         String         @map("user_id") @db.Uuid
+  organizationId String?        @map("organization_id") @db.Uuid
   name           String         @db.VarChar(255)
   description    String?
   status         CampaignStatus @default(draft)
@@ -113,6 +116,7 @@ model Campaign {
   // Relations
   tenant              Tenant                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   user                User                  @relation(fields: [userId], references: [id])
+  organization        Organization?         @relation("OrganizationCampaigns", fields: [organizationId], references: [id])
   template            CampaignTemplate?     @relation("CampaignFromTemplate", fields: [templateId], references: [id])
   templateId          String?               @map("template_id") @db.Uuid
   
@@ -125,6 +129,7 @@ model Campaign {
 
   @@index([tenantId])
   @@index([status])
+  @@index([organizationId])
   @@index([templateId])
   @@map("campaigns")
 }
@@ -287,4 +292,74 @@ enum CampaignWorkflowStatus {
   completed
   failed
   skipped
+}
+
+// Organization Enums
+enum OrganizationType {
+  advertiser
+  publisher
+  buyer
+}
+
+enum OrganizationStatus {
+  active
+  inactive
+  suspended
+}
+
+enum OrganizationSize {
+  startup
+  small
+  medium
+  large
+  enterprise
+}
+
+// Organization Tables
+// ===================
+
+model Organization {
+  id          String             @id @default(uuid()) @db.Uuid
+  tenantId    String             @map("tenant_id") @db.Uuid
+  name        String             @db.VarChar(255)
+  type        OrganizationType   
+  status      OrganizationStatus @default(active)
+  description String?            
+  website     String?            @db.VarChar(500)
+  industry    String?            @db.VarChar(100)
+  size        OrganizationSize?  
+  settings    Json               @default("{}")
+  metadata    Json               @default("{}")
+  createdAt   DateTime           @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime           @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Relations
+  tenant              Tenant                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  campaigns           Campaign[]            @relation("OrganizationCampaigns")
+  organizationUsers   OrganizationUser[]
+
+  @@index([tenantId])
+  @@index([type])
+  @@index([status])
+  @@index([name])
+  @@map("organizations")
+}
+
+model OrganizationUser {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  userId         String   @map("user_id") @db.Uuid
+  role           UserRole @default(viewer)
+  isActive       Boolean  @default(true) @map("is_active")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Relations
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([organizationId])
+  @@index([userId])
+  @@map("organization_users")
 }
