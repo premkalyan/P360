@@ -77,21 +77,14 @@ export default function LoginPage() {
     console.log(`Login with ${provider}`);
   };
 
+  // Function to check if form is valid for button enable/disable
+  const isFormValid = () => {
+    const emailValid = formState.email && /\S+@\S+\.\S+/.test(formState.email);
+    const passwordValid = formState.password && formState.password.length > 0;
+    return !!(emailValid && passwordValid);
+  };
+
   return (
-    <>
-      {/* Custom CSS for proper placeholder styling */}
-      <style jsx>{`
-        input::placeholder {
-          color: #99A1AF !important;
-          font-family: 'Lexend Deca' !important;
-          font-size: 14px !important;
-          font-weight: 400 !important;
-        }
-        input:focus::placeholder {
-          color: #99A1AF !important;
-        }
-      `}</style>
-    
     <div style={{
       position: 'relative',
       width: '1440px',
@@ -382,11 +375,10 @@ export default function LoginPage() {
                     fontWeight: 400,
                     fontSize: '14px',
                     lineHeight: '20px',
-                    color: '#101828', // ✅ FIXED: Black text when typing (was #99A1AF)
+                    color: '#101828', // Black text when typing
                     outline: 'none',
                     boxSizing: 'border-box'
                   }}
-                  // Add CSS for placeholder styling
                   onFocus={(e) => {
                     e.target.style.color = '#101828'; // Ensure black text when focused
                   }}
@@ -496,7 +488,7 @@ export default function LoginPage() {
                       fontWeight: 400,
                       fontSize: '14px',
                       lineHeight: '20px',
-                      color: '#101828', // ✅ FIXED: Black text when typing (was #99A1AF)
+                      color: '#101828', // Black text when typing
                       outline: 'none',
                       boxSizing: 'border-box'
                     }}
@@ -536,7 +528,7 @@ export default function LoginPage() {
               {/* Login Button */}
             <button
               type="submit"
-                disabled={formState.loading}
+                disabled={formState.loading || !isFormValid()} // ✅ Disable until valid email & password
                 style={{
                   display: 'flex',
                   flexDirection: 'row',
@@ -546,10 +538,10 @@ export default function LoginPage() {
                   gap: '6px',
                   width: '320px',
                   height: '40px',
-                  background: '#841AFF', // ✅ FIXED: Purple enabled state (was #F4EBFF)
+                  background: (formState.loading || !isFormValid()) ? '#F4EBFF' : '#841AFF', // Disabled vs enabled state
                   borderRadius: '4px',
                   border: 'none',
-                  cursor: formState.loading ? 'not-allowed' : 'pointer',
+                  cursor: (formState.loading || !isFormValid()) ? 'not-allowed' : 'pointer',
                   flex: 'none',
                   order: 2,
                   alignSelf: 'stretch',
@@ -565,7 +557,7 @@ export default function LoginPage() {
                   fontWeight: 400,
                   fontSize: '14px',
                   lineHeight: '20px',
-                  color: '#FFFFFF', // ✅ FIXED: White text (was #CEA3FF)
+                  color: (formState.loading || !isFormValid()) ? '#CEA3FF' : '#FFFFFF', // Disabled vs enabled text color
                   flex: 'none',
                   order: 0,
                   flexGrow: 0
@@ -829,6 +821,5 @@ export default function LoginPage() {
         />
       </div>
     </div>
-    </>
   );
 }
