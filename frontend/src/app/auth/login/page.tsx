@@ -61,10 +61,12 @@ export default function LoginPage() {
       <div className="absolute top-[72px] left-1/2 transform -translate-x-1/2 z-10">
         <div className="text-center">
           <div className="flex items-center justify-center">
-            <span className="text-2xl font-bold">
-              <span className="text-blue-600">Pipeline</span>
-              <span className="text-purple-600">360</span>
-            </span>
+            <img 
+              src="/p360-logo-full.svg" 
+              alt="Pipeline360" 
+              className="h-7 w-auto"
+              style={{ width: "171.818px", height: "28px" }}
+            />
           </div>
         </div>
       </div>
