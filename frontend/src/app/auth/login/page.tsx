@@ -66,15 +66,46 @@ export default function LoginPage() {
 
     // Simulate API call
     setTimeout(() => {
-      // For demo: simulate invalid credentials to show error state
-      setLoginState(prev => ({
-        ...prev, 
-        errors: {
-          email: 'Email not found',
-          password: 'Password is wrong'
-        },
-        isLoading: false
-      }));
+      // Check for valid credentials
+      const validCredentials = [
+        { email: 'admin@p360.com', password: 'admin123' },
+        { email: 'user@p360.com', password: 'user123' },
+        { email: 'demo@p360.com', password: 'demo123' },
+        { email: 'rico.oktanondat@gmail.com', password: 'password123' } // From Figma example
+      ];
+
+      const isValidLogin = validCredentials.some(
+        cred => cred.email === loginState.email && cred.password === loginState.password
+      );
+
+      if (isValidLogin) {
+        // Successful login - redirect to dashboard
+        console.log('Login successful! Redirecting to dashboard...');
+        alert('Login successful! 🎉\n\nRedirecting to dashboard...');
+        
+        // In a real app, you would:
+        // - Store auth token in localStorage/cookies
+        // - Set user context/state
+        // - Navigate to dashboard using router.push('/dashboard')
+        
+        // For now, just clear the form
+        setLoginState({
+          email: '',
+          password: '',
+          errors: {},
+          isLoading: false
+        });
+      } else {
+        // Invalid credentials - show error state
+        setLoginState(prev => ({
+          ...prev,
+          errors: {
+            email: 'Email not found',
+            password: 'Password is wrong'
+          },
+          isLoading: false
+        }));
+      }
     }, 1000);
   };
 
