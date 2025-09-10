@@ -49,9 +49,9 @@ export default function LoginPage() {
     // TODO: SECURITY CRITICAL - Replace with actual authentication API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    // Mock role detection based on email domain/pattern
-    // In production, this would come from your authentication API/JWT
-    const isAdmin = email.includes('admin') || email.endsWith('@p360admin.com');
+    // Strict whitelist of admin patterns
+    const ADMIN_PATTERNS = ['@p360admin.com', '@company-admin.com'];
+    const isAdmin = ADMIN_PATTERNS.some(pattern => email.toLowerCase().endsWith(pattern));
     const userRole = isAdmin ? 'admin' : 'user';
     
     return {

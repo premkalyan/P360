@@ -103,19 +103,20 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
                 Admin
               </span>
-              <Link
-                href="/auth/login"
-                onClick={() => {
-                  // Clear session on logout
-                  if (typeof window !== 'undefined') {
-                    localStorage.removeItem('p360_user');
-                    localStorage.removeItem('p360_user_role');
-                  }
-                }}
-                className="text-gray-700 hover:text-gray-900 text-sm font-medium"
-              >
-                Logout
-              </Link>
+                      <Link
+                        href="/auth/login"
+                        onClick={() => {
+                          // Clear session and redirect on logout
+                          if (typeof window !== 'undefined') {
+                            localStorage.removeItem('p360_user');
+                            localStorage.removeItem('p360_user_role');
+                            router.push('/auth/login');
+                          }
+                        }}
+                        className="text-gray-700 hover:text-gray-900 text-sm font-medium"
+                      >
+                        Logout
+                      </Link>
             </div>
           </div>
         </div>

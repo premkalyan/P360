@@ -125,8 +125,8 @@ describe('P360-131: Admin Post-Login Routing', () => {
 
     it('handles admin email patterns correctly', async () => {
       const testCases = [
-        { email: 'admin@company.com', expectedRoute: '/admin/organizations', expectedRole: 'admin' },
-        { email: 'superadmin@test.com', expectedRoute: '/admin/organizations', expectedRole: 'admin' },
+        { email: 'admin@company-admin.com', expectedRoute: '/admin/organizations', expectedRole: 'admin' },
+        { email: 'superadmin@p360admin.com', expectedRoute: '/admin/organizations', expectedRole: 'admin' },
         { email: 'user@p360admin.com', expectedRoute: '/admin/organizations', expectedRole: 'admin' },
         { email: 'manager@company.com', expectedRoute: '/dashboard', expectedRole: 'user' },
       ];
