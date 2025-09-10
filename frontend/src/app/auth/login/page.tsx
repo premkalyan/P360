@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { Inter } from 'next/font/google';
 
-// Import Lexend Deca font
-import '@/styles/typography.css';
+// Load font properly with Next.js
+const inter = Inter({ subsets: ['latin'] });
 
 interface LoginState {
   email: string;
@@ -50,13 +51,21 @@ export default function LoginPage() {
   const handleLogin = async () => {
     setLoginState(prev => ({ ...prev, isLoading: true, errors: {} }));
 
-    // Basic validation
+    // Comprehensive validation
     const errors: LoginState['errors'] = {};
+    
+    // Email validation
     if (!loginState.email) {
-      errors.email = 'Email not found';
+      errors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginState.email)) {
+      errors.email = 'Please enter a valid email address';
     }
+    
+    // Password validation
     if (!loginState.password) {
-      errors.password = 'Password is wrong';
+      errors.password = 'Password is required';
+    } else if (loginState.password.length < 6) {
+      errors.password = 'Password must be at least 6 characters';
     }
 
     if (Object.keys(errors).length > 0) {
@@ -118,12 +127,19 @@ export default function LoginPage() {
 
   // Dynamic styling based on form state
   const getInputClasses = (field: keyof LoginState['errors']) => {
-    const baseClasses = "bg-white box-border w-full h-10 px-2.5 py-0 rounded-[4px] font-['Lexend_Deca'] font-normal text-[14px] leading-[20px] focus:outline-none";
+    const baseClasses = `bg-white box-border w-full h-10 px-2.5 py-0 rounded-[4px] ${inter.className} font-normal text-[14px] leading-[20px] focus:outline-none`;
     
     if (loginState.errors[field]) {
       return `${baseClasses} border border-red-500 text-[#101828]`;
     }
     return `${baseClasses} border border-[#e5e7eb] text-[#101828] placeholder:text-[#99a1af]`;
+  };
+
+  // Check if form is valid for button state
+  const isFormValid = () => {
+    const emailValid = loginState.email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginState.email);
+    const passwordValid = loginState.password && loginState.password.length >= 6;
+    return emailValid && passwordValid;
   };
 
   const getButtonStyling = () => {
@@ -135,16 +151,18 @@ export default function LoginPage() {
         disabled: true 
       };
     }
-    if (displayState === 'filled' || displayState === 'error') {
+    if (isFormValid()) {
       return { 
         bg: 'bg-[#841aff] hover:bg-[#7a17e6]', 
         text: 'text-white',
+        cursor: 'cursor-pointer',
         disabled: false
       };
     }
     return { 
       bg: 'bg-[#f4ebff]', 
       text: 'text-[#cea3ff]',
+      cursor: 'cursor-not-allowed',
       disabled: true
     };
   };
@@ -152,8 +170,8 @@ export default function LoginPage() {
   const buttonStyling = getButtonStyling();
 
   return (
-    <div 
-      className="bg-white relative min-h-screen w-full overflow-hidden font-['Lexend_Deca']" 
+    <div
+      className={`bg-white relative min-h-screen w-full overflow-hidden ${inter.className}`}
       data-name="login"
     >
       {/* Background Gradient - More visible at bottom */}
@@ -281,7 +299,7 @@ export default function LoginPage() {
             <button
                   onClick={handleLogin}
                   disabled={buttonStyling.disabled}
-                  className={`box-border flex gap-1.5 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-full font-['Lexend_Deca'] font-normal text-[14px] leading-[20px] transition-colors ${buttonStyling.bg} ${buttonStyling.text} ${buttonStyling.cursor || ''}`}
+                  className={`box-border flex gap-1.5 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-full ${inter.className} font-normal text-[14px] leading-[20px] transition-colors ${buttonStyling.bg} ${buttonStyling.text} ${buttonStyling.cursor || ''}`}
                 >
                   {loginState.isLoading ? 'Logging in...' : 'Login'}
             </button>
