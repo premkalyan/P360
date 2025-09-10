@@ -1,862 +1,354 @@
-'use client';
+const imgNoise3 = "http://localhost:3845/assets/98cd307e8206f1a7c31f8cf4091b8f61c36bfd03.png";
+const imgDiv = "http://localhost:3845/assets/f4778c894624cf4c2c4fa8cad37eaf1ac9efdc95.png";
+const imgDiv1 = "http://localhost:3845/assets/887978bf583e8615c8791f54c607aa15b3ebcd30.png";
+const img = "http://localhost:3845/assets/4928d3957c74cf0e4c07674548d6bf6b96a917b3.svg";
+const img1 = "http://localhost:3845/assets/a9e58a3770c9f767c97e6c61b78fc577a4030433.svg";
+const img2 = "http://localhost:3845/assets/6ca21b266efa32d6b6590f6250f872cbc2a7c983.svg";
+const img3 = "http://localhost:3845/assets/68414e742ff7241f0a5ce984efd8639fb887f8ac.svg";
+const img4 = "http://localhost:3845/assets/ddef98ad5b661cd6bd7b4456aea0ec91d253b199.svg";
+const img5 = "http://localhost:3845/assets/d5579b0f124567122fea34788ddaf70232c0517b.svg";
+const img6 = "http://localhost:3845/assets/213e258ebf8bca338bcd241f51607c3d966c7d4d.svg";
+const img7 = "http://localhost:3845/assets/3aae4cda0ad27966f511f5b14da09a6503f2f317.svg";
+const img8 = "http://localhost:3845/assets/37addbc993709a513a573102fdf2818a72e1676d.svg";
+const img9 = "http://localhost:3845/assets/cc13c38140bd0622c976999fec8c7fea6eb9103b.svg";
+const img10 = "http://localhost:3845/assets/d5618e49d61d92d32856ff2d2187283ed9f26bdd.svg";
+const img11 = "http://localhost:3845/assets/9f7fd8d43723b752b951d226b108a9e3d94a9ed7.svg";
+const img12 = "http://localhost:3845/assets/9d884742727a19aa9552afc46e6db14326beda8c.svg";
+const img13 = "http://localhost:3845/assets/15c45ce221452f09096cc3ff56ef962b93c0d5b9.svg";
+const img14 = "http://localhost:3845/assets/b55ceadb618e14b8d1b73827879eeb8a188457b4.svg";
+const img15 = "http://localhost:3845/assets/ee42f561be878908918c7b1fd4b1f651b672fcf2.svg";
+const img16 = "http://localhost:3845/assets/a8d62b05e482985562796c73cdfb514ebbdc04cf.svg";
+const img17 = "http://localhost:3845/assets/cac9d475276d9a7ef6959f80e9842e4666ac1ed7.svg";
+const img18 = "http://localhost:3845/assets/37861b6edcc43f793c62127b7f896b91d2ea2640.svg";
+const img19 = "http://localhost:3845/assets/336f514a46535968fdad6eb5ad4e840486c9b9f0.svg";
+const img20 = "http://localhost:3845/assets/3431dbc237910d461e6cf7ff6a35d42238602325.svg";
+const img21 = "http://localhost:3845/assets/bb3bc40112d55ebc825ca3dd2b78a1b2adb75805.svg";
+const img22 = "http://localhost:3845/assets/6d79d19cd19479f5def2462fcda8d2f5e43275bb.svg";
+const img23 = "http://localhost:3845/assets/2daea7832f1fe60bcf8f96041e15ac7bc5b2f27b.svg";
+const img24 = "http://localhost:3845/assets/a061211d853b0d5e48a5f7ba39e811b84f007c17.svg";
+const img25 = "http://localhost:3845/assets/750d693f38bc117ddacce99bb60ed5d3de841001.svg";
+const img26 = "http://localhost:3845/assets/929a2d2ba9aecd457da8ece6d12778b2f42fd902.svg";
+const img27 = "http://localhost:3845/assets/8f01e0930c4955a6181f7d3963088e9ac65a9511.svg";
+const img28 = "http://localhost:3845/assets/27196fdb8d5b1dcc55e93cdbdcdf9ede39ee3587.svg";
+const img29 = "http://localhost:3845/assets/984825aa9ad787961d21ff64eb895dedac77daff.svg";
+const img30 = "http://localhost:3845/assets/6a618ff5bd8a6f1fd02782a897ea1f897d5b73ab.svg";
+const img31 = "http://localhost:3845/assets/81a2d809150e631b7b2413562166b510fe9cce29.svg";
+const img32 = "http://localhost:3845/assets/b3c5800fd7be0d818fc54eb67e8abe37055c6484.svg";
+const img33 = "http://localhost:3845/assets/d2f7b0e44c53de49c5127cd4b7628b349e56674a.svg";
+const img34 = "http://localhost:3845/assets/5b880c39620e053942f29abf61098a4e4fadd5fb.svg";
+const img35 = "http://localhost:3845/assets/99c540701d3485d504633ed34b7c81a6f035d29b.svg";
+const img36 = "http://localhost:3845/assets/ee174bbe0f399d2b3a5e6e42a1a280524b222611.svg";
+const img37 = "http://localhost:3845/assets/301432a6c999a23b227a271b91359a380d7b630c.svg";
+const img38 = "http://localhost:3845/assets/eb276127d8cb79a391f46c68836b4fd271feb780.svg";
+const img39 = "http://localhost:3845/assets/2607475932df6ea2032ceaf7005eecc8c84584d3.svg";
+const img40 = "http://localhost:3845/assets/46113c9f66482b60cc95cf51e86e7e6423adaf49.svg";
+const img41 = "http://localhost:3845/assets/205105dde5f68daa68cf5c36191b80661a66ceee.svg";
+const img42 = "http://localhost:3845/assets/4f676f6844e12b328cfd84951dc0391281a8a93e.svg";
+const img43 = "http://localhost:3845/assets/ccec90f23657ecbbc2bc33315b7dfad97a96f458.svg";
+const img44 = "http://localhost:3845/assets/dd4e3d60bf4dd3429b57ba15e5be4eed968d49c5.svg";
+const img45 = "http://localhost:3845/assets/73b96598aacfc55b3bce3440d6109acf528800df.svg";
+const img46 = "http://localhost:3845/assets/d33edc17da3bad4382bdee623aa6c5bf34adc882.svg";
+const img47 = "http://localhost:3845/assets/0a25b4f934d2ab5060fcf11f28bf2cf1e1808037.svg";
+const img48 = "http://localhost:3845/assets/3faa88787e0ecff6ed4084b8a42c7dad418ea9ba.svg";
+const img49 = "http://localhost:3845/assets/296f9dde031ca52e6b073e1841d27f8383d3c589.svg";
+const img50 = "http://localhost:3845/assets/5b6ecf4b43b10c8152368b193b6a5c6eb7a74543.svg";
+const img51 = "http://localhost:3845/assets/a9fd4753b56c59ef62b921cefd4edee18a7e1361.svg";
+const img52 = "http://localhost:3845/assets/9306e39907619442d5c3802fb50a4542214485aa.svg";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-
-interface LoginFormState {
-  email: string;
-  password: string;
-  showPassword: boolean;
-  loading: boolean;
-  errors: {
-    email?: string;
-    password?: string;
-    general?: string;
-  };
-}
-
-export default function LoginPage() {
-  const router = useRouter();
-  const [formState, setFormState] = useState<LoginFormState>({
-    email: '',
-    password: '',
-    showPassword: false,
-    loading: false,
-    errors: {}
-  });
-
-  const validateForm = () => {
-    const errors: LoginFormState['errors'] = {};
-    
-    if (!formState.email) {
-      errors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formState.email)) {
-      errors.email = 'Please enter a valid email address';
-    }
-    
-    if (!formState.password) {
-      errors.password = 'Password is required';
-    } else if (formState.password.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
-    }
-    
-    return errors;
-  };
-
-  // Mock user authentication with role detection
-  const authenticateUser = async (email: string, _password: string) => {
-    // TODO: SECURITY CRITICAL - Replace with actual authentication API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Strict whitelist of admin patterns
-    const ADMIN_PATTERNS = ['@p360admin.com', '@company-admin.com'];
-    const isAdmin = ADMIN_PATTERNS.some(pattern => email.toLowerCase().endsWith(pattern));
-    const userRole = isAdmin ? 'admin' : 'user';
-    
-    return {
-      user: {
-        id: '1',
-        email: email,
-        name: email.split('@')[0],
-        role: userRole,
-        tenantId: isAdmin ? null : 'tenant-1' // Admins can access all tenants
-      },
-      role: userRole
-    };
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    const errors = validateForm();
-    if (Object.keys(errors).length > 0) {
-      setFormState(prev => ({ ...prev, errors }));
-      return;
-    }
-
-    setFormState(prev => ({ ...prev, loading: true, errors: {} }));
-
-    try {
-      // Authenticate user and get role information
-      const authResult = await authenticateUser(formState.email, formState.password);
-      
-      // Store user session (in production, handle JWT tokens properly)
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('p360_user', JSON.stringify(authResult.user));
-        localStorage.setItem('p360_user_role', authResult.role);
-      }
-
-      // Role-based routing
-      if (authResult.role === 'admin') {
-        // Admin users go to organization management
-        router.push('/admin/organizations');
-      } else {
-        // Regular users go to standard dashboard
-        router.push('/dashboard');
-      }
-    } catch (error) {
-        console.error('Login error:', error);
-      setFormState(prev => ({ 
-        ...prev, 
-        errors: { general: 'Login failed. Please try again.' },
-        loading: false 
-      }));
-    } finally {
-      setFormState(prev => ({ ...prev, loading: false }));
-    }
-  };
-
-  const handleSocialLogin = (_provider: 'google' | 'microsoft') => {
-    // TODO: SECURITY CRITICAL - Implement proper OAuth2 flow
-    setFormState(prev => ({ 
-      ...prev, 
-      errors: { general: 'Social login not yet implemented' }
-    }));
-  };
-
-  // Function to check if form is valid for button enable/disable
-  const isFormValid = () => {
-    const emailValid = formState.email && /\S+@\S+\.\S+/.test(formState.email);
-    const passwordValid = formState.password && formState.password.length > 0;
-    return !!(emailValid && passwordValid);
-  };
-
+export default function Login() {
   return (
-    <div style={{
-      position: 'relative',
-      width: '1440px',
-      height: '960px',
-      left: '100px',
-      top: '100px',
-      background: '#FFFFFF'
-    }}>
-      {/* Color Info - Background Gradient */}
-      <div style={{
-        position: 'absolute',
-        width: '1440px',
-        height: '475.25px',
-        left: 'calc(50% - 1440px/2)',
-        bottom: '-60.25px',
-        transform: 'matrix(1, 0, 0, -1, 0, 0)'
-      }}>
-        {/* Frame 2147234854 - Gradient Rectangles */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          padding: '0px',
-          position: 'absolute',
-          width: '1413.01px',
-          height: '95.13px',
-          left: '-32.98px',
-          top: '447.69px',
-          transform: 'matrix(1, 0, 0, -1, 0, 0)'
-        }}>
-          {/* Rectangle 240664298 */}
-          <div style={{
-            width: '420.8px',
-            height: '95.13px',
-            background: '#FF6221',
-            filter: 'blur(64.9358px)',
-            flex: 'none',
-            order: 0,
-            alignSelf: 'stretch',
-            flexGrow: 1,
-            margin: '0px -90.0574px'
-          }} />
-          
-          {/* Rectangle 240664299 */}
-          <div style={{
-            width: '420.8px',
-            height: '95.13px',
-            background: '#ED01CF',
-            filter: 'blur(95.0537px)',
-            flex: 'none',
-            order: 1,
-            alignSelf: 'stretch',
-            flexGrow: 1,
-            margin: '0px -90.0574px'
-          }} />
-          
-          {/* Rectangle 240664300 */}
-          <div style={{
-            width: '420.8px',
-            height: '95.13px',
-            background: '#841AFF',
-            filter: 'blur(96.7956px)',
-            flex: 'none',
-            order: 2,
-            alignSelf: 'stretch',
-            flexGrow: 1,
-            margin: '0px -90.0574px'
-          }} />
-          
-          {/* Rectangle 240664301 */}
-          <div style={{
-            width: '420.8px',
-            height: '95.13px',
-            background: '#008DFF',
-            filter: 'blur(75.8385px)',
-            flex: 'none',
-            order: 3,
-            alignSelf: 'stretch',
-            flexGrow: 1
-          }} />
+    <div className="bg-white relative size-full" data-name="login" data-node-id="758:7457">
+      <div className="absolute bottom-[-60.25px] flex h-[475.252px] items-center justify-center left-1/2 translate-x-[-50%] w-[1440px]">
+        <div className="flex-none scale-y-[-100%]">
+          <div className="h-[475.252px] overflow-clip relative w-[1440px]" data-name="Color Info" data-node-id="758:7458">
+            <div className="absolute box-border content-stretch flex h-[95.131px] items-center justify-start left-[-32.98px] pl-0 pr-[90.057px] py-0 top-[-67.57px] w-[1413.01px]" data-node-id="758:7459">
+              <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
+                <div className="flex-none scale-y-[-100%] size-full">
+                  <div className="bg-[#ff6221] blur-[64.936px] filter size-full" data-node-id="758:7460" />
+                </div>
+              </div>
+              <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
+                <div className="flex-none scale-y-[-100%] size-full">
+                  <div className="bg-[#ed01cf] blur-[95.054px] filter size-full" data-node-id="758:7461" />
+                </div>
+              </div>
+              <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
+                <div className="flex-none scale-y-[-100%] size-full">
+                  <div className="bg-[#841aff] blur-[96.796px] filter size-full" data-node-id="758:7462" />
+                </div>
+              </div>
+              <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
+                <div className="flex-none scale-y-[-100%] size-full">
+                  <div className="bg-[#008dff] blur-[75.839px] filter size-full" data-node-id="758:7463" />
+                </div>
         </div>
       </div>
-
-      {/* Main Flex Container */}
-      <div style={{
-        boxSizing: 'border-box',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '0px',
-        position: 'absolute',
-        width: '768px',
-        maxWidth: '768px',
-        height: '528px',
-        left: 'calc(50% - 768px/2 + 1px)',
-        top: 'calc(50% - 528px/2 - 17px)',
-        border: '1px solid #E4E4E7',
-        filter: 'drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.1)) drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.06))',
-        borderRadius: '4px'
-      }}>
-        {/* Left Side - Login Form */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          padding: '32px',
-          gap: '16px',
-          width: '384px',
-          height: '528px',
-          background: '#FFFFFF',
-          flex: 'none',
-          order: 0,
-          flexGrow: 1
-        }}>
-          {/* Form Container */}
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '0px',
-            gap: '24px',
-            width: '320px',
-            height: '464px',
-            borderRadius: '8px',
-            flex: 'none',
-            order: 0,
-            alignSelf: 'stretch',
-            flexGrow: 0
-          }}>
-            {/* Header */}
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              padding: '0px',
-              gap: '8px',
-              width: '320px',
-              height: '58px',
-              flex: 'none',
-              order: 0,
-              alignSelf: 'stretch',
-              flexGrow: 0
-            }}>
-              {/* Title Text */}
-              <h1 style={{
-                width: '320px',
-                height: '30px',
-                fontFamily: 'Lexend Deca',
-                fontStyle: 'normal',
-                fontWeight: 600,
-                fontSize: '24px',
-                lineHeight: '30px',
-                letterSpacing: '-0.4px',
-                color: '#101828',
-                flex: 'none',
-                order: 0,
-                alignSelf: 'stretch',
-                flexGrow: 0,
-                margin: 0
-              }}>
-                Welcome back
-              </h1>
-              
-              {/* This is a card description. */}
-              <p style={{
-                width: '320px',
-                height: '20px',
-                fontFamily: 'Lexend Deca',
-                fontStyle: 'normal',
-                fontWeight: 400,
-                fontSize: '14px',
-                lineHeight: '20px',
-                color: '#4A5565',
-                flex: 'none',
-                order: 1,
-                alignSelf: 'stretch',
-                flexGrow: 0,
-                margin: 0
-              }}>
-                Login to your Pipeline360 account
-              </p>
+            <div className="absolute flex h-[476.002px] items-center justify-center left-1/2 mix-blend-overlay translate-x-[-50%] translate-y-[-50%] w-[1320.06px]" style={{ top: "calc(50% - 0.375px)" }}>
+              <div className="flex-none rotate-[180deg]">
+                <div className="bg-center bg-cover bg-no-repeat h-[476.002px] opacity-90 w-[1320.06px]" data-name="noise 3" data-node-id="758:7464" style={{ backgroundImage: `url('${imgNoise3}')` }} />
+              </div>
             </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              padding: '0px',
-              gap: '24px',
-              width: '320px',
-              height: '382px',
-              flex: 'none',
-              order: 1,
-              alignSelf: 'stretch',
-              flexGrow: 0
-            }}>
-              {/* Email Field */}
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                padding: '0px',
-                gap: '8px',
-                width: '320px',
-                height: '68px',
-                flex: 'none',
-                order: 0,
-                flexGrow: 0
-              }}>
-                {/* Email Label */}
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'flex-start',
-                  padding: '0px',
-                  gap: '4px',
-                  width: '320px',
-                  height: '20px',
-                  flex: 'none',
-                  order: 0,
-                  alignSelf: 'stretch',
-                  flexGrow: 0
-                }}>
-                  {/* Email */}
-                  <span style={{
-                    width: '38px',
-                    height: '20px',
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#4A5565',
-                    flex: 'none',
-                    order: 0,
-                    flexGrow: 0
-                  }}>
-                    Email
-                  </span>
-                  {/* * */}
-                  <span style={{
-                    width: '6px',
-                    height: '20px',
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#F00250',
-                    flex: 'none',
-                    order: 1,
-                    flexGrow: 0
-                  }}>
-                    *
-                  </span>
+          </div>
         </div>
-        
-                {/* Button 2 (Email Input) */}
+      </div>
+      <div className="absolute left-1/2 max-w-[768px] rounded-[4px] translate-x-[-50%] translate-y-[-50%] w-[768px]" data-name="Flex" data-node-id="758:7465" style={{ top: "calc(50% - 16px)" }}>
+        <div className="content-stretch flex items-center justify-between max-w-inherit overflow-clip relative w-[768px]">
+          <div className="basis-0 bg-white box-border content-stretch flex flex-col gap-4 grow items-start justify-start min-h-px min-w-px p-[32px] relative shrink-0" data-name="Div" data-node-id="758:7466">
+            <div className="content-stretch flex flex-col gap-6 items-center justify-center relative rounded-[8px] shrink-0 w-full" data-name="Flex Vertical" data-node-id="758:7467">
+              <div className="content-stretch flex flex-col gap-2 items-start justify-start leading-[0] relative shrink-0 w-full" data-name="Flex Vertical" data-node-id="758:7468">
+                <div className="font-['Lexend_Deca:SemiBold',_sans-serif] font-semibold relative shrink-0 text-[#101828] text-[24px] tracking-[-0.4px] w-full" id="node-I758_7468-268_956">
+                  <p className="leading-[30px]">Welcome back</p>
+                </div>
+                <div className="font-['Lexend_Deca:Regular',_sans-serif] font-normal relative shrink-0 text-[#4a5565] text-[14px] w-full" id="node-I758_7468-268_957">
+                  <p className="leading-[20px]">Login to your Pipeline360 account</p>
+                </div>
+              </div>
+              <div className="content-stretch flex flex-col gap-6 items-start justify-start relative shrink-0 w-full" data-name="Form" data-node-id="758:7469">
+                <div className="content-stretch flex flex-col gap-2 items-start justify-start relative shrink-0 w-80" data-node-id="758:7470">
+                  <div className="content-stretch flex font-['Lexend_Deca:Regular',_sans-serif] font-normal gap-1 items-start justify-start leading-[0] relative shrink-0 text-[14px] text-nowrap w-full" data-node-id="758:7471">
+                    <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#4a5565]" data-node-id="758:7472">
+                      <p className="leading-[20px] overflow-ellipsis overflow-hidden text-nowrap whitespace-pre">Email</p>
+                    </div>
+                    <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#f00250]" data-node-id="758:7473">
+                      <p className="leading-[20px] overflow-ellipsis overflow-hidden text-[14px] text-nowrap whitespace-pre">*</p>
+                    </div>
+                  </div>
+                  <div className="bg-white box-border content-stretch flex gap-0.5 h-10 items-center justify-start px-2.5 py-0 relative rounded-[4px] shrink-0 w-full" data-name="Button 2" data-node-id="758:7474">
+                    <div aria-hidden="true" className="absolute border border-gray-200 border-solid inset-[-1px] pointer-events-none rounded-[5px]" />
+                    <div className="basis-0 box-border content-stretch flex grow items-start justify-start min-h-px min-w-px px-1.5 py-0 relative shrink-0" data-name="Text Buffer" data-node-id="758:7475">
               <input
                 type="email"
-                  value={formState.email}
-                  onChange={(e) => setFormState(prev => ({ 
-                    ...prev, 
-                    email: e.target.value,
-                    errors: { ...prev.errors, email: undefined }
-                  }))}
                   placeholder="Enter your email here..."
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    padding: '0px 10px',
-                    gap: '2px',
-                    width: '320px',
-                    height: '40px',
-                    background: '#FFFFFF',
-                    border: '1px solid #E5E7EB',
-                    borderRadius: '4px',
-                    flex: 'none',
-                    order: 1,
-                    alignSelf: 'stretch',
-                    flexGrow: 0,
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#101828', // Black text when typing
-                    outline: 'none',
-                    boxSizing: 'border-box'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.color = '#101828'; // Ensure black text when focused
-                  }}
-                />
-                {formState.errors.email && (
-                  <span style={{
-                    fontFamily: 'Lexend Deca',
-                    fontSize: '12px',
-                    color: '#F00250'
-                  }}>
-                    {formState.errors.email}
-                  </span>
-                )}
+                        className="w-full bg-transparent font-['Lexend_Deca:Regular',_sans-serif] font-normal leading-[20px] text-[#99a1af] text-[14px] border-none outline-none"
+                        data-node-id="758:7476"
+                      />
+                    </div>
             </div>
-
-              {/* Password Field */}
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                padding: '0px',
-                gap: '8px',
-                width: '320px',
-                height: '68px',
-                flex: 'none',
-                order: 1,
-                flexGrow: 0
-              }}>
-                {/* Password Label */}
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'flex-start',
-                  padding: '0px',
-                  gap: '4px',
-                  width: '320px',
-                  height: '20px',
-                  flex: 'none',
-                  order: 0,
-                  alignSelf: 'stretch',
-                  flexGrow: 0
-                }}>
-                  {/* Password */}
-                  <span style={{
-                    width: '65px',
-                    height: '20px',
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#4A5565',
-                    flex: 'none',
-                    order: 0,
-                    flexGrow: 0
-                  }}>
-                Password
-                  </span>
-                  {/* * */}
-                  <span style={{
-                    width: '6px',
-                    height: '20px',
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#F00250',
-                    flex: 'none',
-                    order: 1,
-                    flexGrow: 0
-                  }}>
-                    *
-                  </span>
                 </div>
-                
-                {/* Password Input Container */}
-                <div style={{ position: 'relative', width: '100%' }}>
-                  {/* Button 2 (Password Input) */}
+                <div className="content-stretch flex flex-col gap-2 items-start justify-start relative shrink-0 w-80" data-node-id="758:7478">
+                  <div className="content-stretch flex font-['Lexend_Deca:Regular',_sans-serif] font-normal gap-1 items-start justify-start leading-[0] relative shrink-0 text-[14px] text-nowrap w-full" data-node-id="758:7479">
+                    <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#4a5565]" data-node-id="758:7480">
+                      <p className="leading-[20px] overflow-ellipsis overflow-hidden text-nowrap whitespace-pre">Password</p>
+                    </div>
+                    <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#f00250]" data-node-id="758:7481">
+                      <p className="leading-[20px] overflow-ellipsis overflow-hidden text-[14px] text-nowrap whitespace-pre">*</p>
+                    </div>
+                  </div>
+                  <div className="bg-white box-border content-stretch flex gap-0.5 h-10 items-center justify-start px-2.5 py-0 relative rounded-[4px] shrink-0 w-full" data-name="Button 2" data-node-id="758:7482">
+                    <div aria-hidden="true" className="absolute border border-gray-200 border-solid inset-[-1px] pointer-events-none rounded-[5px]" />
+                    <div className="basis-0 box-border content-stretch flex grow items-start justify-start min-h-px min-w-px px-1.5 py-0 relative shrink-0" data-name="Text Buffer" data-node-id="758:7483">
               <input
-                    type={formState.showPassword ? 'text' : 'password'}
-                    value={formState.password}
-                    onChange={(e) => setFormState(prev => ({ 
-                      ...prev, 
-                      password: e.target.value,
-                      errors: { ...prev.errors, password: undefined }
-                    }))}
+                        type="password"
                     placeholder="Enter your password here..."
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      padding: '0px 10px',
-                      paddingRight: '40px',
-                      gap: '2px',
-                      width: '320px',
-                      height: '40px',
-                      background: '#FFFFFF',
-                      border: '1px solid #E5E7EB',
-                      borderRadius: '4px',
-                      flex: 'none',
-                      order: 1,
-                      alignSelf: 'stretch',
-                      flexGrow: 0,
-                      fontFamily: 'Lexend Deca',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      fontSize: '14px',
-                      lineHeight: '20px',
-                      color: '#101828', // Black text when typing
-                      outline: 'none',
-                      boxSizing: 'border-box'
-                    }}
-                    onFocus={(e) => {
-                      e.target.style.color = '#101828'; // Ensure black text when focused
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setFormState(prev => ({ ...prev, showPassword: !prev.showPassword }))}
-                    style={{
-                      position: 'absolute',
-                      right: '12px',
-                      top: '50%',
-                      transform: 'translateY(-50%)',
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
-                      fontSize: '16px'
-                    }}
-                    aria-label={formState.showPassword ? 'Hide password' : 'Show password'}
-                  >
-                    {formState.showPassword ? '👁️' : '👁️‍🗨️'}
-                  </button>
+                        className="w-full bg-transparent font-['Lexend_Deca:Regular',_sans-serif] font-normal leading-[20px] text-[#99a1af] text-[14px] border-none outline-none"
+                        data-node-id="758:7558"
+                      />
             </div>
-                {formState.errors.password && (
-                  <span style={{
-                    fontFamily: 'Lexend Deca',
-                    fontSize: '12px',
-                    color: '#F00250'
-                  }}>
-                    {formState.errors.password}
-                  </span>
-                )}
           </div>
-
-              {/* Login Button */}
-            <button
-              type="submit"
-                disabled={formState.loading || !isFormValid()} // ✅ Disable until valid email & password
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  padding: '4px 12px',
-                  gap: '6px',
-                  width: '320px',
-                  height: '40px',
-                  background: (formState.loading || !isFormValid()) ? '#F4EBFF' : '#841AFF', // Disabled vs enabled state
-                  borderRadius: '4px',
-                  border: 'none',
-                  cursor: (formState.loading || !isFormValid()) ? 'not-allowed' : 'pointer',
-                  flex: 'none',
-                  order: 2,
-                  alignSelf: 'stretch',
-                  flexGrow: 0
-                }}
-              >
-                {/* Login */}
-                <span style={{
-                  width: '39px',
-                  height: '20px',
-                  fontFamily: 'Lexend Deca',
-                  fontStyle: 'normal',
-                  fontWeight: 400,
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                  color: (formState.loading || !isFormValid()) ? '#CEA3FF' : '#FFFFFF', // Disabled vs enabled text color
-                  flex: 'none',
-                  order: 0,
-                  flexGrow: 0
-                }}>
-                  {formState.loading ? 'Logging in...' : 'Login'}
-                </span>
-            </button>
-
-              {/* General Error */}
-              {formState.errors.general && (
-                <div style={{
-                  fontFamily: 'Lexend Deca',
-                  fontSize: '12px',
-                  color: '#F00250',
-                  textAlign: 'center',
-                  width: '100%'
-                }}>
-                  {formState.errors.general}
                 </div>
-              )}
-
-              {/* Separator */}
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                padding: '10px 0px',
-                gap: '10px',
-                isolation: 'isolate',
-                width: '320px',
-                height: '20px',
-                flex: 'none',
-                order: 3,
-                alignSelf: 'stretch',
-                flexGrow: 0,
-                position: 'relative'
-              }}>
-                {/* Separator Line */}
-                <div style={{
-                  width: '320px',
-                  height: '0px',
-                  border: '1px solid #E5E7EB',
-                  flex: 'none',
-                  order: 0,
-                  alignSelf: 'stretch',
-                  flexGrow: 0
-                }} />
-                
-                {/* Or continue with */}
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  padding: '0px 8px',
-                  position: 'absolute',
-                  width: '112px',
-                  height: '16px',
-                  left: 'calc(50% - 112px/2 - 0.5px)',
-                  top: 'calc(50% - 16px/2)',
-                  background: '#FFFFFF',
-                  flex: 'none',
-                  order: 1,
-                  flexGrow: 0
-                }}>
-                  {/* Or continue with */}
-                  <span style={{
-                    width: '96px',
-                    height: '16px',
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '12px',
-                    lineHeight: '16px',
-                    color: '#71717A',
-                    flex: 'none',
-                    order: 0,
-                    flexGrow: 0
-                  }}>
-                    Or continue with
-                  </span>
+                <button className="bg-[#f4ebff] box-border content-stretch flex gap-1.5 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-full hover:bg-[#841aff] hover:text-white transition-colors" data-name="button" data-node-id="758:7486">
+                  <div className="font-['Lexend_Deca:Regular',_sans-serif] font-normal leading-[0] relative shrink-0 text-[#cea3ff] text-[14px] text-nowrap hover:text-white" data-node-id="758:7487">
+                    <p className="leading-[20px] whitespace-pre">Login</p>
+                  </div>
+                </button>
+                <div className="box-border content-stretch flex flex-col gap-2.5 items-start justify-start px-0 py-2.5 relative shrink-0 w-full" data-name="Div" data-node-id="758:7488">
+                  <div className="content-stretch flex flex-col gap-2.5 items-start justify-start relative shrink-0 w-full" data-name="Separator" data-node-id="758:7489">
+                    <div className="h-0 relative shrink-0 w-full" data-name="Separator" id="node-I758_7489-118_2684">
+                      <div className="absolute bottom-0 left-0 right-0 top-[-1px]" style={{ "--stroke-0": "rgba(229, 231, 235, 1)" } as React.CSSProperties}>
+                        <img alt className="block max-w-none size-full" src={img} />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute bg-white box-border content-stretch flex items-center justify-center px-2 py-0 top-1/2 translate-x-[-50%] translate-y-[-50%]" data-name="_Blocks / Legend" data-node-id="758:7490" style={{ left: "calc(50% - 0.5px)" }}>
+                    <div className="font-['Lexend_Deca:Regular',_sans-serif] font-normal leading-[0] relative shrink-0 text-[12px] text-nowrap text-zinc-500" data-node-id="758:7491">
+                      <p className="leading-[16px] whitespace-pre">Or continue with</p>
+                    </div>
+                  </div>
                 </div>
-          </div>
-
-              {/* Social Login Buttons */}
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                padding: '0px',
-                gap: '10px',
-                width: '320px',
-                height: '90px',
-                flex: 'none',
-                order: 4,
-                alignSelf: 'stretch',
-                flexGrow: 0
-              }}>
-                {/* Google Button */}
-                <button
-                  type="button"
-                  onClick={() => handleSocialLogin('google')}
-                  style={{
-                    boxSizing: 'border-box',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    padding: '4px 12px',
-                    gap: '8px',
-                    width: '320px',
-                    height: '40px',
-                    background: '#FFFFFF',
-                    border: '1px solid #E5E7EB',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    flex: 'none',
-                    order: 0,
-                    flexGrow: 0
-                  }}
-                >
-                  {/* Google Icon */}
-                  <div style={{ width: '20px', height: '20px', position: 'relative' }}>
-                    <svg viewBox="0 0 20 20" style={{ width: '100%', height: '100%' }}>
-                      <path d="M18.75 8.23H10.18V11.7H15.23C14.85 13.33 13.42 14.58 11.67 15.05V17.58H15.32C17.55 15.53 18.75 12.59 18.75 8.23Z" fill="#4285F4"/>
-                      <path d="M10.18 20C13.42 20 16.11 18.92 17.85 17.08L14.2 14.55C13.13 15.33 11.77 15.8 10.18 15.8C7.05 15.8 4.4 13.73 3.42 10.92H-0.38V13.53C1.35 16.98 5.48 20 10.18 20Z" fill="#34A853"/>
-                      <path d="M3.42 10.92C3.15 10.14 3 9.3 3 8.43C3 7.56 3.15 6.72 3.42 5.94V3.33H-0.38C-1.38 5.33 -2 6.83 -2 8.43C-2 10.03 -1.38 11.53 -0.38 13.53L3.42 10.92Z" fill="#FBBC05"/>
-                      <path d="M10.18 3.25C11.95 3.25 13.54 3.92 14.77 5.1L17.93 1.94C16.1 0.19 13.41 -0.75 10.18 -0.75C5.48 -0.75 1.35 2.27 -0.38 5.72L3.42 8.33C4.4 5.52 7.05 3.25 10.18 3.25Z" fill="#EA4335"/>
-                    </svg>
-                  </div>
-                  {/* Login with Google */}
-                  <span style={{
-                    width: '124px',
-                    height: '20px',
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#101828',
-                    flex: 'none',
-                    order: 1,
-                    flexGrow: 0
-                  }}>
-                    Login with Google
-                  </span>
+                <div className="content-stretch flex flex-col gap-2.5 items-center justify-start relative shrink-0 w-full" data-name="Flex" data-node-id="758:7492">
+                  <button className="bg-white box-border content-stretch flex gap-2 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-80 hover:bg-gray-50 transition-colors" data-name="button" data-node-id="758:7493">
+                    <div aria-hidden="true" className="absolute border border-gray-200 border-solid inset-0 pointer-events-none rounded-[4px]" />
+                    <div className="overflow-clip relative shrink-0 size-5" data-name="Google" data-node-id="758:7494">
+                      <div className="absolute inset-[42.05%_6.25%_16.83%_50.89%]" data-name="Vector" id="node-I758_7494-758_7409">
+                        <img alt className="block max-w-none size-full" src={img1} />
+                      </div>
+                      <div className="absolute inset-[58.33%_19.56%_6.25%_11.04%]" data-name="Vector" id="node-I758_7494-758_7410">
+                        <img alt className="block max-w-none size-full" src={img2} />
+                      </div>
+                      <div className="absolute inset-[30.39%_74.11%_30.39%_6.25%]" data-name="Vector" id="node-I758_7494-758_7411">
+                        <img alt className="block max-w-none size-full" src={img3} />
+                      </div>
+                      <div className="absolute inset-[6.25%_19.24%_58.31%_11.04%]" data-name="Vector" id="node-I758_7494-758_7412">
+                        <img alt className="block max-w-none size-full" src={img4} />
+                      </div>
+                    </div>
+                    <div className="font-['Lexend_Deca:Regular',_sans-serif] font-normal leading-[0] relative shrink-0 text-[#101828] text-[14px] text-nowrap" data-node-id="758:7495">
+                      <p className="leading-[20px] whitespace-pre">Login with Google</p>
+                    </div>
+                  </button>
+                  <button className="bg-white box-border content-stretch flex gap-2 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-80 hover:bg-gray-50 transition-colors" data-name="button" data-node-id="758:7496">
+                    <div aria-hidden="true" className="absolute border border-gray-200 border-solid inset-0 pointer-events-none rounded-[4px]" />
+                    <div className="overflow-clip relative shrink-0 size-5" data-name="Major Brand Logos [1.1]" data-node-id="758:7497">
+                      <div className="absolute inset-[12.5%_51.79%_51.79%_12.5%]" data-name="Vector" id="node-I758_7497-177_3353">
+                        <img alt className="block max-w-none size-full" src={img5} />
+                      </div>
+                      <div className="absolute inset-[12.5%_12.5%_51.79%_51.79%]" data-name="Vector" id="node-I758_7497-177_3354">
+                        <img alt className="block max-w-none size-full" src={img6} />
+                      </div>
+                      <div className="absolute inset-[51.79%_51.79%_12.5%_12.5%]" data-name="Vector" id="node-I758_7497-177_3355">
+                        <img alt className="block max-w-none size-full" src={img7} />
+                      </div>
+                      <div className="absolute inset-[51.79%_12.5%_12.5%_51.78%]" data-name="Vector" id="node-I758_7497-177_3356">
+                        <img alt className="block max-w-none size-full" src={img8} />
+                      </div>
+                    </div>
+                    <div className="font-['Lexend_Deca:Regular',_sans-serif] font-normal leading-[0] relative shrink-0 text-[#101828] text-[14px] text-nowrap" data-node-id="758:7498">
+                      <p className="leading-[20px] whitespace-pre">Login with Microsoft</p>
+                    </div>
                 </button>
-
-                {/* Microsoft Button */}
-                <button
-                  type="button"
-                  onClick={() => handleSocialLogin('microsoft')}
-                  style={{
-                    boxSizing: 'border-box',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    padding: '4px 12px',
-                    gap: '8px',
-                    width: '320px',
-                    height: '40px',
-                    background: '#FFFFFF',
-                    border: '1px solid #E5E7EB',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                    flex: 'none',
-                    order: 1,
-                    flexGrow: 0
-                  }}
-                >
-                  {/* Microsoft Icon */}
-                  <div style={{ width: '20px', height: '20px', position: 'relative' }}>
-                    <svg viewBox="0 0 20 20" style={{ width: '100%', height: '100%' }}>
-                      <rect x="2.5" y="2.5" width="7.14" height="7.14" fill="#F35325"/>
-                      <rect x="10.36" y="2.5" width="7.14" height="7.14" fill="#81BC06"/>
-                      <rect x="2.5" y="10.36" width="7.14" height="7.14" fill="#05A6F0"/>
-                      <rect x="10.36" y="10.36" width="7.14" height="7.14" fill="#FFBA08"/>
-                    </svg>
-                  </div>
-                  {/* Login with Microsoft */}
-                  <span style={{
-                    width: '139px',
-                    height: '20px',
-                    fontFamily: 'Lexend Deca',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#101828',
-                    flex: 'none',
-                    order: 1,
-                    flexGrow: 0
-                  }}>
-                    Login with Microsoft
-                  </span>
-                </button>
+                </div>
               </div>
-            </form>
+            </div>
+          </div>
+          <div className="basis-0 flex flex-row grow items-center self-stretch shrink-0">
+            <div className="basis-0 bg-center bg-cover bg-no-repeat grow h-full min-h-px min-w-px shrink-0" data-name="Div" data-node-id="772:2147" style={{ backgroundImage: `url('${imgDiv}'), url('${imgDiv1}')` }} />
           </div>
         </div>
-
-        {/* Right Side - Content Area */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          padding: '0px',
-          width: '384px',
-          height: '528px',
-          background: '#CACACA',
-          flex: 'none',
-          order: 1,
-          alignSelf: 'stretch',
-          flexGrow: 1,
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
-          <div style={{ textAlign: 'center' }}>
-            <p style={{
-              fontFamily: 'Lexend Deca',
-              fontWeight: 400,
-              fontSize: '18px',
-              lineHeight: '1.4em',
-              color: '#4A5565',
-              marginBottom: '16px'
-            }}>
-              Future Content Area
-            </p>
-            <p style={{
-              fontFamily: 'Lexend Deca',
-              fontWeight: 400,
-              fontSize: '14px',
-              lineHeight: '1.4285714285714286em',
-              color: '#99A1AF'
-            }}>
-              This space reserved for marketing content,<br />
-              onboarding graphics, or promotional material.
-            </p>
-          </div>
-        </div>
+        <div aria-hidden="true" className="absolute border border-solid border-zinc-200 inset-0 pointer-events-none rounded-[4px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.06)]" />
       </div>
-
-      {/* Logo */}
-      <div style={{
-        position: 'absolute',
-        width: '171.82px',
-        height: '28px',
-        left: 'calc(50% - 171.82px/2 - 0.27px)',
-        top: '72px'
-      }}>
-        <Image
-          src="/logo-02.png"
-          alt="Pipeline360"
-          width={172}
-          height={28}
-          priority
-          style={{
-            width: '100%',
-            height: '100%'
-          }}
-        />
+      <div className="absolute h-7 overflow-clip top-[72px] translate-x-[-50%] w-[171.818px]" data-name="logo" data-node-id="758:7502" style={{ left: "calc(50% - 0.273px)" }}>
+        <div className="absolute inset-[21.95%_63.33%_-0.15%_27.89%]" data-name="Vector" id="node-I758_7502-7_2033">
+          <img alt className="block max-w-none size-full" src={img9} />
+        </div>
+        <div className="absolute inset-[22.44%_-0.02%_22.36%_91.02%]" data-name="Vector" id="node-I758_7502-7_2034">
+          <img alt className="block max-w-none size-full" src={img10} />
+        </div>
+        <div className="absolute inset-[0.15%_49.85%_22.34%_48.37%]" data-name="Vector" id="node-I758_7502-7_2035">
+          <img alt className="block max-w-none size-full" src={img11} />
+        </div>
+        <div className="absolute inset-[0.15%_74.1%_87.69%_23.93%]" data-name="Vector" id="node-I758_7502-7_2036">
+          <img alt className="block max-w-none size-full" src={img12} />
+        </div>
+        <div className="absolute inset-[0.15%_45.81%_87.72%_52.23%]" data-name="Vector" id="node-I758_7502-7_2037">
+          <img alt className="block max-w-none size-full" src={img13} />
+        </div>
+        <div className="absolute inset-[2.01%_99.05%_78.46%_0.02%]" data-name="Vector" id="node-I758_7502-7_2038">
+          <img alt className="block max-w-none size-full" src={img14} />
+        </div>
+        <div className="absolute inset-[9.62%_99.97%_90.26%_0.02%]" data-name="Vector" id="node-I758_7502-7_2039">
+          <img alt className="block max-w-none size-full" src={img15} />
+        </div>
+        <div className="absolute inset-[13.81%_99.97%_86.07%_0.02%]" data-name="Vector" id="node-I758_7502-7_2040">
+          <img alt className="block max-w-none size-full" src={img16} />
+        </div>
+        <div className="absolute inset-[0.4%_77.96%_22.11%_13.5%]" data-name="Vector" id="node-I758_7502-7_2041">
+          <img alt className="block max-w-none size-full" src={img17} />
+        </div>
+        <div className="absolute inset-[22.52%_25.85%_22.27%_65.83%]" data-name="Vector" id="node-I758_7502-7_2042">
+          <img alt className="block max-w-none size-full" src={img18} />
+        </div>
+        <div className="absolute inset-[22.54%_53.52%_22.4%_38.18%]" data-name="Vector" id="node-I758_7502-7_2043">
+          <img alt className="block max-w-none size-full" src={img19} />
+        </div>
+        <div className="absolute inset-[22.47%_36.01%_22.33%_56.35%]" data-name="Vector" id="node-I758_7502-7_2044">
+          <img alt className="block max-w-none size-full" src={img20} />
+        </div>
+        <div className="absolute inset-[22.48%_17.85%_22.31%_75.87%]" data-name="Vector" id="node-I758_7502-7_2045">
+          <img alt className="block max-w-none size-full" src={img21} />
+        </div>
+        <div className="absolute inset-[22.46%_10.05%_22.43%_83.39%]" data-name="Vector" id="node-I758_7502-7_2046">
+          <img alt className="block max-w-none size-full" src={img22} />
+        </div>
+        <div className="absolute inset-[22.48%_45.83%_22.33%_52.39%]" data-name="Vector" id="node-I758_7502-7_2047">
+          <img alt className="block max-w-none size-full" src={img23} />
+        </div>
+        <div className="absolute inset-[22.55%_74.16%_22.32%_24.07%]" data-name="Vector" id="node-I758_7502-7_2048">
+          <img alt className="block max-w-none size-full" src={img24} />
+        </div>
+        <div className="absolute inset-[55.2%_87.3%_22.21%_9.03%]" data-name="Vector" id="node-I758_7502-7_2049">
+          <img alt className="block max-w-none size-full" src={img25} />
+        </div>
+        <div className="absolute inset-[0.46%_87.31%_76.99%_10.11%]" data-name="Vector" id="node-I758_7502-7_2050">
+          <img alt className="block max-w-none size-full" src={img26} />
+        </div>
+        <div className="absolute inset-[0.44%_89.87%_76.97%_8.89%]" data-name="Vector" id="node-I758_7502-7_2051">
+          <img alt className="block max-w-none size-full" src={img27} />
+        </div>
+        <div className="absolute inset-[0.44%_93.68%_76.95%_5.18%]" data-name="Vector" id="node-I758_7502-7_2052">
+          <img alt className="block max-w-none size-full" src={img28} />
+        </div>
+        <div className="absolute inset-[0.43%_94.78%_76.96%_4.1%]" data-name="Vector" id="node-I758_7502-7_2053">
+          <img alt className="block max-w-none size-full" src={img29} />
+        </div>
+        <div className="absolute inset-[0.44%_91.08%_76.96%_7.88%]" data-name="Vector" id="node-I758_7502-7_2054">
+          <img alt className="block max-w-none size-full" src={img30} />
+        </div>
+        <div className="absolute inset-[0.43%_95.83%_76.96%_3.2%]" data-name="Vector" id="node-I758_7502-7_2055">
+          <img alt className="block max-w-none size-full" src={img31} />
+        </div>
+        <div className="absolute inset-[0.45%_92.84%_76.94%_6.25%]" data-name="Vector" id="node-I758_7502-7_2056">
+          <img alt className="block max-w-none size-full" src={img32} />
+        </div>
+        <div className="absolute inset-[0.44%_96.73%_76.96%_2.39%]" data-name="Vector" id="node-I758_7502-7_2057">
+          <img alt className="block max-w-none size-full" src={img33} />
+        </div>
+        <div className="absolute inset-[0.44%_92.02%_76.95%_7.08%]" data-name="Vector" id="node-I758_7502-7_2058">
+          <img alt className="block max-w-none size-full" src={img34} />
+        </div>
+        <div className="absolute inset-[0.41%_97.56%_77%_1.66%]" data-name="Vector" id="node-I758_7502-7_2059">
+          <img alt className="block max-w-none size-full" src={img35} />
+        </div>
+        <div className="absolute inset-[27.77%_91.28%_49.72%_8.03%]" data-name="Vector" id="node-I758_7502-7_2060">
+          <img alt className="block max-w-none size-full" src={img36} />
+        </div>
+        <div className="absolute inset-[28.97%_94.46%_50.85%_4.5%]" data-name="Vector" id="node-I758_7502-7_2061">
+          <img alt className="block max-w-none size-full" src={img37} />
+        </div>
+        <div className="absolute inset-[0.58%_98.32%_77.15%_0.93%]" data-name="Vector" id="node-I758_7502-7_2062">
+          <img alt className="block max-w-none size-full" src={img38} />
+        </div>
+        <div className="absolute inset-[27.86%_89.38%_49.72%_9.96%]" data-name="Vector" id="node-I758_7502-7_2063">
+          <img alt className="block max-w-none size-full" src={img39} />
+        </div>
+        <div className="absolute inset-[27.88%_90.63%_49.71%_8.72%]" data-name="Vector" id="node-I758_7502-7_2064">
+          <img alt className="block max-w-none size-full" src={img40} />
+        </div>
+        <div className="absolute inset-[27.75%_88.72%_49.67%_10.62%]" data-name="Vector" id="node-I758_7502-7_2065">
+          <img alt className="block max-w-none size-full" src={img41} />
+        </div>
+        <div className="absolute inset-[27.71%_93.78%_49.72%_5.54%]" data-name="Vector" id="node-I758_7502-7_2066">
+          <img alt className="block max-w-none size-full" src={img42} />
+        </div>
+        <div className="absolute inset-[27.74%_91.97%_49.73%_7.4%]" data-name="Vector" id="node-I758_7502-7_2067">
+          <img alt className="block max-w-none size-full" src={img43} />
+        </div>
+        <div className="absolute inset-[27.77%_93.19%_49.71%_6.2%]" data-name="Vector" id="node-I758_7502-7_2068">
+          <img alt className="block max-w-none size-full" src={img44} />
+        </div>
+        <div className="absolute inset-[27.87%_90.04%_49.71%_9.38%]" data-name="Vector" id="node-I758_7502-7_2069">
+          <img alt className="block max-w-none size-full" src={img45} />
+        </div>
+        <div className="absolute inset-[27.86%_92.6%_49.71%_6.82%]" data-name="Vector" id="node-I758_7502-7_2070">
+          <img alt className="block max-w-none size-full" src={img46} />
+        </div>
+        <div className="absolute inset-[28.11%_88.11%_50%_11.28%]" data-name="Vector" id="node-I758_7502-7_2071">
+          <img alt className="block max-w-none size-full" src={img47} />
+        </div>
+        <div className="absolute inset-[29.8%_87.32%_51.53%_11.85%]" data-name="Vector" id="node-I758_7502-7_2072">
+          <img alt className="block max-w-none size-full" src={img48} />
+        </div>
+        <div className="absolute inset-[27.65%_89.06%_72.14%_8.57%]" data-name="Vector" id="node-I758_7502-7_2073">
+          <img alt className="block max-w-none size-full" src={img49} />
+        </div>
+        <div className="absolute inset-[27.71%_92.56%_72.15%_6.27%]" data-name="Vector" id="node-I758_7502-7_2074">
+          <img alt className="block max-w-none size-full" src={img50} />
+        </div>
+        <div className="absolute inset-[27.76%_88.96%_72.19%_11.01%]" data-name="Vector" id="node-I758_7502-7_2075">
+          <img alt className="block max-w-none size-full" src={img51} />
+        </div>
+        <div className="absolute inset-[27.71%_93.82%_72.28%_6.18%]" data-name="Vector" id="node-I758_7502-7_2076">
+          <img alt className="block max-w-none size-full" src={img52} />
+        </div>
       </div>
     </div>
   );
