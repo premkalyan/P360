@@ -12,103 +12,89 @@ interface LoginState {
   isLoading: boolean;
 }
 
-type ScreenState = 'empty' | 'filled' | 'error';
+type FormDisplayState = 'empty' | 'filled' | 'error';
 
 export default function LoginPage() {
-  const [state, setState] = useState<LoginState>({
+  const [loginState, setLoginState] = useState<LoginState>({
     email: '',
     password: '',
     errors: {},
-    isLoading: false
+    isLoading: false,
   });
 
-  // Determine current screen state based on input and errors
-  const getScreenState = (): ScreenState => {
-    if (Object.keys(state.errors).length > 0) return 'error';
-    if (state.email || state.password) return 'filled';
+  // Determine display state for conditional styling
+  const getDisplayState = (): FormDisplayState => {
+    if (loginState.errors.email || loginState.errors.password) {
+      return 'error';
+    }
+    if (loginState.email || loginState.password) {
+      return 'filled';
+    }
     return 'empty';
   };
 
-  const screenState = getScreenState();
-
-  const handleInputChange = (field: 'email' | 'password', value: string) => {
-    setState(prev => ({
+  const handleInputChange = (field: keyof Pick<LoginState, 'email' | 'password'>, value: string) => {
+    setLoginState(prev => ({
       ...prev,
       [field]: value,
       errors: {
         ...prev.errors,
-        [field]: undefined // Clear error for this field
+        [field]: undefined // Clear error when user starts typing
       }
     }));
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!state.email || !state.password) return;
+  const handleLogin = async () => {
+    setLoginState(prev => ({ ...prev, isLoading: true, errors: {} }));
 
-    setState(prev => ({ ...prev, isLoading: true }));
-    
+    // Basic validation
+    const errors: LoginState['errors'] = {};
+    if (!loginState.email) {
+      errors.email = 'Email not found';
+    }
+    if (!loginState.password) {
+      errors.password = 'Password is wrong';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setLoginState(prev => ({ ...prev, errors, isLoading: false }));
+      return;
+    }
+
     // Simulate API call
     setTimeout(() => {
-      // Test credentials: rico.oktananda1@gmail.com / password
-      if (state.email === 'rico.oktananda1@gmail.com' && state.password === 'password') {
-        console.log('Login successful!');
-        // Redirect to dashboard
-        window.location.href = '/dashboard';
-      } else {
-        // Show validation errors (Error state)
-        setState(prev => ({
-          ...prev,
-          isLoading: false,
-          errors: {
-            email: 'Email not found',
-            password: 'Password is wrong'
-          }
-        }));
-      }
-    }, 1500);
+      // For demo: simulate invalid credentials
+      setLoginState(prev => ({
+        ...prev,
+        errors: {
+          email: 'Email not found',
+          password: 'Password is wrong'
+        },
+        isLoading: false
+      }));
+    }, 1000);
   };
 
-  const handleOAuthLogin = (provider: 'google' | 'microsoft') => {
-    console.log(`Login with ${provider}`);
+  const handleOAuthLogin = (provider: string) => {
+    console.log(`OAuth login with ${provider}`);
+    // Implement OAuth logic here
   };
 
-  // Get input border classes based on screen state
-  const getInputBorderClass = (field: 'email' | 'password') => {
-    if (screenState === 'error' && state.errors[field]) {
-      return 'border-[#f00250]';
-    }
+  const displayState = getDisplayState();
+
+  // Dynamic styling based on form state
+  const getInputBorderColor = (field: keyof LoginState['errors']) => {
+    if (loginState.errors[field]) return 'border-red-500';
+    if (loginState[field] && !loginState.errors[field]) return 'border-gray-300';
     return 'border-gray-200';
   };
 
-  // Get input text content based on screen state
-  const getInputContent = (field: 'email' | 'password') => {
-    if (screenState === 'filled' && state[field]) {
-      return field === 'password' ? '**********' : state[field];
-    }
-    return '';
-  };
-
-  // Get input text color based on screen state
-  const getInputTextColor = (field: 'email' | 'password') => {
-    if (screenState === 'filled' && state[field]) {
-      return 'text-[#101828]';
-    }
-    return 'text-[#99a1af]';
-  };
-
-  // Get placeholder text
-  const getPlaceholder = (field: 'email' | 'password') => {
-    if (screenState === 'filled' && state[field]) return '';
-    return field === 'email' ? 'Enter your email here...' : 'Enter your password here...';
-  };
-
-  // Get button styling based on screen state
   const getButtonStyling = () => {
-    const isFormFilled = state.email && state.password;
-    if (screenState === 'filled' && isFormFilled && !state.isLoading) {
-      return { bg: 'bg-[#841aff]', text: 'text-white' };
+    if (loginState.isLoading) {
+      return { bg: 'bg-purple-400', text: 'text-white', cursor: 'cursor-not-allowed' };
+    }
+    if (displayState === 'filled' || displayState === 'error') {
+      return { bg: 'bg-purple-600 hover:bg-purple-700', text: 'text-white' };
     }
     return { bg: 'bg-[#f4ebff]', text: 'text-[#cea3ff]' };
   };
@@ -134,179 +120,121 @@ export default function LoginPage() {
 
       {/* Main Content */}
       <div className="absolute left-1/2 max-w-[768px] rounded-[4px] translate-x-[-50%] translate-y-[-50%] w-[768px]" style={{ top: "calc(50% + 16px)" }}>
-        <div className="content-stretch flex items-center justify-between max-w-inherit overflow-clip relative w-[768px]">
+        <div className="flex items-center justify-between overflow-hidden relative w-[768px] bg-white rounded-lg shadow-lg">
           
-          {/* Left Panel - Form */}
-          <div className="basis-0 bg-white box-border content-stretch flex flex-col gap-4 grow items-start justify-start min-h-px min-w-px p-[32px] relative shrink-0">
-            <div className="content-stretch flex flex-col gap-6 items-center justify-center relative rounded-[8px] shrink-0 w-full">
+          {/* Left Panel - Login Form */}
+          <div className="flex-1 p-8 bg-white">
+            <div className="max-w-[384px]">
               
               {/* Header */}
-              <div className="content-stretch flex flex-col gap-2 items-start justify-start leading-[0] relative shrink-0 w-full">
-                <div className="font-['Lexend_Deca:SemiBold',_sans-serif] font-semibold relative shrink-0 text-[#101828] text-[24px] tracking-[-0.4px] w-full">
-                  <p className="leading-[30px]">Welcome back</p>
-                </div>
-                <div className="font-['Lexend_Deca:Regular',_sans-serif] font-normal relative shrink-0 text-[#4a5565] text-[14px] w-full">
-                  <p className="leading-[20px]">Login to your Pipeline360 account</p>
-                </div>
-            </div>
+              <div className="mb-6">
+                <h1 className="text-2xl font-semibold text-gray-900 mb-2">Welcome back</h1>
+                <p className="text-gray-600">Login to your Pipeline360 account</p>
+              </div>
 
-            {/* Form */}
-              <form onSubmit={handleLogin} className="content-stretch flex flex-col gap-6 items-start justify-start relative shrink-0 w-full">
-                
               {/* Email Field */}
-                <div className="content-stretch flex flex-col gap-2 items-start justify-start relative shrink-0 w-80">
-                  <div className="content-stretch flex font-['Lexend_Deca:Regular',_sans-serif] font-normal gap-1 items-start justify-start leading-[0] relative shrink-0 text-[14px] text-nowrap w-full">
-                    <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#4a5565]">
-                      <p className="leading-[20px] overflow-ellipsis overflow-hidden text-nowrap whitespace-pre">Email</p>
-                    </div>
-                    <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#f00250]">
-                      <p className="leading-[20px] overflow-ellipsis overflow-hidden text-[14px] text-nowrap whitespace-pre">*</p>
-                    </div>
-        </div>
-                  <div className="bg-white box-border content-stretch flex gap-0.5 h-10 items-center justify-start px-2.5 py-0 relative rounded-[4px] shrink-0 w-full">
-                    <div aria-hidden="true" className={`absolute border border-solid inset-[-1px] pointer-events-none rounded-[5px] ${getInputBorderClass('email')}`} />
-              <input
-                type="email"
-                      value={state.email}
-                      onChange={(e) => handleInputChange('email', e.target.value)}
-                      placeholder={getPlaceholder('email')}
-                      disabled={state.isLoading}
-                      className={`basis-0 box-border content-stretch flex grow items-start justify-start min-h-px min-w-px px-1.5 py-0 relative shrink-0 font-['Lexend_Deca:Regular',_sans-serif] font-normal leading-[0] text-[14px] text-nowrap w-full bg-transparent border-none outline-none ${getInputTextColor('email')}`}
-                    />
-                  </div>
-                  {screenState === 'error' && state.errors.email && (
-                    <div className="font-['Lexend_Deca:Regular',_sans-serif] font-normal leading-[0] relative shrink-0 text-[#f00250] text-[12px] text-nowrap">
-                      <p className="leading-[16px] whitespace-pre">{state.errors.email}</p>
-                    </div>
+              <div className="mb-4">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  Email *
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  value={loginState.email}
+                  onChange={(e) => handleInputChange('email', e.target.value)}
+                  placeholder={displayState === 'empty' ? 'Enter your email here...' : 'a@p360admin.com'}
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${getInputBorderColor('email')}`}
+                />
+                {loginState.errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{loginState.errors.email}</p>
                 )}
-            </div>
+              </div>
 
               {/* Password Field */}
-                <div className="content-stretch flex flex-col gap-2 items-start justify-start relative shrink-0 w-80">
-                  <div className="content-stretch flex font-['Lexend_Deca:Regular',_sans-serif] font-normal gap-1 items-start justify-start leading-[0] relative shrink-0 text-[14px] text-nowrap w-full">
-                    <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#4a5565]">
-                      <p className="leading-[20px] overflow-ellipsis overflow-hidden text-nowrap whitespace-pre">Password</p>
-                    </div>
-                    <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#f00250]">
-                      <p className="leading-[20px] overflow-ellipsis overflow-hidden text-[14px] text-nowrap whitespace-pre">*</p>
-                    </div>
-                </div>
-                  <div className="bg-white box-border content-stretch flex gap-0.5 h-10 items-center justify-start px-2.5 py-0 relative rounded-[4px] shrink-0 w-full">
-                    <div aria-hidden="true" className={`absolute border border-solid inset-[-1px] pointer-events-none rounded-[5px] ${getInputBorderClass('password')}`} />
-              <input
-                      type="password"
-                      value={state.password}
-                      onChange={(e) => handleInputChange('password', e.target.value)}
-                      placeholder={getPlaceholder('password')}
-                      disabled={state.isLoading}
-                      className={`basis-0 box-border content-stretch flex grow items-start justify-start min-h-px min-w-px px-1.5 py-0 relative shrink-0 font-['Lexend_Deca:Regular',_sans-serif] font-normal leading-[0] text-[14px] text-nowrap w-full bg-transparent border-none outline-none ${getInputTextColor('password')}`}
-                    />
-                  </div>
-                  {screenState === 'error' && state.errors.password && (
-                    <div className="font-['Lexend_Deca:Regular',_sans-serif] font-normal leading-[0] relative shrink-0 text-[#f00250] text-[12px] text-nowrap">
-                      <p className="leading-[16px] whitespace-pre">{state.errors.password}</p>
-            </div>
+              <div className="mb-6">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                  Password *
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  value={loginState.password}
+                  onChange={(e) => handleInputChange('password', e.target.value)}
+                  placeholder={displayState === 'empty' ? 'Enter your password here...' : '••••••••'}
+                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 ${getInputBorderColor('password')}`}
+                />
+                {loginState.errors.password && (
+                  <p className="text-red-500 text-sm mt-1">{loginState.errors.password}</p>
                 )}
-          </div>
+              </div>
 
               {/* Login Button */}
-            <button
-              type="submit"
-                  disabled={!state.email || !state.password || state.isLoading}
-                  className={`${buttonStyling.bg} box-border content-stretch flex gap-1.5 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-full`}
-                >
-                  <div className={`font-['Lexend_Deca:Regular',_sans-serif] font-normal leading-[0] relative shrink-0 ${buttonStyling.text} text-[14px] text-nowrap`}>
-                    <p className="leading-[20px] whitespace-pre">
-                      {state.isLoading ? 'Logging in...' : 'Login'}
-                    </p>
-                  </div>
-            </button>
+              <button
+                onClick={handleLogin}
+                disabled={loginState.isLoading}
+                className={`w-full py-2 px-4 rounded-lg font-medium transition-colors ${buttonStyling.bg} ${buttonStyling.text} ${buttonStyling.cursor || ''}`}
+              >
+                {loginState.isLoading ? 'Logging in...' : 'Login'}
+              </button>
 
-                {/* Separator */}
-                <div className="box-border content-stretch flex flex-col gap-2.5 items-start justify-start px-0 py-2.5 relative shrink-0 w-full">
-                  <div className="content-stretch flex flex-col gap-2.5 items-start justify-start relative shrink-0 w-full">
-                    <div className="h-0 relative shrink-0 w-full">
-                      <div className="absolute bottom-0 left-0 right-0 top-[-1px]" style={{ "--stroke-0": "rgba(229, 231, 235, 1)" } as React.CSSProperties}>
-                        <img alt="" className="block max-w-none size-full" src={img} />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="absolute bg-white box-border content-stretch flex items-center justify-center px-2 py-0 top-1/2 translate-x-[-50%] translate-y-[-50%]" style={{ left: "calc(50% - 0.5px)" }}>
-                    <div className="font-['Lexend_Deca:Regular',_sans-serif] font-normal leading-[0] relative shrink-0 text-[12px] text-nowrap text-zinc-500">
-                      <p className="leading-[16px] whitespace-pre">Or continue with</p>
+              {/* Separator */}
+              <div className="my-6 relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-200"></div>
                 </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
                 </div>
-          </div>
+              </div>
 
-                {/* OAuth Buttons */}
-                <div className="content-stretch flex flex-col gap-2.5 items-center justify-start relative shrink-0 w-full">
-                  {/* Google Login */}
+              {/* OAuth Buttons */}
+              <div className="space-y-3">
                 <button
-                  type="button"
-                    onClick={() => handleOAuthLogin('google')}
-                    disabled={state.isLoading}
-                    className="bg-white box-border content-stretch flex gap-2 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-80"
-                  >
-                    <div aria-hidden="true" className="absolute border border-gray-200 border-solid inset-0 pointer-events-none rounded-[4px]" />
-                    <div className="overflow-clip relative shrink-0 size-5">
-                      <div className="absolute inset-[42.05%_6.25%_16.83%_50.89%]">
-                        <img alt="" className="block max-w-none size-full" src={img1} />
-                      </div>
-                      <div className="absolute inset-[58.33%_19.56%_6.25%_11.04%]">
-                        <img alt="" className="block max-w-none size-full" src={img2} />
-                      </div>
-                      <div className="absolute inset-[30.39%_74.11%_30.39%_6.25%]">
-                        <img alt="" className="block max-w-none size-full" src={img3} />
-                      </div>
-                      <div className="absolute inset-[6.25%_19.24%_58.31%_11.04%]">
-                        <img alt="" className="block max-w-none size-full" src={img4} />
-                      </div>
-                    </div>
-                    <div className="font-['Lexend_Deca:Regular',_sans-serif] font-normal leading-[0] relative shrink-0 text-[#101828] text-[14px] text-nowrap">
-                      <p className="leading-[20px] whitespace-pre">Login with Google</p>
-                  </div>
+                  onClick={() => handleOAuthLogin('Google')}
+                  className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                  </svg>
+                  Login with Google
                 </button>
 
-                  {/* Microsoft Login */}
                 <button
-                  type="button"
-                    onClick={() => handleOAuthLogin('microsoft')}
-                    disabled={state.isLoading}
-                    className="bg-white box-border content-stretch flex gap-2 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-80"
-                  >
-                    <div aria-hidden="true" className="absolute border border-gray-200 border-solid inset-0 pointer-events-none rounded-[4px]" />
-                    <div className="overflow-clip relative shrink-0 size-5">
-                      <div className="absolute inset-[12.5%_51.79%_51.79%_12.5%]">
-                        <img alt="" className="block max-w-none size-full" src={img5} />
-                      </div>
-                      <div className="absolute inset-[12.5%_12.5%_51.79%_51.79%]">
-                        <img alt="" className="block max-w-none size-full" src={img6} />
-                      </div>
-                      <div className="absolute inset-[51.79%_51.79%_12.5%_12.5%]">
-                        <img alt="" className="block max-w-none size-full" src={img7} />
-                      </div>
-                      <div className="absolute inset-[51.79%_12.5%_12.5%_51.78%]">
-                        <img alt="" className="block max-w-none size-full" src={img8} />
-                      </div>
-                    </div>
-                    <div className="font-['Lexend_Deca:Regular',_sans-serif] font-normal leading-[0] relative shrink-0 text-[#101828] text-[14px] text-nowrap">
-                      <p className="leading-[20px] whitespace-pre">Login with Microsoft</p>
-                  </div>
+                  onClick={() => handleOAuthLogin('Microsoft')}
+                  className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                    <path fill="#F25022" d="M1 1h10v10H1z"/>
+                    <path fill="#00A4EF" d="M13 1h10v10H13z"/>
+                    <path fill="#7FBA00" d="M1 13h10v10H1z"/>
+                    <path fill="#FFB900" d="M13 13h10v10H13z"/>
+                  </svg>
+                  Login with Microsoft
                 </button>
               </div>
-            </form>
+
+            </div>
           </div>
-        </div>
 
           {/* Right Panel - Branding */}
-          <div className="basis-0 flex flex-row grow items-center self-stretch shrink-0">
-            <div className="basis-0 bg-center bg-cover bg-no-repeat grow h-full min-h-px min-w-px shrink-0" style={{ backgroundImage: `url('${imgDiv}'), url('${imgDiv1}')` }} />
+          <div className="flex-1 bg-gray-100 h-full min-h-[500px] flex items-center justify-center">
+            <div className="text-center p-8">
+              <div className="w-24 h-24 bg-gray-300 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Welcome to Pipeline360</h3>
+              <p className="text-gray-600">Your digital advertising platform</p>
+            </div>
           </div>
+
         </div>
-        
-        {/* Border and Shadow */}
-        <div aria-hidden="true" className="absolute border border-solid border-zinc-200 inset-0 pointer-events-none rounded-[4px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_0px_rgba(0,0,0,0.06)]" />
       </div>
+
     </div>
   );
 }
