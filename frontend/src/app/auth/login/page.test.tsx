@@ -3,6 +3,9 @@ import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import LoginPage from './page';
 
+// Mock window.alert for tests
+global.alert = jest.fn();
+
 // Mock the typography CSS import
 jest.mock('@/styles/typography.css', () => ({}));
 
@@ -19,20 +22,20 @@ describe('LoginPage', () => {
       // Check for form elements
       expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
       expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
+      expect(screen.getByTestId('login-button')).toBeInTheDocument();
       
       // Check for OAuth buttons
-      expect(screen.getByRole('button', { name: /continue with google/i })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /continue with microsoft/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /login with google/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /login with microsoft/i })).toBeInTheDocument();
       
       // Check for Pipeline360 logo
-      expect(screen.getByRole('img', { name: /pipeline360 logo/i })).toBeInTheDocument();
+      expect(screen.getByRole('img', { name: /pipeline360/i })).toBeInTheDocument();
     });
 
     it('has login button disabled initially (empty state)', () => {
       render(<LoginPage />);
       
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByTestId('login-button');
       expect(loginButton).toBeDisabled();
       expect(loginButton).toHaveClass('bg-[#f4ebff]');
     });
@@ -40,7 +43,7 @@ describe('LoginPage', () => {
     it('applies P360 typography classes correctly', () => {
       render(<LoginPage />);
       
-      const container = screen.getByTestId('login') || document.querySelector('[data-name="login"]');
+      const container = document.querySelector('[data-name="login"]');
       expect(container).toHaveClass('font-p360');
     });
   });
@@ -51,7 +54,7 @@ describe('LoginPage', () => {
       render(<LoginPage />);
       
       const emailInput = screen.getByLabelText(/email/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByTestId('login-button');
       
       // Type invalid email
       await user.type(emailInput, 'invalid-email');
@@ -70,7 +73,7 @@ describe('LoginPage', () => {
       
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByTestId('login-button');
       
       // Type valid email
       await user.type(emailInput, 'test@example.com');
@@ -91,7 +94,7 @@ describe('LoginPage', () => {
       
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByTestId('login-button');
       
       await user.type(emailInput, 'admin@p360.com');
       await user.type(passwordInput, 'admin123');
@@ -106,7 +109,7 @@ describe('LoginPage', () => {
       
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByTestId('login-button');
       
       // Fill valid credentials
       await user.type(emailInput, 'admin@p360.com');
@@ -126,7 +129,7 @@ describe('LoginPage', () => {
       
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByTestId('login-button');
       
       await user.type(emailInput, 'admin@p360.com');
       await user.type(passwordInput, 'admin123');
@@ -147,7 +150,7 @@ describe('LoginPage', () => {
       
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByTestId('login-button');
       
       await user.type(emailInput, 'admin@p360.com');
       await user.type(passwordInput, 'admin123');
@@ -168,15 +171,15 @@ describe('LoginPage', () => {
       
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByTestId('login-button');
       
       await user.type(emailInput, 'invalid@example.com');
       await user.type(passwordInput, 'wrongpassword');
       await user.click(loginButton);
       
       await waitFor(() => {
-        expect(screen.getByText(/email not found/i)).toBeInTheDocument();
-        expect(screen.getByText(/password is wrong/i)).toBeInTheDocument();
+        expect(screen.getByText('Email not found')).toBeInTheDocument();
+        expect(screen.getByText('Password is wrong')).toBeInTheDocument();
       });
       
       // Check error state styling
@@ -190,7 +193,7 @@ describe('LoginPage', () => {
       
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByTestId('login-button');
       
       // Trigger error state
       await user.type(emailInput, 'invalid@example.com');
@@ -215,10 +218,10 @@ describe('LoginPage', () => {
       
       render(<LoginPage />);
       
-      const googleButton = screen.getByRole('button', { name: /continue with google/i });
+      const googleButton = screen.getByRole('button', { name: /login with google/i });
       await user.click(googleButton);
       
-      expect(consoleSpy).toHaveBeenCalledWith('OAuth login with Google...');
+      expect(consoleSpy).toHaveBeenCalledWith('OAuth login with Google');
       
       consoleSpy.mockRestore();
     });
@@ -229,10 +232,10 @@ describe('LoginPage', () => {
       
       render(<LoginPage />);
       
-      const microsoftButton = screen.getByRole('button', { name: /continue with microsoft/i });
+      const microsoftButton = screen.getByRole('button', { name: /login with microsoft/i });
       await user.click(microsoftButton);
       
-      expect(consoleSpy).toHaveBeenCalledWith('OAuth login with Microsoft...');
+      expect(consoleSpy).toHaveBeenCalledWith('OAuth login with Microsoft');
       
       consoleSpy.mockRestore();
     });
@@ -244,7 +247,7 @@ describe('LoginPage', () => {
       
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByTestId('login-button');
       
       expect(emailInput).toHaveAttribute('type', 'email');
       expect(passwordInput).toHaveAttribute('type', 'password');
@@ -257,7 +260,7 @@ describe('LoginPage', () => {
       
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByTestId('login-button');
       
       // Tab through form elements
       await user.tab();
@@ -266,8 +269,10 @@ describe('LoginPage', () => {
       await user.tab();
       expect(passwordInput).toHaveFocus();
       
+      // Skip login button since it's disabled when form is empty
+      // OAuth buttons will receive focus next
       await user.tab();
-      expect(loginButton).toHaveFocus();
+      expect(screen.getByRole('button', { name: /login with google/i })).toHaveFocus();
     });
   });
 
@@ -277,7 +282,7 @@ describe('LoginPage', () => {
       
       const emailInput = screen.getByLabelText(/email/i);
       const passwordInput = screen.getByLabelText(/password/i);
-      const loginButton = screen.getByRole('button', { name: /login/i });
+      const loginButton = screen.getByTestId('login-button');
       
       expect(emailInput).toHaveClass('p360-input');
       expect(passwordInput).toHaveClass('p360-input');
@@ -317,7 +322,7 @@ describe('LoginPage Integration', () => {
     render(<LoginPage />);
     
     // Initial state - button disabled
-    const loginButton = screen.getByRole('button', { name: /login/i });
+    const loginButton = screen.getByTestId('login-button');
     expect(loginButton).toBeDisabled();
     
     // Fill valid credentials

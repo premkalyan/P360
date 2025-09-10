@@ -231,7 +231,7 @@ export default function LoginPage() {
           
           {/* Left Panel - Login Form */}
           <div className="basis-0 bg-white box-border flex flex-col gap-4 grow items-start justify-start min-h-px min-w-px p-[32px] relative shrink-0">
-            <div className="flex flex-col gap-6 items-center justify-center relative rounded-[8px] shrink-0 w-full">
+            <div className="flex flex-col gap-6 items-center justify-center relative rounded-[8px] shrink-0 w-full" data-testid="login">
               
               {/* Header */}
               <div className="flex flex-col gap-2 items-start justify-start leading-[0] relative shrink-0 w-full">
@@ -248,23 +248,28 @@ export default function LoginPage() {
                 
               {/* Email Field */}
                 <div className="flex flex-col gap-2 items-start justify-start relative shrink-0 w-80">
-                  <div className="flex font-['Lexend_Deca'] font-normal gap-1 items-start justify-start leading-[0] relative shrink-0 text-[14px] w-full">
+                  <label htmlFor="email" className="flex font-['Lexend_Deca'] font-normal gap-1 items-start justify-start leading-[0] relative shrink-0 text-[14px] w-full">
                     <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#4a5565]">
                       <p className="leading-[20px] overflow-ellipsis overflow-hidden whitespace-pre">Email</p>
                     </div>
                     <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#f00250]">
                       <p className="leading-[20px] overflow-ellipsis overflow-hidden text-[14px] whitespace-pre">*</p>
-                    </div>
         </div>
+                  </label>
               <input
+                    id="email"
                 type="email"
                     value={loginState.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                     placeholder={displayState === 'empty' ? 'Enter your email here...' : ''}
                     className={getInputClasses('email')}
+                    aria-label="Email"
+                    aria-required="true"
+                    aria-invalid={!!loginState.errors.email}
+                    aria-describedby={loginState.errors.email ? "email-error" : undefined}
                   />
                   {loginState.errors.email && (
-                    <p className="font-['Lexend_Deca'] font-normal text-[#f00250] text-[12px] leading-[16px]">
+                    <p id="email-error" className="font-['Lexend_Deca'] font-normal text-[#f00250] text-[12px] leading-[16px]">
                       {loginState.errors.email}
                     </p>
                 )}
@@ -272,23 +277,28 @@ export default function LoginPage() {
 
               {/* Password Field */}
                 <div className="flex flex-col gap-2 items-start justify-start relative shrink-0 w-80">
-                  <div className="flex font-['Lexend_Deca'] font-normal gap-1 items-start justify-start leading-[0] relative shrink-0 text-[14px] w-full">
+                  <label htmlFor="password" className="flex font-['Lexend_Deca'] font-normal gap-1 items-start justify-start leading-[0] relative shrink-0 text-[14px] w-full">
                     <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#4a5565]">
                       <p className="leading-[20px] overflow-ellipsis overflow-hidden whitespace-pre">Password</p>
                     </div>
                     <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#f00250]">
                       <p className="leading-[20px] overflow-ellipsis overflow-hidden text-[14px] whitespace-pre">*</p>
-                    </div>
                 </div>
+                  </label>
               <input
+                    id="password"
                     type="password"
                     value={loginState.password}
                     onChange={(e) => handleInputChange('password', e.target.value)}
                     placeholder={displayState === 'empty' ? 'Enter your password here...' : ''}
                     className={getInputClasses('password')}
+                    aria-label="Password"
+                    aria-required="true"
+                    aria-invalid={!!loginState.errors.password}
+                    aria-describedby={loginState.errors.password ? "password-error" : undefined}
                   />
                   {loginState.errors.password && (
-                    <p className="font-['Lexend_Deca'] font-normal text-[#f00250] text-[12px] leading-[16px]">
+                    <p id="password-error" className="font-['Lexend_Deca'] font-normal text-[#f00250] text-[12px] leading-[16px]">
                       {loginState.errors.password}
                     </p>
                 )}
@@ -296,9 +306,12 @@ export default function LoginPage() {
 
               {/* Login Button */}
             <button
+                  data-testid="login-button"
+                  type="button"
                   onClick={handleLogin}
                   disabled={buttonStyling.disabled}
                   className={`box-border flex gap-1.5 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-full p360-button-text transition-colors ${buttonStyling.bg} ${buttonStyling.text} ${buttonStyling.cursor || ''}`}
+                  aria-label={loginState.isLoading ? 'Logging in...' : 'Login to your account'}
                 >
                   {loginState.isLoading ? 'Logging in...' : 'Login'}
             </button>
