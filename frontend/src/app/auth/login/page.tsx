@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 
+// Import Lexend Deca font
+import '@/styles/typography.css';
+
 interface LoginState {
   email: string;
   password: string;
@@ -65,7 +68,7 @@ export default function LoginPage() {
     setTimeout(() => {
       // For demo: simulate invalid credentials to show error state
       setLoginState(prev => ({
-        ...prev,
+        ...prev, 
         errors: {
           email: 'Email not found',
           password: 'Password is wrong'
@@ -119,36 +122,39 @@ export default function LoginPage() {
 
   return (
     <div 
-      className="bg-white relative min-h-screen w-full overflow-hidden" 
+      className="bg-white relative min-h-screen w-full overflow-hidden font-['Lexend_Deca']" 
       data-name="login"
-      style={{
-        fontFamily: "'Lexend Deca', sans-serif"
-      }}
     >
-      {/* Subtle Background Gradient - Much softer than before */}
+      {/* Background Gradient - More visible at bottom */}
       <div className="absolute bottom-[-60.25px] flex h-[475.252px] items-center justify-center left-1/2 translate-x-[-50%] w-[1440px]">
         <div className="flex-none scale-y-[-100%]">
           <div className="h-[475.252px] overflow-clip relative w-[1440px]">
             <div className="absolute box-border content-stretch flex h-[95.131px] items-center justify-start left-[-32.98px] pl-0 pr-[90.057px] py-0 top-[-67.57px] w-[1413.01px]">
               <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
                 <div className="flex-none scale-y-[-100%] size-full">
-                  <div className="bg-[#ff6221] blur-[64.936px] filter size-full opacity-30" />
+                  <div className="bg-[#ff6221] blur-[64.936px] filter size-full opacity-60" />
                 </div>
               </div>
               <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
                 <div className="flex-none scale-y-[-100%] size-full">
-                  <div className="bg-[#ed01cf] blur-[95.054px] filter size-full opacity-30" />
+                  <div className="bg-[#ed01cf] blur-[95.054px] filter size-full opacity-60" />
                 </div>
               </div>
               <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
                 <div className="flex-none scale-y-[-100%] size-full">
-                  <div className="bg-[#841aff] blur-[96.796px] filter size-full opacity-30" />
+                  <div className="bg-[#841aff] blur-[96.796px] filter size-full opacity-60" />
                 </div>
               </div>
               <div className="basis-0 flex grow h-full items-center justify-center min-h-px min-w-px mr-[-90.057px] relative shrink-0">
                 <div className="flex-none scale-y-[-100%] size-full">
-                  <div className="bg-[#008dff] blur-[75.839px] filter size-full opacity-30" />
+                  <div className="bg-[#008dff] blur-[75.839px] filter size-full opacity-60" />
                 </div>
+              </div>
+            </div>
+            {/* Noise overlay */}
+            <div className="absolute flex h-[476.002px] items-center justify-center left-1/2 mix-blend-overlay translate-x-[-50%] translate-y-[-50%] w-[1320.06px] opacity-20" style={{ top: "calc(50% - 0.375px)" }}>
+              <div className="flex-none rotate-[180deg]">
+                <div className="bg-gradient-to-r from-orange-200 via-pink-200 via-purple-200 to-blue-200 h-[476.002px] w-[1320.06px] opacity-40" />
               </div>
             </div>
           </div>
@@ -187,12 +193,12 @@ export default function LoginPage() {
                 <div className="font-['Lexend_Deca'] font-normal relative shrink-0 text-[#4a5565] text-[14px] w-full">
                   <p className="leading-[20px]">Login to your Pipeline360 account</p>
                 </div>
-              </div>
+            </div>
 
-              {/* Form */}
+            {/* Form */}
               <div className="flex flex-col gap-6 items-start justify-start relative shrink-0 w-full">
                 
-                {/* Email Field */}
+              {/* Email Field */}
                 <div className="flex flex-col gap-2 items-start justify-start relative shrink-0 w-80">
                   <div className="flex font-['Lexend_Deca'] font-normal gap-1 items-start justify-start leading-[0] relative shrink-0 text-[14px] w-full">
                     <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#4a5565]">
@@ -201,9 +207,9 @@ export default function LoginPage() {
                     <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#f00250]">
                       <p className="leading-[20px] overflow-ellipsis overflow-hidden text-[14px] whitespace-pre">*</p>
                     </div>
-                  </div>
-                  <input
-                    type="email"
+        </div>
+              <input
+                type="email"
                     value={loginState.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                     placeholder={displayState === 'empty' ? 'Enter your email here...' : ''}
@@ -213,10 +219,10 @@ export default function LoginPage() {
                     <p className="font-['Lexend_Deca'] font-normal text-[#f00250] text-[12px] leading-[16px]">
                       {loginState.errors.email}
                     </p>
-                  )}
-                </div>
+                )}
+            </div>
 
-                {/* Password Field */}
+              {/* Password Field */}
                 <div className="flex flex-col gap-2 items-start justify-start relative shrink-0 w-80">
                   <div className="flex font-['Lexend_Deca'] font-normal gap-1 items-start justify-start leading-[0] relative shrink-0 text-[14px] w-full">
                     <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#4a5565]">
@@ -225,8 +231,8 @@ export default function LoginPage() {
                     <div className="overflow-ellipsis overflow-hidden relative shrink-0 text-[#f00250]">
                       <p className="leading-[20px] overflow-ellipsis overflow-hidden text-[14px] whitespace-pre">*</p>
                     </div>
-                  </div>
-                  <input
+                </div>
+              <input
                     type="password"
                     value={loginState.password}
                     onChange={(e) => handleInputChange('password', e.target.value)}
@@ -237,17 +243,17 @@ export default function LoginPage() {
                     <p className="font-['Lexend_Deca'] font-normal text-[#f00250] text-[12px] leading-[16px]">
                       {loginState.errors.password}
                     </p>
-                  )}
-                </div>
+                )}
+          </div>
 
-                {/* Login Button */}
-                <button
+              {/* Login Button */}
+            <button
                   onClick={handleLogin}
                   disabled={buttonStyling.disabled}
                   className={`box-border flex gap-1.5 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-full font-['Lexend_Deca'] font-normal text-[14px] leading-[20px] transition-colors ${buttonStyling.bg} ${buttonStyling.text} ${buttonStyling.cursor || ''}`}
                 >
                   {loginState.isLoading ? 'Logging in...' : 'Login'}
-                </button>
+            </button>
 
                 {/* Separator */}
                 <div className="box-border flex flex-col gap-2.5 items-start justify-start px-0 py-2.5 relative shrink-0 w-full">
@@ -259,13 +265,13 @@ export default function LoginPage() {
                   <div className="absolute bg-white box-border flex items-center justify-center px-2 py-0 top-1/2 translate-x-[-50%] translate-y-[-50%]" style={{ left: "calc(50% - 0.5px)" }}>
                     <div className="font-['Lexend_Deca'] font-normal leading-[0] relative shrink-0 text-[12px] text-[#71717a]">
                       <p className="leading-[16px] whitespace-pre">Or continue with</p>
-                    </div>
-                  </div>
                 </div>
+                </div>
+          </div>
 
                 {/* OAuth Buttons */}
                 <div className="flex flex-col gap-2.5 items-center justify-start relative shrink-0 w-full">
-                  <button
+                <button
                     onClick={() => handleOAuthLogin('Google')}
                     className="bg-white box-border flex gap-2 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-80 border border-[#e5e7eb] hover:bg-gray-50 transition-colors"
                   >
@@ -277,10 +283,10 @@ export default function LoginPage() {
                     </svg>
                     <div className="font-['Lexend_Deca'] font-normal leading-[0] relative shrink-0 text-[#101828] text-[14px]">
                       <p className="leading-[20px] whitespace-pre">Login with Google</p>
-                    </div>
-                  </button>
+                  </div>
+                </button>
 
-                  <button
+                <button
                     onClick={() => handleOAuthLogin('Microsoft')}
                     className="bg-white box-border flex gap-2 h-10 items-center justify-center px-3 py-1 relative rounded-[4px] shrink-0 w-80 border border-[#e5e7eb] hover:bg-gray-50 transition-colors"
                   >
@@ -292,27 +298,22 @@ export default function LoginPage() {
                     </svg>
                     <div className="font-['Lexend_Deca'] font-normal leading-[0] relative shrink-0 text-[#101828] text-[14px]">
                       <p className="leading-[20px] whitespace-pre">Login with Microsoft</p>
-                    </div>
-                  </button>
+                  </div>
+                </button>
                 </div>
 
               </div>
             </div>
           </div>
 
-          {/* Right Panel - Image Placeholder */}
+          {/* Right Panel - Figma Image */}
           <div className="basis-0 flex flex-row grow items-center self-stretch shrink-0">
-            <div className="basis-0 bg-[#e5e7eb] bg-center bg-cover bg-no-repeat grow h-full min-h-px min-w-px shrink-0 flex items-center justify-center">
-              {/* Image placeholder */}
-              <div className="text-center">
-                <div className="w-16 h-16 bg-white bg-opacity-50 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                  <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                  </svg>
-                </div>
-                <p className="text-gray-500 text-sm font-['Lexend_Deca']">Image Placeholder</p>
-              </div>
-            </div>
+            <div 
+              className="basis-0 bg-center bg-cover bg-no-repeat grow h-full min-h-px min-w-px shrink-0" 
+              style={{ 
+                backgroundImage: `url('/figma-placeholder-1.png'), url('/figma-placeholder-2.png')` 
+              }}
+            />
           </div>
 
         </div>
