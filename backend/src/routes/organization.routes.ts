@@ -33,7 +33,6 @@ const router = Router();
 router.use(authenticateToken);
 router.use(validateTenantAccess);
 router.use(rateLimit(100, 15)); // 100 requests per 15 minutes
-router.use(requireJsonContent);
 
 /**
  * @swagger
@@ -290,6 +289,7 @@ router.get(
  */
 router.post(
   '/',
+  requireJsonContent,
   requireManagerOrAdmin,
   validateRequest({
     body: CreateOrganizationSchema,
@@ -405,6 +405,7 @@ router.get('/:id', validateUuidParam, getOrganization);
  */
 router.put(
   '/:id',
+  requireJsonContent,
   requireManagerOrAdmin,
   validateUuidParam,
   validateRequest({
@@ -507,7 +508,7 @@ router.delete('/:id', requireAdmin, validateUuidParam, deleteOrganization);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/:id/users', validateUuidParam, getOrganizationUsers);
+router.get('/:id/users', requireManagerOrAdmin, validateUuidParam, getOrganizationUsers);
 
 /**
  * @swagger

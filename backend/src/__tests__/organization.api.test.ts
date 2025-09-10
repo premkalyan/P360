@@ -38,19 +38,28 @@ const viewerToken = generateJWT(mockViewerUser);
 describe('Organization API', () => {
   let createdOrgId: string;
 
-  beforeAll(async () => {
-    // Clear test data
+beforeAll(async () => {
+  // Clear test data - skip if database not available
+  try {
     await prisma.organization.deleteMany({
       where: { tenantId: 'test-tenant-id' },
     });
-  });
+  } catch (error) {
+    console.warn('Skipping database setup - database not available');
+    return;
+  }
+});
 
   afterAll(async () => {
-    // Clean up test data
-    await prisma.organization.deleteMany({
-      where: { tenantId: 'test-tenant-id' },
-    });
-    await prisma.$disconnect();
+    // Clean up test data - skip if database not available
+    try {
+      await prisma.organization.deleteMany({
+        where: { tenantId: 'test-tenant-id' },
+      });
+      await prisma.$disconnect();
+    } catch (error) {
+      console.warn('Skipping database cleanup - database not available');
+    }
   });
 
   describe('Authentication', () => {

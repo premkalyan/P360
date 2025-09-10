@@ -24,7 +24,11 @@ export const listOrganizations = async (req: Request, res: Response) => {
     }
 
     const query = req.query as unknown as OrganizationQuery;
-    const { page, limit, type, status, search, sortBy, sortOrder } = query;
+    const { type, status, search, sortBy, sortOrder } = query;
+    
+    // Handle pagination parameters (may be strings in tests, numbers after validation middleware)
+    const page = typeof query.page === 'string' ? parseInt(query.page) || 1 : query.page || 1;
+    const limit = typeof query.limit === 'string' ? parseInt(query.limit) || 20 : query.limit || 20;
 
     // Calculate skip for pagination
     const skip = (page - 1) * limit;
@@ -278,8 +282,8 @@ export const updateOrganization = async (req: Request, res: Response) => {
       where: { id },
       data: {
         ...data,
-        settings: data.settings ? { ...(existingOrg.settings as any), ...(data.settings as any) } : existingOrg.settings,
-        metadata: data.metadata ? { ...(existingOrg.metadata as any), ...(data.metadata as any) } : existingOrg.metadata,
+        settings: data.settings ? { ...((existingOrg.settings as any) || {}), ...(data.settings as any) } : existingOrg.settings,
+        metadata: data.metadata ? { ...((existingOrg.metadata as any) || {}), ...(data.metadata as any) } : existingOrg.metadata,
       },
       include: {
         _count: {

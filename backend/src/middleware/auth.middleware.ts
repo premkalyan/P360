@@ -72,17 +72,17 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
     req.user = user;
     next();
   } catch (error) {
-    if (error instanceof jwt.JsonWebTokenError) {
-      return res.status(401).json({
-        error: 'Unauthorized',
-        message: 'Invalid authentication token'
-      });
-    }
-    
     if (error instanceof jwt.TokenExpiredError) {
       return res.status(401).json({
         error: 'Unauthorized',
         message: 'Authentication token expired'
+      });
+    }
+    
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.status(401).json({
+        error: 'Unauthorized',
+        message: 'Invalid authentication token'
       });
     }
 

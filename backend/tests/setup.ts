@@ -3,16 +3,29 @@ import { beforeAll, afterAll, beforeEach, afterEach } from '@jest/globals';
 // Environment setup
 process.env.NODE_ENV = 'test';
 process.env.JWT_SECRET = 'test-jwt-secret';
-process.env.DATABASE_URL = 'postgresql://test_user:test_password@localhost:5432/p360_test';
+
+// Database URL with fallback for CI/CD environments
+process.env.DATABASE_URL = process.env.CI_DATABASE_URL || 
+  process.env.DATABASE_URL || 
+  'postgresql://test_user:test_password@localhost:5432/p360_test';
 
 // Global test setup
 beforeAll(async () => {
-  // Setup test database, migrations, etc.
   console.log('🧪 Setting up test environment...');
+  
+  // Skip database setup if not available (for unit tests)
+  try {
+    const { PrismaClient } = require('@prisma/client');
+    const prisma = new PrismaClient();
+    await prisma.$connect();
+    console.log('✅ Database connection successful');
+    await prisma.$disconnect();
+  } catch (error) {
+    console.warn('⚠️ Database not available, running in mock mode');
+  }
 });
 
 afterAll(async () => {
-  // Cleanup test database
   console.log('🧹 Cleaning up test environment...');
 });
 

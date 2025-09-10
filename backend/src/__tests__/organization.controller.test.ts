@@ -147,6 +147,7 @@ describe('Organization Controller', () => {
 
     test('should require tenant ID', async () => {
       mockReq.headers = {};
+      mockReq.user = undefined;
 
       await listOrganizations(mockReq as Request, mockRes as Response);
 
