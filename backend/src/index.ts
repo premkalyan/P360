@@ -6,6 +6,7 @@ import { PrismaClient } from '@prisma/client';
 
 // Import routes and middleware
 import organizationRoutes from './routes/organization.routes';
+import activityRoutes from './routes/activity.routes';
 import { setupSwagger } from './config/swagger.config';
 import { sanitizeInput } from './middleware/validation.middleware';
 
@@ -65,6 +66,7 @@ app.get('/api/v1', (req, res) => {
     endpoints: {
       health: '/health',
       organizations: '/api/v1/organizations',
+      activities: '/api/v1/activities',
       swagger: '/api-docs',
       openapi: '/api-docs.json'
     },
@@ -83,6 +85,7 @@ app.get('/api/v1', (req, res) => {
 
 // Mount API routes
 app.use('/api/v1/organizations', organizationRoutes);
+app.use('/api/v1/activities', activityRoutes);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, _next: express.NextFunction) => {

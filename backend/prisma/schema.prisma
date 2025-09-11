@@ -51,6 +51,7 @@ model Tenant {
   campaigns         Campaign[]
   campaignTemplates CampaignTemplate[]
   organizations     Organization[]
+  activities        Activity[]
 
   @@map("tenants")
 }
@@ -74,6 +75,8 @@ model User {
   userSessions      UserSession[]
   completedWorkflows CampaignWorkflow[] @relation("WorkflowCompletedBy")
   organizationUsers OrganizationUser[]
+  activities        Activity[]         @relation("ActivityUser")
+  actorActivities   Activity[]         @relation("ActivityActor")
 
   @@index([tenantId])
   @@index([email])
@@ -126,6 +129,7 @@ model Campaign {
   campaignTargeting   CampaignTargeting?
   campaignAnalytics   CampaignAnalytics?
   campaignWorkflows   CampaignWorkflow[]
+  activities          Activity[]
 
   @@index([tenantId])
   @@index([status])
@@ -337,6 +341,7 @@ model Organization {
   tenant              Tenant                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   campaigns           Campaign[]            @relation("OrganizationCampaigns")
   organizationUsers   OrganizationUser[]
+  activities          Activity[]
 
   @@index([tenantId])
   @@index([type])
@@ -362,4 +367,65 @@ model OrganizationUser {
   @@index([organizationId])
   @@index([userId])
   @@map("organization_users")
+}
+
+// Activity Tracking System
+// ========================
+
+enum ActivityType {
+  organization_created
+  organization_updated
+  organization_deleted
+  user_added
+  user_removed
+  status_changed
+  budget_changed
+  campaign_created
+  campaign_updated
+  campaign_deleted
+  asset_uploaded
+  targeting_updated
+  system_action
+}
+
+enum ActivityCategory {
+  organization
+  user
+  campaign
+  system
+  audit
+}
+
+model Activity {
+  id             String           @id @default(uuid()) @db.Uuid
+  tenantId       String           @map("tenant_id") @db.Uuid
+  organizationId String?          @map("organization_id") @db.Uuid
+  campaignId     String?          @map("campaign_id") @db.Uuid
+  userId         String?          @map("user_id") @db.Uuid
+  actorUserId    String?          @map("actor_user_id") @db.Uuid // Who performed the action
+  type           ActivityType
+  category       ActivityCategory
+  title          String           @db.VarChar(255)
+  description    String?
+  metadata       Json             @default("{}")
+  ipAddress      String?          @map("ip_address") @db.VarChar(45)
+  userAgent      String?          @map("user_agent") @db.VarChar(500)
+  createdAt      DateTime         @default(now()) @map("created_at") @db.Timestamptz
+
+  // Relations
+  tenant       Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  campaign     Campaign?     @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  user         User?         @relation("ActivityUser", fields: [userId], references: [id], onDelete: SetNull)
+  actorUser    User?         @relation("ActivityActor", fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId])
+  @@index([organizationId])
+  @@index([campaignId])
+  @@index([userId])
+  @@index([actorUserId])
+  @@index([type])
+  @@index([category])
+  @@index([createdAt])
+  @@map("activities")
 }
