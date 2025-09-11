@@ -183,6 +183,32 @@ class OrganizationService {
       filteredOrgs = filteredOrgs.filter(org => org.status === query.status);
     }
 
+    // P360-135: Apply size filter
+    if (query.size) {
+      filteredOrgs = filteredOrgs.filter(org => org.size === query.size);
+    }
+
+    // Apply sorting
+    if (query.sortBy && query.sortOrder) {
+      filteredOrgs.sort((a, b) => {
+        const aValue = a[query.sortBy as keyof Organization];
+        const bValue = b[query.sortBy as keyof Organization];
+        
+        let comparison = 0;
+        if (aValue && bValue) {
+          if (typeof aValue === 'string' && typeof bValue === 'string') {
+            comparison = aValue.localeCompare(bValue);
+          } else if (aValue instanceof Date && bValue instanceof Date) {
+            comparison = aValue.getTime() - bValue.getTime();
+          } else {
+            comparison = String(aValue).localeCompare(String(bValue));
+          }
+        }
+        
+        return query.sortOrder === 'desc' ? -comparison : comparison;
+      });
+    }
+
     // Apply pagination
     const page = query.page || 1;
     const limit = query.limit || 20;

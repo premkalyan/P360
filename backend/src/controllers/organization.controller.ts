@@ -24,7 +24,7 @@ export const listOrganizations = async (req: Request, res: Response) => {
     }
 
     const query = req.query as unknown as OrganizationQuery;
-    const { type, status, search, sortBy, sortOrder } = query;
+    const { type, status, size, search, sortBy, sortOrder } = query;
     
     // Handle pagination parameters (may be strings in tests, numbers after validation middleware)
     const page = typeof query.page === 'string' ? parseInt(query.page) || 1 : query.page || 1;
@@ -44,6 +44,11 @@ export const listOrganizations = async (req: Request, res: Response) => {
 
     if (status) {
       where.status = status;
+    }
+
+    // P360-135: Add size filter support
+    if (size) {
+      where.size = size;
     }
 
     if (search) {

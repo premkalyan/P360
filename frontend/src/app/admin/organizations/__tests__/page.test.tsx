@@ -1,88 +1,577 @@
 /**
- * P360-133: Organizations Page Component Unit Tests
- * Tests the organization management CRUD interface with mock data
+ * P360-135: Organizations Page - Advanced Filtering and Sorting Component Tests
+ * React component tests for enhanced organization grid functionality
  */
 
-import { render, screen, act } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import React from 'react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import OrganizationsPage from '../page';
 
-// Mock CSS imports
-jest.mock('@/styles/typography.css', () => ({}));
-
-// Mock the organization service to return predictable data
+// Mock the organization service
 jest.mock('@/services/organization.service', () => ({
   organizationService: {
-    listOrganizations: jest.fn().mockResolvedValue({
-      data: [
-        {
-          id: '1',
-          name: 'TechCorp Enterprise',
-          accountId: 'ORG-801',
-          type: 'advertiser',
-          salesforceId: 'SF-001-ABC123',
-          users: 12,
-          status: 'draft'
-        }
-      ],
-      pagination: { page: 1, totalPages: 1, total: 1, limit: 10 }
-    }),
+    listOrganizations: jest.fn(),
     createOrganization: jest.fn(),
     updateOrganization: jest.fn(),
     deleteOrganization: jest.fn(),
-    getOrganization: jest.fn(),
-  }
+  },
 }));
 
-describe('OrganizationsPage', () => {
-  it('renders organization management interface', async () => {
-    await act(async () => {
-      render(<OrganizationsPage />);
-    });
+// Mock the sidebar components
+jest.mock('../CreateOrganizationSidebar', () => {
+  return function MockCreateOrganizationSidebar({ isOpen, onClose, onSuccess }: any) {
+    return isOpen ? (
+      <div data-testid="create-sidebar">
+        <button onClick={onClose}>Close</button>
+        <button onClick={() => onSuccess({ id: 'new-1', name: 'New Org', type: 'advertiser', status: 'draft' })}>
+          Create
+        </button>
+      </div>
+    ) : null;
+  };
+});
 
-    // Check main UI elements that should always be present
-    expect(screen.getByText('Organization Management')).toBeInTheDocument();
-    expect(screen.getByText('New Organization')).toBeInTheDocument();
-    expect(screen.getByText('Sort')).toBeInTheDocument();
-    expect(screen.getByText('Filters')).toBeInTheDocument();
+jest.mock('../EditOrganizationSidebar', () => {
+  return function MockEditOrganizationSidebar({ isOpen, onClose, onSuccess }: any) {
+    return isOpen ? (
+      <div data-testid="edit-sidebar">
+        <button onClick={onClose}>Close</button>
+        <button onClick={() => onSuccess({ id: '1', name: 'Updated Org', type: 'advertiser', status: 'active' })}>
+          Update
+        </button>
+      </div>
+    ) : null;
+  };
+});
+
+jest.mock('../ActivityDetails', () => {
+  return function MockActivityDetails({ isOpen, onClose }: any) {
+    return isOpen ? (
+      <div data-testid="activity-details">
+        <button onClick={onClose}>Close Activity</button>
+      </div>
+    ) : null;
+  };
+});
+
+// Mock organization data
+const mockOrganizations = [
+  {
+    id: '1',
+    name: 'TechCorp Enterprise',
+    type: 'advertiser' as const,
+    status: 'active' as const,
+    size: 'large' as const,
+    accountId: 'ORG-001',
+    salesforceId: 'SF-001-ABC123',
+    userCount: 25,
+    createdAt: '2024-01-15T08:00:00Z',
+    updatedAt: '2024-01-20T10:30:00Z',
+  },
+  {
+    id: '2',
+    name: 'Marketing Solutions Inc',
+    type: 'agency' as const,
+    status: 'active' as const,
+    size: 'medium' as const,
+    accountId: 'ORG-002',
+    userCount: 12,
+    createdAt: '2024-01-18T09:15:00Z',
+    updatedAt: '2024-01-22T14:45:00Z',
+  },
+  {
+    id: '3',
+    name: 'Brand Publishers Network',
+    type: 'publisher' as const,
+    status: 'draft' as const,
+    size: 'startup' as const,
+    accountId: 'ORG-003',
+    userCount: 5,
+    createdAt: '2024-01-25T11:00:00Z',
+    updatedAt: '2024-01-25T11:00:00Z',
+  },
+];
+
+const mockPagination = {
+  page: 1,
+  limit: 20,
+  total: 3,
+  totalPages: 1,
+  hasNext: false,
+  hasPrev: false,
+};
+
+// Import the mocked service
+const { organizationService } = require('@/services/organization.service');
+
+describe('OrganizationsPage - P360-135 Advanced Filtering and Sorting', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    organizationService.listOrganizations.mockResolvedValue({
+      data: mockOrganizations,
+      pagination: mockPagination,
+    });
   });
 
-  it('displays complete grid interface elements', async () => {
-    await act(async () => {
-      render(<OrganizationsPage />);
-    });
-
-    // Check all interface elements
-    expect(screen.getByPlaceholderText('Search organization...')).toBeInTheDocument();
+  it('should render organization grid with all organizations', async () => {
+    render(<OrganizationsPage />);
     
-    // Check table headers
-    expect(screen.getByText('Organization Name')).toBeInTheDocument();
-    expect(screen.getByText('Account ID')).toBeInTheDocument();
-    expect(screen.getByText('Type')).toBeInTheDocument();
-    expect(screen.getByText('Salesforce ID')).toBeInTheDocument();
-    expect(screen.getByText('# of Users')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Organization Management')).toBeInTheDocument();
+      expect(screen.getByText('TechCorp Enterprise')).toBeInTheDocument();
+      expect(screen.getByText('Marketing Solutions Inc')).toBeInTheDocument();
+      expect(screen.getByText('Brand Publishers Network')).toBeInTheDocument();
+    });
   });
 
-  it('renders search input correctly', async () => {
-    await act(async () => {
+  describe('Sort Dropdown Functionality', () => {
+    it('should render sort dropdown button', async () => {
       render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const sortButton = screen.getByText(/Sort:/);
+        expect(sortButton).toBeInTheDocument();
+      });
     });
 
+    it('should open sort dropdown when clicked', async () => {
+      const user = userEvent.setup();
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const sortButton = screen.getByText(/Sort:/);
+        expect(sortButton).toBeInTheDocument();
+      });
+
+      const sortButton = screen.getByText(/Sort:/);
+      await user.click(sortButton);
+
+      await waitFor(() => {
+        expect(screen.getByText('Name (A-Z)')).toBeInTheDocument();
+        expect(screen.getByText('Name (Z-A)')).toBeInTheDocument();
+        expect(screen.getByText('Newest First')).toBeInTheDocument();
+        expect(screen.getByText('Oldest First')).toBeInTheDocument();
+        expect(screen.getByText('Recently Updated')).toBeInTheDocument();
+      });
+    });
+
+    it('should apply sort when option is selected', async () => {
+      const user = userEvent.setup();
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const sortButton = screen.getByText(/Sort:/);
+        expect(sortButton).toBeInTheDocument();
+      });
+
+      // Open sort dropdown
+      const sortButton = screen.getByText(/Sort:/);
+      await user.click(sortButton);
+
+      // Select Name A-Z
+      const nameAscOption = screen.getByText('Name (A-Z)');
+      await user.click(nameAscOption);
+
+      await waitFor(() => {
+        expect(organizationService.listOrganizations).toHaveBeenCalledWith(
+          expect.objectContaining({
+            sortBy: 'name',
+            sortOrder: 'asc',
+            page: 1,
+          })
+        );
+      });
+    });
+
+    it('should show current sort selection with indicator', async () => {
+      const user = userEvent.setup();
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const sortButton = screen.getByText(/Sort:/);
+        expect(sortButton).toBeInTheDocument();
+      });
+
+      // Check default sort display
+      expect(screen.getByText(/Sort: Date Created ↓/)).toBeInTheDocument();
+    });
+  });
+
+  describe('Filters Dropdown Functionality', () => {
+    it('should render filters dropdown button', async () => {
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const filtersButton = screen.getByText('Filters');
+        expect(filtersButton).toBeInTheDocument();
+      });
+    });
+
+    it('should open filters dropdown when clicked', async () => {
+      const user = userEvent.setup();
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const filtersButton = screen.getByText('Filters');
+        expect(filtersButton).toBeInTheDocument();
+      });
+
+      const filtersButton = screen.getByText('Filters');
+      await user.click(filtersButton);
+
+      await waitFor(() => {
+        expect(screen.getByText('Status')).toBeInTheDocument();
+    expect(screen.getByText('Type')).toBeInTheDocument();
+        expect(screen.getByText('Organization Size')).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Apply' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Clear' })).toBeInTheDocument();
+      });
+    });
+
+    it('should apply filters when Apply button is clicked', async () => {
+      const user = userEvent.setup();
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const filtersButton = screen.getByText('Filters');
+        expect(filtersButton).toBeInTheDocument();
+      });
+
+      // Open filters dropdown
+      const filtersButton = screen.getByText('Filters');
+      await user.click(filtersButton);
+
+      await waitFor(() => {
+        expect(screen.getByLabelText('Status')).toBeInTheDocument();
+      });
+
+      // Select status filter
+      const statusSelect = screen.getByLabelText('Status');
+      await user.selectOptions(statusSelect, 'active');
+
+      // Click Apply
+      const applyButton = screen.getByRole('button', { name: 'Apply' });
+      await user.click(applyButton);
+
+      await waitFor(() => {
+        expect(organizationService.listOrganizations).toHaveBeenCalledWith(
+          expect.objectContaining({
+            status: 'active',
+            page: 1,
+          })
+        );
+      });
+    });
+
+    it('should clear filters when Clear button is clicked', async () => {
+      const user = userEvent.setup();
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const filtersButton = screen.getByText('Filters');
+        expect(filtersButton).toBeInTheDocument();
+      });
+
+      // Open filters dropdown and apply a filter first
+      const filtersButton = screen.getByText('Filters');
+      await user.click(filtersButton);
+
+      const statusSelect = screen.getByLabelText('Status');
+      await user.selectOptions(statusSelect, 'active');
+
+      const applyButton = screen.getByRole('button', { name: 'Apply' });
+      await user.click(applyButton);
+
+      // Wait for the filter to be applied
+      await waitFor(() => {
+        expect(organizationService.listOrganizations).toHaveBeenCalledWith(
+          expect.objectContaining({ status: 'active' })
+        );
+      });
+
+      // Open filters dropdown again and clear
+      await user.click(filtersButton);
+      
+      const clearButton = screen.getByRole('button', { name: 'Clear' });
+      await user.click(clearButton);
+
+      await waitFor(() => {
+        expect(organizationService.listOrganizations).toHaveBeenCalledWith(
+          expect.objectContaining({
+            status: undefined,
+            type: undefined,
+            size: undefined,
+            page: 1,
+          })
+        );
+      });
+    });
+
+    it('should show filter count when filters are active', async () => {
+      const user = userEvent.setup();
+      
+      // Mock service to return filtered results
+      organizationService.listOrganizations.mockResolvedValue({
+        data: [mockOrganizations[0]], // Only one organization
+        pagination: { ...mockPagination, total: 1 },
+      });
+
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const filtersButton = screen.getByText('Filters');
+        expect(filtersButton).toBeInTheDocument();
+      });
+
+      // Apply a filter
+      const filtersButton = screen.getByText('Filters');
+      await user.click(filtersButton);
+
+      const statusSelect = screen.getByLabelText('Status');
+      await user.selectOptions(statusSelect, 'active');
+
+      const applyButton = screen.getByRole('button', { name: 'Apply' });
+      await user.click(applyButton);
+
+      // Check if filter count is shown
+      await waitFor(() => {
+        expect(screen.getByText('Filters (1)')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Filter Badges', () => {
+    it('should display filter badges when filters are active', async () => {
+      const user = userEvent.setup();
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const filtersButton = screen.getByText('Filters');
+        expect(filtersButton).toBeInTheDocument();
+      });
+
+      // Apply filters
+      const filtersButton = screen.getByText('Filters');
+      await user.click(filtersButton);
+
+      const statusSelect = screen.getByLabelText('Status');
+      await user.selectOptions(statusSelect, 'active');
+
+      const typeSelect = screen.getByLabelText('Type');
+      await user.selectOptions(typeSelect, 'advertiser');
+
+      const applyButton = screen.getByRole('button', { name: 'Apply' });
+      await user.click(applyButton);
+
+      // Check for filter badges
+      await waitFor(() => {
+        expect(screen.getByText('Status: active')).toBeInTheDocument();
+        expect(screen.getByText('Type: advertiser')).toBeInTheDocument();
+      });
+    });
+
+    it('should remove individual filter when badge X is clicked', async () => {
+      const user = userEvent.setup();
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const filtersButton = screen.getByText('Filters');
+        expect(filtersButton).toBeInTheDocument();
+      });
+
+      // Apply a filter first
+      const filtersButton = screen.getByText('Filters');
+      await user.click(filtersButton);
+
+      const statusSelect = screen.getByLabelText('Status');
+      await user.selectOptions(statusSelect, 'active');
+
+      const applyButton = screen.getByRole('button', { name: 'Apply' });
+      await user.click(applyButton);
+
+      // Wait for badge to appear
+      await waitFor(() => {
+        expect(screen.getByText('Status: active')).toBeInTheDocument();
+      });
+
+      // Find and click the X button on the status badge
+      const statusBadge = screen.getByText('Status: active').closest('div');
+      const removeButton = statusBadge?.querySelector('button');
+      expect(removeButton).toBeInTheDocument();
+      
+      if (removeButton) {
+        await user.click(removeButton);
+      }
+
+      await waitFor(() => {
+        expect(organizationService.listOrganizations).toHaveBeenCalledWith(
+          expect.objectContaining({
+            status: undefined,
+            page: 1,
+          })
+        );
+      });
+    });
+
+    it('should clear all filters when "Clear all" is clicked', async () => {
+      const user = userEvent.setup();
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const filtersButton = screen.getByText('Filters');
+        expect(filtersButton).toBeInTheDocument();
+      });
+
+      // Apply multiple filters
+      const filtersButton = screen.getByText('Filters');
+      await user.click(filtersButton);
+
+      const statusSelect = screen.getByLabelText('Status');
+      await user.selectOptions(statusSelect, 'active');
+
+      const typeSelect = screen.getByLabelText('Type');
+      await user.selectOptions(typeSelect, 'advertiser');
+
+      const applyButton = screen.getByRole('button', { name: 'Apply' });
+      await user.click(applyButton);
+
+      // Wait for badges to appear
+      await waitFor(() => {
+        expect(screen.getByText('Status: active')).toBeInTheDocument();
+        expect(screen.getByText('Type: advertiser')).toBeInTheDocument();
+      });
+
+      // Click "Clear all"
+      const clearAllButton = screen.getByText('Clear all');
+      await user.click(clearAllButton);
+
+      await waitFor(() => {
+        expect(organizationService.listOrganizations).toHaveBeenCalledWith(
+          expect.objectContaining({
+            status: undefined,
+            type: undefined,
+            size: undefined,
+            page: 1,
+          })
+        );
+      });
+    });
+  });
+
+  describe('Search Integration', () => {
+    it('should apply search filter when typing in search box', async () => {
+      const user = userEvent.setup();
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
     const searchInput = screen.getByPlaceholderText('Search organization...');
     expect(searchInput).toBeInTheDocument();
-    expect(searchInput).toHaveAttribute('type', 'text');
-    expect(searchInput).toHaveClass('font-p360');
-  });
+      });
 
-  it('displays proper P360 typography in title', async () => {
-    await act(async () => {
-      render(<OrganizationsPage />);
+      const searchInput = screen.getByPlaceholderText('Search organization...');
+      await user.type(searchInput, 'tech');
+
+      // Wait for debounced search
+      await waitFor(() => {
+        expect(organizationService.listOrganizations).toHaveBeenCalledWith(
+          expect.objectContaining({
+            search: 'tech',
+            page: 1,
+          })
+        );
+      }, { timeout: 1000 });
     });
 
-    // Check main title typography
-    const title = screen.getByText('Organization Management');
-    expect(title).toHaveClass('font-p360');
-    expect(title).toHaveClass('font-semibold');
-    expect(title).toHaveClass('text-[#4a5565]');
+    it('should combine search with filters', async () => {
+      const user = userEvent.setup();
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const searchInput = screen.getByPlaceholderText('Search organization...');
+        const filtersButton = screen.getByText('Filters');
+        expect(searchInput).toBeInTheDocument();
+        expect(filtersButton).toBeInTheDocument();
+      });
+
+      // Add search term
+      const searchInput = screen.getByPlaceholderText('Search organization...');
+      await user.type(searchInput, 'tech');
+
+      // Apply filter
+      const filtersButton = screen.getByText('Filters');
+      await user.click(filtersButton);
+
+      const statusSelect = screen.getByLabelText('Status');
+      await user.selectOptions(statusSelect, 'active');
+
+      const applyButton = screen.getByRole('button', { name: 'Apply' });
+      await user.click(applyButton);
+
+      // Wait for combined search and filter
+      await waitFor(() => {
+        expect(organizationService.listOrganizations).toHaveBeenCalledWith(
+          expect.objectContaining({
+            search: 'tech',
+            status: 'active',
+            page: 1,
+          })
+        );
+      }, { timeout: 1000 });
+    });
+  });
+
+  describe('Dropdown Outside Click Behavior', () => {
+    it('should close sort dropdown when clicking outside', async () => {
+      const user = userEvent.setup();
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const sortButton = screen.getByText(/Sort:/);
+        expect(sortButton).toBeInTheDocument();
+      });
+
+      // Open sort dropdown
+      const sortButton = screen.getByText(/Sort:/);
+      await user.click(sortButton);
+
+      await waitFor(() => {
+        expect(screen.getByText('Name (A-Z)')).toBeInTheDocument();
+      });
+
+      // Click outside
+      const pageTitle = screen.getByText('Organization Management');
+      await user.click(pageTitle);
+
+      await waitFor(() => {
+        expect(screen.queryByText('Name (A-Z)')).not.toBeInTheDocument();
+      });
+    });
+
+    it('should close filters dropdown when clicking outside', async () => {
+      const user = userEvent.setup();
+      render(<OrganizationsPage />);
+      
+      await waitFor(() => {
+        const filtersButton = screen.getByText('Filters');
+        expect(filtersButton).toBeInTheDocument();
+      });
+
+      // Open filters dropdown
+      const filtersButton = screen.getByText('Filters');
+      await user.click(filtersButton);
+
+      await waitFor(() => {
+        expect(screen.getByLabelText('Status')).toBeInTheDocument();
+      });
+
+      // Click outside
+      const pageTitle = screen.getByText('Organization Management');
+      await user.click(pageTitle);
+
+      await waitFor(() => {
+        expect(screen.queryByLabelText('Status')).not.toBeInTheDocument();
+      });
+    });
   });
 });
