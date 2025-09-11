@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getActivities, createActivity, getActivityStats } from '../controllers/activity.controller';
-import { authenticateToken } from '../middleware/auth';
+import { authenticateToken } from '../middleware/auth.middleware';
 
 const router = Router();
 

@@ -19,6 +19,8 @@
     "lint": "npm run lint:frontend && npm run lint:backend",
     "test:frontend": "npm -w frontend run test",
     "test:backend": "npm -w backend run test",
+    "test:frontend:ci": "npm -w frontend run test:ci",
+    "test:backend:ci": "npm -w backend run test:ci",
     "test:unit": "npm run test:frontend && npm run test:backend",
     "test:e2e": "playwright test tests/e2e/",
     "test:integration": "jest tests/integration/",
@@ -44,7 +46,8 @@
     "docker:logs": "docker-compose logs -f",
     "kiwi:setup": "node tests/setup-kiwi-tcms.js",
     "kiwi:report": "node tests/report-to-kiwi.js",
-    "ci:test": "npm run lint && npm run test:all && npm run docker:test",
+    "ci:test": "npm run lint && npm run test:unit:ci && npm run docker:test",
+    "test:unit:ci": "npm run test:frontend:ci && npm run test:backend:ci",
     "ci:deploy": "npm run build && npm run docker:build"
   },
   "devDependencies": {

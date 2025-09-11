@@ -23,7 +23,7 @@ const createActivitySchema = z.object({
   category: z.nativeEnum(ActivityCategory),
   title: z.string().min(1).max(255),
   description: z.string().optional(),
-  metadata: z.record(z.any()).optional().default({}),
+  metadata: z.record(z.string(), z.any()).optional().default({}),
 });
 
 /**
@@ -92,7 +92,7 @@ export const getActivities = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error fetching activities:', error);
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: 'Invalid query parameters', details: error.errors });
+      return res.status(400).json({ error: 'Invalid query parameters', details: error.issues });
     }
     res.status(500).json({ error: 'Internal server error' });
   }
@@ -118,6 +118,7 @@ export const createActivity = async (req: Request, res: Response) => {
         actorUserId,
         ipAddress: req.ip,
         userAgent: req.get('User-Agent'),
+        metadata: data.metadata ? JSON.parse(JSON.stringify(data.metadata)) : {},
       },
       include: {
         organization: {
@@ -139,7 +140,7 @@ export const createActivity = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error creating activity:', error);
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: 'Invalid request data', details: error.errors });
+      return res.status(400).json({ error: 'Invalid request data', details: error.issues });
     }
     res.status(500).json({ error: 'Internal server error' });
   }
