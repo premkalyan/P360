@@ -1,4 +1,23 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom'
+
+// Mock fetch for tests
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    ok: true,
+    json: () => Promise.resolve({}),
+  })
+)
+
+// Suppress console warnings in tests
+const originalConsoleWarn = console.warn
+beforeEach(() => {
+  console.warn = jest.fn()
+})
+
+afterEach(() => {
+  console.warn = originalConsoleWarn
+  jest.clearAllMocks()
+});
 
 // Mock Next.js router
 jest.mock('next/router', () => ({
