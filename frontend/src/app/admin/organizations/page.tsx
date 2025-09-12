@@ -468,8 +468,9 @@ export default function OrganizationsPage() {
                   <div className="space-y-4">
                     {/* Status Filter */}
                     <div>
-                      <label className="block text-sm font-medium text-[#4a5565] mb-2">Status</label>
+                      <label htmlFor="status-filter" className="block text-sm font-medium text-[#4a5565] mb-2">Status</label>
                       <select
+                        id="status-filter"
                         value={tempFilters.status}
                         onChange={(e) => setTempFilters(prev => ({ ...prev, status: e.target.value as any }))}
                         className="w-full border border-gray-200 rounded-[4px] px-3 py-2 text-sm focus:ring-[#841aff] focus:border-[#841aff]"
@@ -483,8 +484,9 @@ export default function OrganizationsPage() {
                     
                     {/* Type Filter */}
                     <div>
-                      <label className="block text-sm font-medium text-[#4a5565] mb-2">Type</label>
+                      <label htmlFor="type-filter" className="block text-sm font-medium text-[#4a5565] mb-2">Type</label>
                       <select
+                        id="type-filter"
                         value={tempFilters.type}
                         onChange={(e) => setTempFilters(prev => ({ ...prev, type: e.target.value as any }))}
                         className="w-full border border-gray-200 rounded-[4px] px-3 py-2 text-sm focus:ring-[#841aff] focus:border-[#841aff]"
@@ -499,8 +501,9 @@ export default function OrganizationsPage() {
                     
                     {/* Size Filter */}
                     <div>
-                      <label className="block text-sm font-medium text-[#4a5565] mb-2">Organization Size</label>
+                      <label htmlFor="size-filter" className="block text-sm font-medium text-[#4a5565] mb-2">Size</label>
                       <select
+                        id="size-filter"
                         value={tempFilters.size}
                         onChange={(e) => setTempFilters(prev => ({ ...prev, size: e.target.value as any }))}
                         className="w-full border border-gray-200 rounded-[4px] px-3 py-2 text-sm focus:ring-[#841aff] focus:border-[#841aff]"
