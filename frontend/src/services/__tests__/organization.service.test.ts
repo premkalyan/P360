@@ -3,10 +3,11 @@
  * Unit tests for enhanced organization service functionality
  */
 
-import { organizationService, Organization, OrganizationQuery } from '../organization.service';
+import { organizationService, Organization } from '../organization.service';
 
 // Mock fetch for testing
-global.fetch = jest.fn();
+const mockFetch = jest.fn();
+global.fetch = mockFetch as any;
 
 // Mock data for testing
 const mockOrganizations: Organization[] = [
@@ -58,81 +59,81 @@ const mockOrganizations: Organization[] = [
 
 describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => {
   beforeEach(() => {
-    (fetch as jest.Mock).mockClear();
+    mockFetch.mockClear();
   });
 
   describe('Search Functionality', () => {
     it('should filter organizations by name search', async () => {
       // Mock API failure to trigger fallback
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ search: 'tech' });
       
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].name).toBe('TechCorp Enterprise');
+      expect(result.data[0]!.name).toBe('TechCorp Enterprise');
     });
 
     it('should filter organizations by account ID search', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ search: 'ORG-002' });
       
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].accountId).toBe('ORG-002');
+      expect(result.data[0]!.accountId).toBe('ORG-002');
     });
 
     it('should filter organizations by description search', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ search: 'marketing' });
       
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].description).toContain('marketing');
+      expect(result.data[0]!.description).toContain('marketing');
     });
 
     it('should be case-insensitive', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ search: 'TECH' });
       
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].name).toBe('TechCorp Enterprise');
+      expect(result.data[0]!.name).toBe('TechCorp Enterprise');
     });
   });
 
   describe('Type Filtering', () => {
     it('should filter organizations by advertiser type', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ type: 'advertiser' });
       
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].type).toBe('advertiser');
-      expect(result.data[0].name).toBe('TechCorp Enterprise');
+      expect(result.data[0]!.type).toBe('advertiser');
+      expect(result.data[0]!.name).toBe('TechCorp Enterprise');
     });
 
     it('should filter organizations by agency type', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ type: 'agency' });
       
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].type).toBe('agency');
-      expect(result.data[0].name).toBe('Marketing Solutions Inc');
+      expect(result.data[0]!.type).toBe('agency');
+      expect(result.data[0]!.name).toBe('Marketing Solutions Inc');
     });
 
     it('should filter organizations by publisher type', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ type: 'publisher' });
       
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].type).toBe('publisher');
-      expect(result.data[0].name).toBe('Brand Publishers Network');
+      expect(result.data[0]!.type).toBe('publisher');
+      expect(result.data[0]!.name).toBe('Brand Publishers Network');
     });
 
     it('should return empty results for non-existent type', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ type: 'brand' });
       
@@ -142,7 +143,7 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
 
   describe('Status Filtering', () => {
     it('should filter organizations by active status', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ status: 'active' });
       
@@ -151,17 +152,17 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
     });
 
     it('should filter organizations by draft status', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ status: 'draft' });
       
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].status).toBe('draft');
-      expect(result.data[0].name).toBe('Brand Publishers Network');
+      expect(result.data[0]!.status).toBe('draft');
+      expect(result.data[0]!.name).toBe('Brand Publishers Network');
     });
 
     it('should return empty results for inactive status', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ status: 'inactive' });
       
@@ -171,37 +172,37 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
 
   describe('Size Filtering (P360-135 Enhancement)', () => {
     it('should filter organizations by large size', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ size: 'large' });
       
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].size).toBe('large');
-      expect(result.data[0].name).toBe('TechCorp Enterprise');
+      expect(result.data[0]!.size).toBe('large');
+      expect(result.data[0]!.name).toBe('TechCorp Enterprise');
     });
 
     it('should filter organizations by medium size', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ size: 'medium' });
       
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].size).toBe('medium');
-      expect(result.data[0].name).toBe('Marketing Solutions Inc');
+      expect(result.data[0]!.size).toBe('medium');
+      expect(result.data[0]!.name).toBe('Marketing Solutions Inc');
     });
 
     it('should filter organizations by startup size', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ size: 'startup' });
       
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].size).toBe('startup');
-      expect(result.data[0].name).toBe('Brand Publishers Network');
+      expect(result.data[0]!.size).toBe('startup');
+      expect(result.data[0]!.name).toBe('Brand Publishers Network');
     });
 
     it('should return empty results for non-existent size', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ size: 'enterprise' });
       
@@ -211,7 +212,7 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
 
   describe('Sorting Functionality (P360-135 Enhancement)', () => {
     it('should sort organizations by name ascending', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ 
         sortBy: 'name', 
@@ -219,13 +220,13 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
       });
       
       expect(result.data).toHaveLength(3);
-      expect(result.data[0].name).toBe('Brand Publishers Network');
-      expect(result.data[1].name).toBe('Marketing Solutions Inc');
-      expect(result.data[2].name).toBe('TechCorp Enterprise');
+      expect(result.data[0]!.name).toBe('Brand Publishers Network');
+      expect(result.data[1]!.name).toBe('Marketing Solutions Inc');
+      expect(result.data[2]!.name).toBe('TechCorp Enterprise');
     });
 
     it('should sort organizations by name descending', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ 
         sortBy: 'name', 
@@ -233,13 +234,13 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
       });
       
       expect(result.data).toHaveLength(3);
-      expect(result.data[0].name).toBe('TechCorp Enterprise');
-      expect(result.data[1].name).toBe('Marketing Solutions Inc');
-      expect(result.data[2].name).toBe('Brand Publishers Network');
+      expect(result.data[0]!.name).toBe('TechCorp Enterprise');
+      expect(result.data[1]!.name).toBe('Marketing Solutions Inc');
+      expect(result.data[2]!.name).toBe('Brand Publishers Network');
     });
 
     it('should sort organizations by creation date ascending (oldest first)', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ 
         sortBy: 'createdAt', 
@@ -247,13 +248,13 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
       });
       
       expect(result.data).toHaveLength(3);
-      expect(result.data[0].name).toBe('TechCorp Enterprise'); // 2024-01-15
-      expect(result.data[1].name).toBe('Marketing Solutions Inc'); // 2024-01-18
-      expect(result.data[2].name).toBe('Brand Publishers Network'); // 2024-01-25
+      expect(result.data[0]!.name).toBe('TechCorp Enterprise'); // 2024-01-15
+      expect(result.data[1]!.name).toBe('Marketing Solutions Inc'); // 2024-01-18
+      expect(result.data[2]!.name).toBe('Brand Publishers Network'); // 2024-01-25
     });
 
     it('should sort organizations by creation date descending (newest first)', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ 
         sortBy: 'createdAt', 
@@ -261,15 +262,15 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
       });
       
       expect(result.data).toHaveLength(3);
-      expect(result.data[0].name).toBe('Brand Publishers Network'); // 2024-01-25
-      expect(result.data[1].name).toBe('Marketing Solutions Inc'); // 2024-01-18
-      expect(result.data[2].name).toBe('TechCorp Enterprise'); // 2024-01-15
+      expect(result.data[0]!.name).toBe('Brand Publishers Network'); // 2024-01-25
+      expect(result.data[1]!.name).toBe('Marketing Solutions Inc'); // 2024-01-18
+      expect(result.data[2]!.name).toBe('TechCorp Enterprise'); // 2024-01-15
     });
   });
 
   describe('Combined Filtering and Sorting', () => {
     it('should apply multiple filters simultaneously', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ 
         type: 'advertiser',
@@ -278,14 +279,14 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
       });
       
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].name).toBe('TechCorp Enterprise');
-      expect(result.data[0].type).toBe('advertiser');
-      expect(result.data[0].status).toBe('active');
-      expect(result.data[0].size).toBe('large');
+      expect(result.data[0]!.name).toBe('TechCorp Enterprise');
+      expect(result.data[0]!.type).toBe('advertiser');
+      expect(result.data[0]!.status).toBe('active');
+      expect(result.data[0]!.size).toBe('large');
     });
 
     it('should apply search with filters', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ 
         search: 'tech',
@@ -294,11 +295,11 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
       });
       
       expect(result.data).toHaveLength(1);
-      expect(result.data[0].name).toBe('TechCorp Enterprise');
+      expect(result.data[0]!.name).toBe('TechCorp Enterprise');
     });
 
     it('should apply filters with sorting', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ 
         status: 'active',
@@ -307,12 +308,12 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
       });
       
       expect(result.data).toHaveLength(2);
-      expect(result.data[0].name).toBe('TechCorp Enterprise');
-      expect(result.data[1].name).toBe('Marketing Solutions Inc');
+      expect(result.data[0]!.name).toBe('TechCorp Enterprise');
+      expect(result.data[1]!.name).toBe('Marketing Solutions Inc');
     });
 
     it('should return empty results when filters have no matches', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ 
         type: 'advertiser',
@@ -325,7 +326,7 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
 
   describe('Pagination with Filters', () => {
     it('should apply pagination to filtered results', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ 
         status: 'active',
@@ -341,7 +342,7 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
     });
 
     it('should calculate pagination correctly for filtered results', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('API unavailable'));
+      mockFetch.mockRejectedValue(new Error('API unavailable'));
 
       const result = await organizationService.listOrganizations({ 
         status: 'active',
@@ -370,7 +371,7 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
         },
       };
 
-      (fetch as jest.Mock).mockResolvedValue({
+      mockFetch.mockResolvedValue({
         ok: true,
         json: jest.fn().mockResolvedValue(mockResponse),
       });
@@ -391,12 +392,12 @@ describe('OrganizationService - P360-135 Advanced Filtering and Sorting', () => 
     });
 
     it('should fallback to mock data when API fails', async () => {
-      (fetch as jest.Mock).mockRejectedValue(new Error('Network error'));
+      mockFetch.mockRejectedValue(new Error('Network error'));
 
       const result = await organizationService.listOrganizations();
       
       expect(result.data).toHaveLength(3);
-      expect(result.data[0].name).toBe('TechCorp Enterprise');
+      expect(result.data[0]!.name).toBe('TechCorp Enterprise');
     });
   });
 });

@@ -185,7 +185,6 @@ describe('OrganizationsPage - P360-135 Advanced Filtering and Sorting', () => {
     });
 
     it('should show current sort selection with indicator', async () => {
-      const user = userEvent.setup();
       render(<OrganizationsPage />);
       
       await waitFor(() => {
