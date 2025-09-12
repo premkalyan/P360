@@ -53,6 +53,7 @@ export const OrganizationQuerySchema = z.object({
   limit: z.string().regex(/^\d+$/).transform(Number).pipe(z.number().min(1).max(100)).optional().default(20),
   type: OrganizationTypeSchema.optional(),
   status: OrganizationStatusSchema.optional(),
+  size: OrganizationSizeSchema.optional(),
   search: z.string().max(255).optional(),
   sortBy: z.enum(['name', 'type', 'status', 'createdAt', 'updatedAt']).optional().default('createdAt'),
   sortOrder: z.enum(['asc', 'desc']).optional().default('desc'),

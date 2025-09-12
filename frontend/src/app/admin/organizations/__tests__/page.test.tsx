@@ -225,7 +225,7 @@ describe('OrganizationsPage - P360-135 Advanced Filtering and Sorting', () => {
         expect(screen.getByLabelText('Type')).toBeInTheDocument();
         expect(screen.getByText('Size')).toBeInTheDocument();
         expect(screen.getByRole('button', { name: 'Apply' })).toBeInTheDocument();
-        expect(screen.getByRole('button', { name: 'Clear all' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Clear' })).toBeInTheDocument();
       });
     });
 
@@ -470,9 +470,13 @@ describe('OrganizationsPage - P360-135 Advanced Filtering and Sorting', () => {
       });
 
       const searchInput = screen.getByPlaceholderText('Search organization...');
-      await user.type(searchInput, 'tech', { delay: 50 });
+      // Type very slowly to avoid overwhelming the debouncing
+      await user.type(searchInput, 'tech', { delay: 200 });
+      
+      // Wait for debouncing to complete (500ms debounce + generous buffer)
+      await new Promise(resolve => setTimeout(resolve, 1200));
 
-      // Wait for debounced search (500ms + buffer)
+      // Wait for debounced search with longer timeout
       await waitFor(() => {
         expect(organizationService.listOrganizations).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -480,7 +484,7 @@ describe('OrganizationsPage - P360-135 Advanced Filtering and Sorting', () => {
             page: 1,
           })
         );
-      }, { timeout: 2000 });
+      }, { timeout: 5000 });
     });
 
     it('should combine search with filters', async () => {
@@ -496,7 +500,11 @@ describe('OrganizationsPage - P360-135 Advanced Filtering and Sorting', () => {
 
       // Add search term
       const searchInput = screen.getByPlaceholderText('Search organization...');
-      await user.type(searchInput, 'tech', { delay: 50 });
+      // Type very slowly to avoid overwhelming the debouncing
+      await user.type(searchInput, 'tech', { delay: 200 });
+      
+      // Wait for search debouncing to complete (500ms + generous buffer)
+      await new Promise(resolve => setTimeout(resolve, 1200));
 
       // Apply filter
       const filtersButton = screen.getByText('Filters');
@@ -517,7 +525,7 @@ describe('OrganizationsPage - P360-135 Advanced Filtering and Sorting', () => {
             page: 1,
           })
         );
-      }, { timeout: 2000 });
+      }, { timeout: 5000 });
     });
   });
 

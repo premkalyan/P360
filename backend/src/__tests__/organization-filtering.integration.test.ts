@@ -4,7 +4,7 @@
  */
 
 import request from 'supertest';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, UserRole, OrganizationType, OrganizationStatus, OrganizationSize } from '@prisma/client';
 import app from '../index';
 import { generateJWT } from '../middleware/auth.middleware';
 
@@ -15,7 +15,7 @@ const testUser = {
   id: 'test-user-id',
   tenantId: 'test-tenant-id',
   email: 'test@p360.com',
-  role: 'admin'
+  role: UserRole.admin
 };
 
 const authToken = generateJWT(testUser);
@@ -26,9 +26,9 @@ const testOrganizations = [
     id: 'org-1',
     tenantId: 'test-tenant-id',
     name: 'TechCorp Enterprise',
-    type: 'advertiser',
-    status: 'active',
-    size: 'large',
+    type: OrganizationType.advertiser,
+    status: OrganizationStatus.active,
+    size: OrganizationSize.large,
     accountId: 'ORG-001',
     salesforceId: 'SF-001-ABC123',
     description: 'Leading technology company',
@@ -39,9 +39,9 @@ const testOrganizations = [
     id: 'org-2',
     tenantId: 'test-tenant-id',
     name: 'Marketing Solutions Inc',
-    type: 'agency',
-    status: 'active',
-    size: 'medium',
+    type: OrganizationType.advertiser, // Note: changed from 'agency' to match Prisma enum
+    status: OrganizationStatus.active,
+    size: OrganizationSize.medium,
     accountId: 'ORG-002',
     salesforceId: 'SF-002-DEF456',
     description: 'Full-service marketing agency',
@@ -52,9 +52,9 @@ const testOrganizations = [
     id: 'org-3',
     tenantId: 'test-tenant-id',
     name: 'Brand Publishers Network',
-    type: 'publisher',
-    status: 'draft',
-    size: 'startup',
+    type: OrganizationType.publisher,
+    status: OrganizationStatus.suspended, // Note: changed from 'draft' to match Prisma enum
+    size: OrganizationSize.startup,
     accountId: 'ORG-003',
     description: 'Digital publishing network',
     contactEmail: 'team@brandpublishers.com',
@@ -74,6 +74,7 @@ describe('Organization API - P360-135 Advanced Filtering and Sorting', () => {
         role: testUser.role,
         firstName: 'Test',
         lastName: 'User',
+        passwordHash: 'test-hash', // Required field for test user
         isActive: true,
       },
     });
