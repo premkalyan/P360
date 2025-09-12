@@ -94,19 +94,26 @@ export default function OrganizationsPage() {
   // Close dropdown when clicking outside  
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-      
-      // Close action dropdown
-      if (openDropdownId && !target?.closest('.relative')) {
+      try {
+        const target = event.target as Element;
+        
+        // Close action dropdown
+        if (openDropdownId && !target?.closest('.relative')) {
+          setOpenDropdownId(null);
+        }
+        
+        // P360-135: Close sort and filter dropdowns
+        if (showSortDropdown && !target?.closest('[data-dropdown="sort"]')) {
+          setShowSortDropdown(false);
+        }
+        
+        if (showFiltersDropdown && !target?.closest('[data-dropdown="filters"]')) {
+          setShowFiltersDropdown(false);
+        }
+      } catch (err) {
+        // Ensure dropdowns close on any error
         setOpenDropdownId(null);
-      }
-      
-      // P360-135: Close sort and filter dropdowns
-      if (showSortDropdown && !target?.closest('[data-dropdown="sort"]')) {
         setShowSortDropdown(false);
-      }
-      
-      if (showFiltersDropdown && !target?.closest('[data-dropdown="filters"]')) {
         setShowFiltersDropdown(false);
       }
     };

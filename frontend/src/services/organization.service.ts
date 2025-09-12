@@ -194,15 +194,18 @@ class OrganizationService {
         const aValue = a[query.sortBy as keyof Organization];
         const bValue = b[query.sortBy as keyof Organization];
         
+        // Handle null/undefined values
+        if (!aValue && !bValue) return 0;
+        if (!aValue) return 1;
+        if (!bValue) return -1;
+        
         let comparison = 0;
-        if (aValue && bValue) {
-          if (typeof aValue === 'string' && typeof bValue === 'string') {
-            comparison = aValue.localeCompare(bValue);
-          } else if (aValue instanceof Date && bValue instanceof Date) {
-            comparison = aValue.getTime() - bValue.getTime();
-          } else {
-            comparison = String(aValue).localeCompare(String(bValue));
-          }
+        if (typeof aValue === 'string' && typeof bValue === 'string') {
+          comparison = aValue.localeCompare(bValue);
+        } else if (aValue instanceof Date && bValue instanceof Date) {
+          comparison = aValue.getTime() - bValue.getTime();
+        } else {
+          comparison = String(aValue).localeCompare(String(bValue));
         }
         
         return query.sortOrder === 'desc' ? -comparison : comparison;
