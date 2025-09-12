@@ -461,7 +461,9 @@ describe('OrganizationsPage - P360-135 Advanced Filtering and Sorting', () => {
 
   describe('Search Integration', () => {
     it('should apply search filter when typing in search box', async () => {
-      const user = userEvent.setup();
+      // Use fake timers to control debouncing exactly
+      jest.useFakeTimers();
+      
       render(<OrganizationsPage />);
       
       await waitFor(() => {
@@ -470,13 +472,19 @@ describe('OrganizationsPage - P360-135 Advanced Filtering and Sorting', () => {
       });
 
       const searchInput = screen.getByPlaceholderText('Search organization...');
-      // Type very slowly to avoid overwhelming the debouncing
-      await user.type(searchInput, 'tech', { delay: 200 });
       
-      // Wait for debouncing to complete (500ms debounce + generous buffer)
-      await new Promise(resolve => setTimeout(resolve, 1200));
+      // Directly set the value and trigger input event to bypass user.type() timing issues
+      await act(async () => {
+        fireEvent.change(searchInput, { target: { value: 'tech' } });
+        
+        // Advance timers to trigger debounce (500ms)
+        jest.advanceTimersByTime(500);
+      });
 
-      // Wait for debounced search with longer timeout
+      // Restore real timers for waitFor
+      jest.useRealTimers();
+
+      // Wait for the API call
       await waitFor(() => {
         expect(organizationService.listOrganizations).toHaveBeenCalledWith(
           expect.objectContaining({
@@ -484,10 +492,13 @@ describe('OrganizationsPage - P360-135 Advanced Filtering and Sorting', () => {
             page: 1,
           })
         );
-      }, { timeout: 5000 });
+      }, { timeout: 2000 });
     });
 
     it('should combine search with filters', async () => {
+      // Use fake timers for search debouncing control
+      jest.useFakeTimers();
+      
       const user = userEvent.setup();
       render(<OrganizationsPage />);
       
@@ -498,13 +509,19 @@ describe('OrganizationsPage - P360-135 Advanced Filtering and Sorting', () => {
         expect(filtersButton).toBeInTheDocument();
       });
 
-      // Add search term
+      // Add search term with exact timing control
       const searchInput = screen.getByPlaceholderText('Search organization...');
-      // Type very slowly to avoid overwhelming the debouncing
-      await user.type(searchInput, 'tech', { delay: 200 });
       
-      // Wait for search debouncing to complete (500ms + generous buffer)
-      await new Promise(resolve => setTimeout(resolve, 1200));
+      await act(async () => {
+        // Directly set the search value and trigger debounce
+        fireEvent.change(searchInput, { target: { value: 'tech' } });
+        
+        // Advance timers to complete debounce (500ms)
+        jest.advanceTimersByTime(500);
+      });
+
+      // Restore real timers for user interactions
+      jest.useRealTimers();
 
       // Apply filter
       const filtersButton = screen.getByText('Filters');
@@ -525,7 +542,7 @@ describe('OrganizationsPage - P360-135 Advanced Filtering and Sorting', () => {
             page: 1,
           })
         );
-      }, { timeout: 5000 });
+      }, { timeout: 2000 });
     });
   });
 
